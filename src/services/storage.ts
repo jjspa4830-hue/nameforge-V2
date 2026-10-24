@@ -134,6 +134,42 @@ function normalizeEntry(raw: any): SavedNameEntry | null {
   };
 }
 
+/** Remap an imported name's collection reference without attaching it to an unrelated local collection. */
+export function remapImportedCollectionId(
+  collectionId: string | undefined,
+  importedCollectionIdMap: Map<string, string>,
+  declaredImportedCollectionIds: Set<string>
+): string | undefined {
+  if (!collectionId || !declaredImportedCollectionIds.has(collectionId)) return collectionId;
+  return importedCollectionIdMap.get(collectionId);
+}
+
+/** Validate imported history records without trusting fields from an external JSON file. */
+export function normalizeHistoryEntry(raw: unknown): HistoryEntry | null {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return null;
+  const item = raw as Partial<HistoryEntry>;
+  const name = safeTrim(item.name);
+  const generator = safeTrim(item.generator);
+  if (!name || !generator) return null;
+
+  const rawGeneratedAt = safeTrim(item.generatedAt);
+  const parsedGeneratedAt = Date.parse(rawGeneratedAt);
+  const generatedAt = rawGeneratedAt && Number.isFinite(parsedGeneratedAt)
+    ? new Date(parsedGeneratedAt).toISOString()
+    : new Date().toISOString();
+
+  return {
+    id: safeTrim(item.id) || generateId(),
+    name,
+    generator,
+    style: safeTrim(item.style) || 'default',
+    tone: safeTrim(item.tone),
+    description: safeTrim(item.description),
+    bestFor: safeTrim(item.bestFor),
+    generatedAt,
+  };
+}
+
 function isEntryActive(item: SavedNameEntry): boolean {
   return (
     item.saved === true ||
@@ -590,14 +626,56 @@ export function importDataJSON(jsonStr: string): ImportResult {
       return result;
     }
 
-    // Check if it is an array of names or a full bundle
-    const rawNames: any[] = Array.isArray(parsed)
-      ? parsed
-      : Array.isArray(parsed.names)
-      ? parsed.names
+    // Validate the payload shape before writing anything to localStorage.
+    // Legacy exports containing only an array of names remain supported.
+    if (!Array.isArray(parsed) && !Array.isArray(parsed.names)) {
+      result.errors.push('Le fichier ne contient pas de liste de noms valide.');
+      return result;
+    }
+    if (!Array.isArray(parsed) && parsed.collections !== undefined && !Array.isArray(parsed.collections)) {
+      result.errors.push('La liste des collections du fichier est invalide.');
+      return result;
+    }
+    if (!Array.isArray(parsed) && parsed.history !== undefined && !Array.isArray(parsed.history)) {
+      result.errors.push("La liste de l'historique du fichier est invalide.");
+      return result;
+    }
+
+    const rawNames: any[] = Array.isArray(parsed) ? parsed : parsed.names;
+    const rawCollections: any[] = Array.isArray(parsed) ? [] : (parsed.collections || []);
+    const importedHistory: HistoryEntry[] = !Array.isArray(parsed) && Array.isArray(parsed.history)
+      ? parsed.history
+          .map((item: unknown) => normalizeHistoryEntry(item))
+          .filter((item: HistoryEntry | null): item is HistoryEntry => item !== null)
       : [];
 
-    const rawCollections: any[] = Array.isArray(parsed.collections) ? parsed.collections : [];
+    // Snapshot the affected keys so a quota/security error cannot leave a half-imported backup.
+    const previousStorage = {
+      names: localStorage.getItem(STORAGE_KEY),
+      collections: localStorage.getItem(COLLECTIONS_KEY),
+      history: localStorage.getItem(HISTORY_KEY),
+    };
+    const rollbackImport = () => {
+      const restore = (key: string, value: string | null) => {
+        try {
+          if (value === null) localStorage.removeItem(key);
+          else localStorage.setItem(key, value);
+        } catch {
+          // Best effort: storage may remain unavailable (e.g. quota exceeded).
+        }
+      };
+      restore(STORAGE_KEY, previousStorage.names);
+      restore(COLLECTIONS_KEY, previousStorage.collections);
+      restore(HISTORY_KEY, previousStorage.history);
+    };
+    const failImport = (message: string): ImportResult => {
+      rollbackImport();
+      result.success = false;
+      result.errors.push(message);
+      result.added = 0;
+      result.updated = 0;
+      return result;
+    };
 
     const existingNames = getSavedNames();
     const existingMap = new Map<string, SavedNameEntry>();
@@ -605,31 +683,68 @@ export function importDataJSON(jsonStr: string): ImportResult {
       existingMap.set(item.name.toLowerCase() + '_' + item.generator.toLowerCase(), item);
     });
 
-    // Import Collections first
+    // Keep imported collection references attached to the imported collection,
+    // even when its original ID already belongs to a different local collection.
+    const importedCollectionIdMap = new Map<string, string>();
+    const declaredImportedCollectionIds = new Set<string>();
+    for (const rawCollection of rawCollections) {
+      if (rawCollection && typeof rawCollection === 'object' && !Array.isArray(rawCollection)) {
+        const originalId = safeTrim(rawCollection.id);
+        if (originalId) declaredImportedCollectionIds.add(originalId);
+      }
+    }
+
+    // Import collections with stable, unique destination IDs; malformed entries are ignored.
     if (rawCollections.length > 0) {
       const currentCols = getCollections();
       const colIdSet = new Set(currentCols.map((c) => c.id));
-      for (const col of rawCollections) {
-        if (col && col.name && !colIdSet.has(col.id)) {
-          currentCols.push({
-            id: col.id || generateId(),
-            name: safeTrim(col.name),
-            description: safeTrim(col.description),
-            color: col.color || '#8b5cf6',
-            createdAt: col.createdAt || new Date().toISOString(),
-          });
+      for (const rawCollection of rawCollections) {
+        if (!rawCollection || typeof rawCollection !== 'object' || Array.isArray(rawCollection)) {
+          result.skipped++;
+          continue;
         }
+        const colName = safeTrim(rawCollection.name);
+        if (!colName) {
+          result.skipped++;
+          continue;
+        }
+        const originalId = safeTrim(rawCollection.id);
+        let id = originalId || generateId();
+        if (colIdSet.has(id)) {
+          do {
+            id = generateId();
+          } while (colIdSet.has(id));
+        }
+        colIdSet.add(id);
+        if (originalId && !importedCollectionIdMap.has(originalId)) {
+          importedCollectionIdMap.set(originalId, id);
+        }
+        currentCols.push({
+          id,
+          name: colName,
+          description: safeTrim(rawCollection.description),
+          color: safeTrim(rawCollection.color) || '#8b5cf6',
+          createdAt: safeTrim(rawCollection.createdAt) || new Date().toISOString(),
+        });
       }
-      saveCollections(currentCols);
+      if (!saveCollections(currentCols)) {
+        return failImport('Impossible d’enregistrer les collections importées. Aucune modification n’a été conservée.');
+      }
     }
 
-    // Import Names with merge
+    // Import Names with merge. Remap collection IDs to avoid cross-linking a name
+    // to an unrelated local collection that happens to share the same ID.
     for (const item of rawNames) {
       const entry = normalizeEntry(item);
       if (!entry) {
         result.skipped++;
         continue;
       }
+      entry.collectionId = remapImportedCollectionId(
+        entry.collectionId,
+        importedCollectionIdMap,
+        declaredImportedCollectionIds
+      );
 
       const key = entry.name.toLowerCase() + '_' + entry.generator.toLowerCase();
       if (existingMap.has(key)) {
@@ -671,7 +786,41 @@ export function importDataJSON(jsonStr: string): ImportResult {
       }
     }
 
-    saveAllNames(existingNames);
+    if (!saveAllNames(existingNames)) {
+      return failImport('Impossible d’enregistrer les noms importés. Aucune modification n’a été conservée.');
+    }
+
+    // Restore history too, merge by name, then retain the 50 most recent entries.
+    if (importedHistory.length > 0) {
+      const currentHistory = getGenerationHistory();
+      const seenHistoryNames = new Set<string>();
+      const mergedHistory: HistoryEntry[] = [];
+      for (const item of [...currentHistory, ...importedHistory]) {
+        // A name can legitimately appear in multiple generators or styles.
+        // Deduplicate only equivalent history entries, not by display name alone.
+        const key = [
+          safeTrim(item.name).toLocaleLowerCase(),
+          safeTrim(item.generator).toLocaleLowerCase(),
+          safeTrim(item.style).toLocaleLowerCase(),
+        ].join('::');
+        if (!safeTrim(item.name) || seenHistoryNames.has(key)) {
+          result.skipped++;
+          continue;
+        }
+        seenHistoryNames.add(key);
+        mergedHistory.push(item);
+      }
+      mergedHistory.sort((a, b) =>
+        new Date(b.generatedAt || 0).getTime() - new Date(a.generatedAt || 0).getTime()
+      );
+      try {
+        localStorage.setItem(HISTORY_KEY, JSON.stringify(mergedHistory.slice(0, 50)));
+        notifyStorageChange();
+      } catch {
+        return failImport("Impossible de restaurer l'historique. Les modifications de cet import ont été annulées.");
+      }
+    }
+
     result.success = true;
     return result;
   } catch (e: any) {
