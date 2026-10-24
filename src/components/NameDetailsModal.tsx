@@ -99,6 +99,7 @@ export const NameDetailsModal: React.FC<NameDetailsModalProps> = ({
     <div
       role="dialog"
       aria-modal="true"
+      aria-labelledby="name-details-title"
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in"
     >
       <div className="relative w-full max-w-2xl bg-[#0c1224] border border-purple-500/30 rounded-3xl shadow-2xl overflow-hidden max-h-[92vh] flex flex-col text-slate-200">
@@ -113,13 +114,14 @@ export const NameDetailsModal: React.FC<NameDetailsModalProps> = ({
                 {t.header} {getLocalizedGeneratorTitle(nameItem.generatorId, language, meta.title)}
               </span>
               <div className="flex items-center gap-2 mt-0.5">
-                <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+                <h2 id="name-details-title" className="text-2xl sm:text-3xl font-black text-white tracking-tight">
                   {nameItem.name}
                 </h2>
                 <button
                   onClick={handleSpeak}
                   className="p-1.5 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 text-cyan-300 border border-purple-500/30 transition cursor-pointer"
                   title={t.listen}
+                  aria-label={t.listen}
                 >
                   <Volume2 className="w-4 h-4" />
                 </button>
@@ -129,6 +131,7 @@ export const NameDetailsModal: React.FC<NameDetailsModalProps> = ({
           <button
             onClick={onClose}
             className="w-9 h-9 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-300 hover:text-white transition cursor-pointer"
+            aria-label={t.close}
           >
             <X className="w-5 h-5" />
           </button>
@@ -165,6 +168,8 @@ export const NameDetailsModal: React.FC<NameDetailsModalProps> = ({
                   <button
                     key={s}
                     onClick={() => handleRate(s)}
+                    aria-label={`${t.rating} ${s}/5`}
+                    aria-pressed={rating === s}
                     className="p-0.5 cursor-pointer hover:scale-110 transition"
                   >
                     <Star
