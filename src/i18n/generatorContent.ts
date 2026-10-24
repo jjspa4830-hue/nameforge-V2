@@ -1104,7 +1104,7 @@ const GENERATOR_DESCRIPTION_OVERRIDES: Record<string, Record<string, string>> = 
     da: "Skab navne på kongeriger, riger, dynastier og kongehuse til episke fantasykort og fortællinger.",
     fi: "Luo nimiä kuningaskunnille, maille, dynastioille ja kuningashuoneille eeppisiin fantasiakarttoihin ja tarinoihin."
   },
-  sci-fi: {
+  "sci-fi": {
     en: "Generate science-fiction names for futuristic worlds, organizations, technologies, and stories, balancing plausibility with imagination.",
     fr: "Générez des noms de science-fiction pour des mondes futuristes, organisations, technologies et récits, entre crédibilité et imagination.",
     es: "Genera nombres de ciencia ficción para mundos futuristas, organizaciones, tecnologías e historias, equilibrando plausibilidad e imaginación.",
