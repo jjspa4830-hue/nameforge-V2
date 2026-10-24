@@ -128,6 +128,7 @@ export const NameDetailsModal: React.FC<NameDetailsModalProps> = ({
           </div>
           <button
             onClick={onClose}
+            aria-label={t.close}
             className="w-9 h-9 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-300 hover:text-white transition cursor-pointer"
           >
             <X className="w-5 h-5" />
