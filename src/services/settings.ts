@@ -173,7 +173,9 @@ export function getAppSettings(): AppSettings {
 export function saveAppSettings(newSettings: Partial<AppSettings>): AppSettings {
   try {
     const current = getAppSettings();
-    const updated: AppSettings = { ...current, ...newSettings };
+    // Callers can pass runtime values that bypass TypeScript (e.g. stale UI state or imported data).
+    // Normalize the merged object before persisting or applying it to the document.
+    const updated = normalizeAppSettings({ ...current, ...newSettings });
     localStorage.setItem(SETTINGS_KEY, JSON.stringify(updated));
     applySettingsToDOM(updated);
     notifySettingsChange();
