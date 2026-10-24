@@ -32,7 +32,7 @@
           var lang = 'en';
           if (raw) {
             var s = JSON.parse(raw);
-            if (s.language) lang = s.language;
+            if (typeof s.language === 'string' && /^[a-z]{2,3}$/.test(s.language)) lang = s.language;
             var isDark = true;
             if (s.theme === 'light') isDark = false;
             else if (s.theme === 'system') {
@@ -50,7 +50,8 @@
             } else {
               document.documentElement.dir = 'ltr';
             }
-            if (s.textSize) {
+            // Only apply known text-size modes from persisted settings.
+            if (s.textSize === 'large' || s.textSize === 'compact') {
               document.documentElement.classList.add('text-size-' + s.textSize);
             }
           }
