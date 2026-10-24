@@ -6,6 +6,7 @@ import { ATTESTED_BABY_NAMES } from '../data/attestedBabyNames';
 import { normalizeSearchText } from '../services/search';
 import { getLocalizedGeneratorDescription, hasLocalizedGeneratorDescription, LOCALIZED_GENERATOR_DESCRIPTION_LANGUAGES } from '../i18n/generatorContent';
 import { getLocalizedFaq } from '../i18n/localizedFaq';
+import { LOCALIZED_GENERATOR_DESCRIPTION_IDS } from '../i18n/generatorContent';
 import { getShellLabels } from '../i18n/shell';
 import { getMyNamesAuditLabels } from '../i18n/myNames';
 import { getLocalizedGeneratorTitle, getLocalizedGeneratorShortTitle, LOCALIZED_GENERATOR_TITLE_IDS } from '../i18n/generatorTitles';
@@ -905,6 +906,27 @@ assert(
     `${ALL_GENERATORS_LIST.length} generators × ${LOCALIZED_GENERATOR_DESCRIPTION_LANGUAGES.length} languages checked`
 );
 
+
+// Every generator with a reviewed, generator-specific description must cover all 25 priority locales.
+const reviewedDescriptionCoverageFailures: string[] = [];
+for (const generatorId of LOCALIZED_GENERATOR_DESCRIPTION_IDS) {
+  const meta = GENERATORS_METADATA[generatorId as keyof typeof GENERATORS_METADATA];
+  if (!meta) {
+    reviewedDescriptionCoverageFailures.push(`${generatorId}/missing-metadata`);
+    continue;
+  }
+  for (const lang of LOCALIZED_GENERATOR_DESCRIPTION_LANGUAGES) {
+    const localized = getLocalizedGeneratorDescription(meta, lang);
+    if (!hasLocalizedGeneratorDescription(generatorId, lang) || !localized.trim()) {
+      reviewedDescriptionCoverageFailures.push(`${generatorId}/${lang}`);
+    }
+  }
+}
+assert(
+  reviewedDescriptionCoverageFailures.length === 0,
+  `All ${LOCALIZED_GENERATOR_DESCRIPTION_IDS.length} reviewed generator-specific descriptions cover all 25 priority locales`,
+  reviewedDescriptionCoverageFailures.slice(0, 30).join(', ') || `${LOCALIZED_GENERATOR_DESCRIPTION_IDS.length} generators × 25 locales checked`
+);
 
 // Generator-specific descriptions must remain complete for all priority locales.
 const petDescriptionFailures = LOCALIZED_GENERATOR_DESCRIPTION_LANGUAGES.filter(
