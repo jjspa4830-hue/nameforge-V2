@@ -2,10 +2,11 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 
-// https://vitejs.dev/config/
+// Use relative asset paths so the app works under the GitHub Pages
+// project URL (/nameforge-V2/) as well as local previews.
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  base: '/test-name-forge/',
+  base: './',
   server: {
     host: '0.0.0.0',
     port: 3000,
