@@ -13,7 +13,7 @@ import { getLanguageModalLabels } from '../i18n/languageModal';
 import { getNameDetailsLabels } from '../i18n/nameDetails';
 import { getCollectionModalLabels } from '../i18n/collectionModal';
 import { getCompareModalLabels } from '../i18n/compareModal';
-import { normalizeHistoryEntry } from '../services/storage';
+import { normalizeHistoryEntry, remapImportedCollectionId } from '../services/storage';
 
 declare const process: { exit: (code: number) => void };
 
@@ -46,6 +46,12 @@ assert(normalizeHistoryEntry({ name: 'Aria', generator: '' }) === null, 'Importe
 const invalidHistoryDate = normalizeHistoryEntry({ name: 'Luna', generator: 'fantasy', generatedAt: 'not-a-date' });
 assert(Boolean(invalidHistoryDate && Number.isFinite(Date.parse(invalidHistoryDate.generatedAt))), 'Imported history replaces invalid timestamps with a valid date');
 assert(normalizeHistoryEntry({ name: 'Luna', generator: 'fantasy', generatedAt: '2025-01-02T03:04:05Z' })?.generatedAt === '2025-01-02T03:04:05.000Z', 'Imported history normalizes valid timestamps to ISO format');
+const importedCollectionIds = new Map([['shared-id', 'restored-collection-id']]);
+const declaredCollectionIds = new Set(['shared-id']);
+assert(remapImportedCollectionId('shared-id', importedCollectionIds, declaredCollectionIds) === 'restored-collection-id', 'Imported names are remapped to the restored collection when IDs collide');
+assert(remapImportedCollectionId('missing-imported-id', new Map(), declaredCollectionIds) === undefined, 'Names do not attach to a local collection when an imported collection cannot be restored');
+assert(remapImportedCollectionId('local-only-id', importedCollectionIds, declaredCollectionIds) === 'local-only-id', 'Collection references remain unchanged when the backup does not define that collection');
+
 
 // Global shell localization regression checks (25 priority locales).
 const PRIORITY_LOCALES = [
