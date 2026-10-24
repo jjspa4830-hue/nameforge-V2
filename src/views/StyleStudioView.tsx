@@ -266,17 +266,17 @@ export const StyleStudioView: React.FC<StyleStudioViewProps> = ({
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               placeholder={getStudioLabel(settings.language, 'inputPlaceholder')}
-              className={`w-full px-5 py-4 rounded-2xl bg-[#090d19] border border-slate-700 text-lg sm:text-xl font-bold text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 transition shadow-inner ${isRtl ? 'text-right pl-12' : 'text-left pr-12'}`}
+              className={`w-full px-5 py-4 rounded-2xl bg-[#090d19] border border-slate-700 text-lg sm:text-xl font-bold text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 transition shadow-inner ${isRtl ? 'text-end ps-12' : 'text-start pe-12'}`}
               maxLength={60}
               aria-describedby="styler-input-counter"
             />
-            <span id="styler-input-counter" aria-live="polite" className="absolute bottom-1 right-4 text-[10px] text-slate-500">
+            <span id="styler-input-counter" aria-live="polite" className="absolute bottom-1 end-4 text-[10px] text-slate-500">
               {inputText.length}/60
             </span>
             {inputText && (
               <button
                 onClick={() => setInputText('')}
-                className={`absolute top-1/2 -translate-y-1/2 text-xs font-bold text-slate-500 hover:text-slate-300 p-1 ${isRtl ? 'left-4' : 'right-4'}`}
+                className={`absolute top-1/2 -translate-y-1/2 text-xs font-bold text-slate-500 hover:text-slate-300 p-1 ${isRtl ? 'start-4' : 'end-4'}`}
                 title={getStudioLabel(settings.language, 'clearInput')}
               >
                 ✕
