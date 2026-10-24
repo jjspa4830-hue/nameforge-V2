@@ -654,13 +654,13 @@ export const MyNamesView: React.FC<MyNamesViewProps> = ({ onNavigate }) => {
             {/* Search bar + Bulk export actions */}
             <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 border-t border-slate-800/80">
               <div className="relative w-full sm:w-80">
-                <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <Search className="w-3.5 h-3.5 text-slate-400 absolute start-3.5 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
                   placeholder={controls.searchPlaceholder}
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="w-full h-9 pl-9 pr-3 bg-[#0a0f1d] border border-slate-700/80 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-purple-500"
+                  className="w-full h-9 ps-9 pe-3 bg-[#0a0f1d] border border-slate-700/80 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-purple-500"
                 />
               </div>
 
@@ -798,7 +798,7 @@ export const MyNamesView: React.FC<MyNamesViewProps> = ({ onNavigate }) => {
                             />
                           </button>
                         ))}
-                        <span className="text-[11px] text-slate-500 ml-1">
+                        <span className="text-[11px] text-slate-500 ms-1">
                           {item.rating ? `${item.rating}/5` : extraLabels.notRated}
                         </span>
                       </div>
