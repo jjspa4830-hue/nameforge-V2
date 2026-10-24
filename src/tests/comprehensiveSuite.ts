@@ -79,6 +79,15 @@ for (const locale of PRIORITY_LOCALES) {
       labels.notRated !== 'Not rated',
       `My Names labels avoid English-only fallback for ${locale}`
     );
+    assert(
+      labels.restore !== 'Restore' &&
+      labels.compare !== 'Compare' &&
+      labels.all !== 'All' &&
+      labels.saved !== '🔖 Saved' &&
+      labels.favorites !== '❤️ Favorites' &&
+      labels.withNotes !== '📝 With notes',
+      `My Names toolbar labels avoid English-only fallback for ${locale}`
+    );
   }
 }
 
