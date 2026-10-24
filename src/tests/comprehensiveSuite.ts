@@ -13,6 +13,7 @@ import { getLanguageModalLabels } from '../i18n/languageModal';
 import { getNameDetailsLabels } from '../i18n/nameDetails';
 import { getCollectionModalLabels } from '../i18n/collectionModal';
 import { getCompareModalLabels } from '../i18n/compareModal';
+import { normalizeAppSettings } from '../services/settings';
 
 declare const process: { exit: (code: number) => void };
 
@@ -36,6 +37,42 @@ function assert(condition: boolean, description: string, details?: string) {
     console.error(`  ✗ Test ${currentNum} FAILED: ${description} - ${details || ''}`);
   }
 }
+
+// Persisted settings must be normalized so corrupted or obsolete values cannot leak into the UI.
+const normalizedInvalidSettings = normalizeAppSettings({
+  language: 'not-a-language',
+  theme: 'ultraviolet',
+  textSize: 'tiny',
+  reduceMotion: 'yes',
+  defaultGenLanguage: 'unknown',
+});
+assert(
+  normalizedInvalidSettings.language === 'en' &&
+  normalizedInvalidSettings.theme === 'dark' &&
+  normalizedInvalidSettings.textSize === 'normal' &&
+  normalizedInvalidSettings.reduceMotion === false &&
+  normalizedInvalidSettings.defaultGenLanguage === 'auto',
+  'Invalid persisted settings fall back to safe defaults'
+);
+const normalizedValidSettings = normalizeAppSettings({
+  language: 'ar',
+  theme: 'system',
+  textSize: 'large',
+  reduceMotion: true,
+  defaultGenLanguage: 'tech',
+});
+assert(
+  normalizedValidSettings.language === 'ar' &&
+  normalizedValidSettings.theme === 'system' &&
+  normalizedValidSettings.textSize === 'large' &&
+  normalizedValidSettings.reduceMotion === true &&
+  normalizedValidSettings.defaultGenLanguage === 'tech',
+  'Valid persisted settings are preserved'
+);
+assert(
+  normalizeAppSettings(null).language === 'en',
+  'Missing settings payload safely falls back to defaults'
+);
 
 // Global shell localization regression checks (25 priority locales).
 const PRIORITY_LOCALES = [
