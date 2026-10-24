@@ -639,6 +639,34 @@ export function importDataJSON(jsonStr: string): ImportResult {
           .filter((item: HistoryEntry | null): item is HistoryEntry => item !== null)
       : [];
 
+    // Snapshot the affected keys so a quota/security error cannot leave a half-imported backup.
+    const previousStorage = {
+      names: localStorage.getItem(STORAGE_KEY),
+      collections: localStorage.getItem(COLLECTIONS_KEY),
+      history: localStorage.getItem(HISTORY_KEY),
+    };
+    const rollbackImport = () => {
+      const restore = (key: string, value: string | null) => {
+        try {
+          if (value === null) localStorage.removeItem(key);
+          else localStorage.setItem(key, value);
+        } catch {
+          // Best effort: storage may remain unavailable (e.g. quota exceeded).
+        }
+      };
+      restore(STORAGE_KEY, previousStorage.names);
+      restore(COLLECTIONS_KEY, previousStorage.collections);
+      restore(HISTORY_KEY, previousStorage.history);
+    };
+    const failImport = (message: string): ImportResult => {
+      rollbackImport();
+      result.success = false;
+      result.errors.push(message);
+      result.added = 0;
+      result.updated = 0;
+      return result;
+    };
+
     const existingNames = getSavedNames();
     const existingMap = new Map<string, SavedNameEntry>();
     existingNames.forEach((item) => {
@@ -673,7 +701,9 @@ export function importDataJSON(jsonStr: string): ImportResult {
           createdAt: safeTrim(rawCollection.createdAt) || new Date().toISOString(),
         });
       }
-      saveCollections(currentCols);
+      if (!saveCollections(currentCols)) {
+        return failImport('Impossible d’enregistrer les collections importées. Aucune modification n’a été conservée.');
+      }
     }
 
     // Import Names with merge
@@ -724,7 +754,9 @@ export function importDataJSON(jsonStr: string): ImportResult {
       }
     }
 
-    saveAllNames(existingNames);
+    if (!saveAllNames(existingNames)) {
+      return failImport('Impossible d’enregistrer les noms importés. Aucune modification n’a été conservée.');
+    }
 
     // Restore history too, merge by name, then retain the 50 most recent entries.
     if (importedHistory.length > 0) {
@@ -753,7 +785,7 @@ export function importDataJSON(jsonStr: string): ImportResult {
         localStorage.setItem(HISTORY_KEY, JSON.stringify(mergedHistory.slice(0, 50)));
         notifyStorageChange();
       } catch {
-        result.errors.push("Impossible de restaurer l'historique dans le stockage local.");
+        return failImport("Impossible de restaurer l'historique. Les modifications de cet import ont été annulées.");
       }
     }
 
