@@ -673,7 +673,18 @@ export function importDataJSON(jsonStr: string): ImportResult {
       existingMap.set(item.name.toLowerCase() + '_' + item.generator.toLowerCase(), item);
     });
 
-    // Import collections with stable, unique IDs; malformed entries are ignored.
+    // Keep imported collection references attached to the imported collection,
+    // even when its original ID already belongs to a different local collection.
+    const importedCollectionIdMap = new Map<string, string>();
+    const declaredImportedCollectionIds = new Set<string>();
+    for (const rawCollection of rawCollections) {
+      if (rawCollection && typeof rawCollection === 'object' && !Array.isArray(rawCollection)) {
+        const originalId = safeTrim(rawCollection.id);
+        if (originalId) declaredImportedCollectionIds.add(originalId);
+      }
+    }
+
+    // Import collections with stable, unique destination IDs; malformed entries are ignored.
     if (rawCollections.length > 0) {
       const currentCols = getCollections();
       const colIdSet = new Set(currentCols.map((c) => c.id));
@@ -687,12 +698,17 @@ export function importDataJSON(jsonStr: string): ImportResult {
           result.skipped++;
           continue;
         }
-        let id = safeTrim(rawCollection.id) || generateId();
+        const originalId = safeTrim(rawCollection.id);
+        let id = originalId || generateId();
         if (colIdSet.has(id)) {
-          result.skipped++;
-          continue;
+          do {
+            id = generateId();
+          } while (colIdSet.has(id));
         }
         colIdSet.add(id);
+        if (originalId && !importedCollectionIdMap.has(originalId)) {
+          importedCollectionIdMap.set(originalId, id);
+        }
         currentCols.push({
           id,
           name: colName,
@@ -706,12 +722,16 @@ export function importDataJSON(jsonStr: string): ImportResult {
       }
     }
 
-    // Import Names with merge
+    // Import Names with merge. Remap collection IDs to avoid cross-linking a name
+    // to an unrelated local collection that happens to share the same ID.
     for (const item of rawNames) {
       const entry = normalizeEntry(item);
       if (!entry) {
         result.skipped++;
         continue;
+      }
+      if (entry.collectionId && declaredImportedCollectionIds.has(entry.collectionId)) {
+        entry.collectionId = importedCollectionIdMap.get(entry.collectionId);
       }
 
       const key = entry.name.toLowerCase() + '_' + entry.generator.toLowerCase();
