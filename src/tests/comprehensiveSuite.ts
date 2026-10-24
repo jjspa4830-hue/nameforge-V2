@@ -198,15 +198,23 @@ for (const locale of PRIORITY_LOCALES) {
     `Every FAQ question and answer is present for ${locale}`
   );
   if (locale !== 'fr') {
+    const frenchFallbacks = localized.filter((item, index) =>
+      item.q === faqFrenchSource[index]?.q || item.a === faqFrenchSource[index]?.a
+    ).length;
     assert(
-      localized[0].q !== faqFrenchSource[0].q,
-      `FAQ does not silently fall back to French for ${locale}`
+      frenchFallbacks === 0,
+      `FAQ entries do not silently fall back to French for ${locale}`,
+      `${frenchFallbacks} entries match French source text`
     );
   }
   if (locale !== 'fr' && locale !== 'en') {
+    const englishFallbacks = localized.filter((item, index) =>
+      item.q === faqEnglishSource[index]?.q || item.a === faqEnglishSource[index]?.a
+    ).length;
     assert(
-      localized[0].q !== faqEnglishSource[0].q,
-      `FAQ does not silently fall back to English for ${locale}`
+      englishFallbacks === 0,
+      `FAQ entries do not silently fall back to English for ${locale}`,
+      `${englishFallbacks} entries match English source text`
     );
   }
 }
