@@ -13,6 +13,7 @@ import { getLanguageModalLabels } from '../i18n/languageModal';
 import { getNameDetailsLabels } from '../i18n/nameDetails';
 import { getCollectionModalLabels } from '../i18n/collectionModal';
 import { getCompareModalLabels } from '../i18n/compareModal';
+import { normalizeHistoryEntry } from '../services/storage';
 
 declare const process: { exit: (code: number) => void };
 
@@ -36,6 +37,12 @@ function assert(condition: boolean, description: string, details?: string) {
     console.error(`  ✗ Test ${currentNum} FAILED: ${description} - ${details || ''}`);
   }
 }
+
+// Imported history records must be normalized and malformed records ignored.
+assert(normalizeHistoryEntry({ name: '  Aria  ', generator: 'fantasy' })?.name === 'Aria', 'Imported history trims names and accepts valid records');
+assert(normalizeHistoryEntry({ name: '', generator: 'fantasy' }) === null, 'Imported history rejects empty names');
+assert(normalizeHistoryEntry(null) === null, 'Imported history rejects null records');
+assert(normalizeHistoryEntry({ name: 'Aria', generator: '' }) === null, 'Imported history rejects missing generator IDs');
 
 // Global shell localization regression checks (25 priority locales).
 const PRIORITY_LOCALES = [
