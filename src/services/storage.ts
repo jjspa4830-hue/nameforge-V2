@@ -720,24 +720,27 @@ export function importDataJSON(jsonStr: string): ImportResult {
 
     saveAllNames(existingNames);
 
-    // Restore history too, preserving existing entries and keeping the newest 50.
+    // Restore history too, merge by name, then retain the 50 most recent entries.
     if (importedHistory.length > 0) {
       const currentHistory = getGenerationHistory();
-      const seenHistoryNames = new Set(currentHistory.map((item) => safeTrim(item.name).toLowerCase()));
-      const mergedHistory = [...currentHistory];
-      for (const item of importedHistory) {
-        const key = item.name.toLowerCase();
-        if (!seenHistoryNames.has(key)) {
-          seenHistoryNames.add(key);
-          mergedHistory.push(item);
-        } else {
+      const seenHistoryNames = new Set<string>();
+      const mergedHistory: HistoryEntry[] = [];
+      for (const item of [...currentHistory, ...importedHistory]) {
+        const key = safeTrim(item.name).toLowerCase();
+        if (!key || seenHistoryNames.has(key)) {
           result.skipped++;
+          continue;
         }
+        seenHistoryNames.add(key);
+        mergedHistory.push(item);
       }
+      mergedHistory.sort((a, b) =>
+        new Date(b.generatedAt || 0).getTime() - new Date(a.generatedAt || 0).getTime()
+      );
       try {
         localStorage.setItem(HISTORY_KEY, JSON.stringify(mergedHistory.slice(0, 50)));
         notifyStorageChange();
-      } catch (e) {
+      } catch {
         result.errors.push("Impossible de restaurer l'historique dans le stockage local.");
       }
     }
