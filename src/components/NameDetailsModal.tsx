@@ -145,7 +145,7 @@ export const NameDetailsModal: React.FC<NameDetailsModalProps> = ({
 
             <button
               onClick={handleSpeak}
-              className="p-3 rounded-2xl bg-[#10182e] border border-slate-800 hover:border-cyan-500/50 transition cursor-pointer text-left group"
+              className="p-3 rounded-2xl bg-[#10182e] border border-slate-800 hover:border-cyan-500/50 transition cursor-pointer text-start group"
               title={t.listen}
             >
               <span className="text-[10px] uppercase font-bold text-slate-400 flex items-center justify-between">
