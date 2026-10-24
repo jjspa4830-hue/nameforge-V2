@@ -134,20 +134,39 @@ const DEFAULT_SETTINGS: AppSettings = {
   defaultGenLanguage: 'auto',
 };
 
+export function normalizeAppSettings(raw: unknown): AppSettings {
+  const parsed = raw && typeof raw === 'object' ? raw as Partial<AppSettings> : {};
+  const language = SUPPORTED_LANGUAGES.some((item) => item.code === parsed.language)
+    ? parsed.language!
+    : DEFAULT_SETTINGS.language;
+  const theme: ThemeMode = parsed.theme === 'dark' || parsed.theme === 'light' || parsed.theme === 'system'
+    ? parsed.theme
+    : DEFAULT_SETTINGS.theme;
+  const textSize: TextSizeMode = parsed.textSize === 'normal' || parsed.textSize === 'large' || parsed.textSize === 'compact'
+    ? parsed.textSize
+    : DEFAULT_SETTINGS.textSize;
+  const defaultGenLanguage: GenLanguageCode = GEN_LANGUAGES.some((item) => item.code === parsed.defaultGenLanguage)
+    ? parsed.defaultGenLanguage!
+    : DEFAULT_SETTINGS.defaultGenLanguage;
+
+  return {
+    language,
+    theme,
+    textSize,
+    reduceMotion: typeof parsed.reduceMotion === 'boolean'
+      ? parsed.reduceMotion
+      : DEFAULT_SETTINGS.reduceMotion,
+    defaultGenLanguage,
+  };
+}
+
 export function getAppSettings(): AppSettings {
   try {
     const raw = localStorage.getItem(SETTINGS_KEY);
-    if (!raw) return DEFAULT_SETTINGS;
-    const parsed = JSON.parse(raw);
-    return {
-      language: parsed.language || DEFAULT_SETTINGS.language,
-      theme: parsed.theme || DEFAULT_SETTINGS.theme,
-      textSize: parsed.textSize || DEFAULT_SETTINGS.textSize,
-      reduceMotion: typeof parsed.reduceMotion === 'boolean' ? parsed.reduceMotion : DEFAULT_SETTINGS.reduceMotion,
-      defaultGenLanguage: parsed.defaultGenLanguage || DEFAULT_SETTINGS.defaultGenLanguage,
-    };
+    if (!raw) return { ...DEFAULT_SETTINGS };
+    return normalizeAppSettings(JSON.parse(raw));
   } catch {
-    return DEFAULT_SETTINGS;
+    return { ...DEFAULT_SETTINGS };
   }
 }
 
