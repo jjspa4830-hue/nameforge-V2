@@ -732,8 +732,14 @@ export function importDataJSON(jsonStr: string): ImportResult {
       const seenHistoryNames = new Set<string>();
       const mergedHistory: HistoryEntry[] = [];
       for (const item of [...currentHistory, ...importedHistory]) {
-        const key = safeTrim(item.name).toLowerCase();
-        if (!key || seenHistoryNames.has(key)) {
+        // A name can legitimately appear in multiple generators or styles.
+        // Deduplicate only equivalent history entries, not by display name alone.
+        const key = [
+          safeTrim(item.name).toLocaleLowerCase(),
+          safeTrim(item.generator).toLocaleLowerCase(),
+          safeTrim(item.style).toLocaleLowerCase(),
+        ].join('::');
+        if (!safeTrim(item.name) || seenHistoryNames.has(key)) {
           result.skipped++;
           continue;
         }
