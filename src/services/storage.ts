@@ -134,6 +134,16 @@ function normalizeEntry(raw: any): SavedNameEntry | null {
   };
 }
 
+/** Remap an imported name's collection reference without attaching it to an unrelated local collection. */
+export function remapImportedCollectionId(
+  collectionId: string | undefined,
+  importedCollectionIdMap: Map<string, string>,
+  declaredImportedCollectionIds: Set<string>
+): string | undefined {
+  if (!collectionId || !declaredImportedCollectionIds.has(collectionId)) return collectionId;
+  return importedCollectionIdMap.get(collectionId);
+}
+
 /** Validate imported history records without trusting fields from an external JSON file. */
 export function normalizeHistoryEntry(raw: unknown): HistoryEntry | null {
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return null;
@@ -730,9 +740,11 @@ export function importDataJSON(jsonStr: string): ImportResult {
         result.skipped++;
         continue;
       }
-      if (entry.collectionId && declaredImportedCollectionIds.has(entry.collectionId)) {
-        entry.collectionId = importedCollectionIdMap.get(entry.collectionId);
-      }
+      entry.collectionId = remapImportedCollectionId(
+        entry.collectionId,
+        importedCollectionIdMap,
+        declaredImportedCollectionIds
+      );
 
       const key = entry.name.toLowerCase() + '_' + entry.generator.toLowerCase();
       if (existingMap.has(key)) {
