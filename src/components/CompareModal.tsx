@@ -79,7 +79,7 @@ export const CompareModal: React.FC<CompareModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md animate-fade-in overflow-y-auto">
       <div
-        className="w-full max-w-5xl bg-[#0d1424] border border-slate-700/80 rounded-3xl p-5 sm:p-8 shadow-2xl relative text-left my-auto"
+        className="w-full max-w-5xl bg-[#0d1424] border border-slate-700/80 rounded-3xl p-5 sm:p-8 shadow-2xl relative text-start my-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -161,7 +161,7 @@ export const CompareModal: React.FC<CompareModalProps> = ({
                 {/* Remove button */}
                 <button
                   onClick={() => handleRemove(item.name)}
-                  className="absolute top-3 right-3 text-slate-500 hover:text-red-400 p-1 rounded-lg transition"
+                  className="absolute top-3 end-3 text-slate-500 hover:text-red-400 p-1 rounded-lg transition"
                   title={t.remove}
                 >
                   <X className="w-4 h-4" />
@@ -171,7 +171,7 @@ export const CompareModal: React.FC<CompareModalProps> = ({
                   <div className="text-[11px] font-bold uppercase tracking-wider text-purple-400 mb-1">
                     {item.generator}
                   </div>
-                  <h3 className="text-xl sm:text-2xl font-black text-white break-words pr-6">
+                  <h3 className="text-xl sm:text-2xl font-black text-white break-words pe-6">
                     {item.name}
                   </h3>
 
@@ -201,7 +201,7 @@ export const CompareModal: React.FC<CompareModalProps> = ({
                         />
                       </button>
                     ))}
-                    <span className="text-[11px] text-slate-400 ml-1">
+                    <span className="text-[11px] text-slate-400 ms-1">
                       {item.rating > 0 ? `${item.rating}/5` : t.unrated}
                     </span>
                   </div>
