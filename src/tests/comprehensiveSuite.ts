@@ -13,6 +13,7 @@ import { getLanguageModalLabels } from '../i18n/languageModal';
 import { getNameDetailsLabels } from '../i18n/nameDetails';
 import { getCollectionModalLabels } from '../i18n/collectionModal';
 import { getCompareModalLabels } from '../i18n/compareModal';
+import { normalizeRating } from '../services/storage';
 
 declare const process: { exit: (code: number) => void };
 
@@ -36,6 +37,15 @@ function assert(condition: boolean, description: string, details?: string) {
     console.error(`  ✗ Test ${currentNum} FAILED: ${description} - ${details || ''}`);
   }
 }
+
+// User ratings must stay within the supported 1–5 star range.
+assert(normalizeRating(1) === 1, 'One-star rating is accepted');
+assert(normalizeRating(5) === 5, 'Five-star rating is accepted');
+assert(normalizeRating('4') === 4, 'Numeric rating strings are normalized');
+assert(normalizeRating(0) === 0, 'Zero rating is treated as no rating');
+assert(normalizeRating(6) === 0, 'Out-of-range ratings are rejected');
+assert(normalizeRating(Number.NaN) === 0, 'NaN ratings are rejected');
+assert(normalizeRating('not-a-rating') === 0, 'Non-numeric ratings are rejected');
 
 // Global shell localization regression checks (25 priority locales).
 const PRIORITY_LOCALES = [
