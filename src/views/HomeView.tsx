@@ -625,13 +625,13 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
 
           {/* Search Input */}
           <div className="relative max-w-2xl mx-auto">
-            <Search className="w-5 h-5 text-purple-400 absolute left-4 top-1/2 -translate-y-1/2" />
+            <Search className="w-5 h-5 text-purple-400 absolute start-4 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               placeholder={t.nav.searchPlaceholder}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full h-13 pl-12 pr-4 bg-[#070b16] border border-slate-700/80 rounded-2xl text-sm font-medium text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 shadow-inner"
+              className="w-full h-13 ps-12 pe-4 bg-[#070b16] border border-slate-700/80 rounded-2xl text-sm font-medium text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 shadow-inner"
             />
           </div>
 
@@ -650,7 +650,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
                   <button
                     key={gen.id}
                     onClick={() => onNavigate('generator-detail', gen.id)}
-                    className="p-3 rounded-xl bg-[#090e1c] border border-slate-800 hover:border-purple-500/60 transition text-left flex items-center justify-between group cursor-pointer"
+                    className="p-3 rounded-xl bg-[#090e1c] border border-slate-800 hover:border-purple-500/60 transition text-start flex items-center justify-between group cursor-pointer"
                   >
                     <div className="flex items-center gap-2.5 truncate">
                       <span className="text-xl">{gen.icon}</span>
@@ -825,7 +825,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
 
           {/* Category Filter Tabs for Top Rated */}
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-xs text-slate-400 font-bold mr-1">{topRatedLabels.filterLabel}</span>
+            <span className="text-xs text-slate-400 font-bold me-1">{topRatedLabels.filterLabel}</span>
             <button
               onClick={() => setRatedCategoryFilter('all')}
               className={`py-1.5 px-3 rounded-xl text-xs font-bold transition cursor-pointer ${
@@ -1036,7 +1036,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
               >
                 <button
                   onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
-                  className="w-full p-4 sm:p-5 text-left flex items-center justify-between gap-4 cursor-pointer hover:bg-slate-800/40 transition"
+                  className="w-full p-4 sm:p-5 text-start flex items-center justify-between gap-4 cursor-pointer hover:bg-slate-800/40 transition"
                 >
                   <span className="font-bold text-white text-sm sm:text-base leading-snug">
                     {item.q}
