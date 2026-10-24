@@ -555,7 +555,7 @@ export const MyNamesView: React.FC<MyNamesViewProps> = ({ onNavigate }) => {
               className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white text-xs font-extrabold flex items-center gap-1.5 shadow-md transition cursor-pointer"
             >
               <Scale className="w-3.5 h-3.5" />
-              <span>Comparer ({selectedForCompare.length})</span>
+              <span>{extraLabels.compare} ({selectedForCompare.length})</span>
             </button>
           )}
 
@@ -583,7 +583,7 @@ export const MyNamesView: React.FC<MyNamesViewProps> = ({ onNavigate }) => {
             title={controls.restore}
           >
             <Upload className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Restaurer</span>
+            <span>{extraLabels.restore}</span>
           </button>
         </div>
       </div>
@@ -600,10 +600,10 @@ export const MyNamesView: React.FC<MyNamesViewProps> = ({ onNavigate }) => {
               <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
                 {(
                   [
-                    ['all', 'Tous'],
-                    ['saved', '🔖 Enregistrés'],
-                    ['liked', '❤️ Favoris'],
-                    ['notes', '📝 Avec Notes'],
+                    ['all', extraLabels.all],
+                    ['saved', extraLabels.saved],
+                    ['liked', extraLabels.favorites],
+                    ['notes', extraLabels.withNotes],
                   ] as const
                 ).map(([tabKey, label]) => (
                   <button
