@@ -116,6 +116,8 @@ export const CollectionModal: React.FC<CollectionModalProps> = ({
                   type="button"
                   onClick={() => setColor(c)}
                   style={{ backgroundColor: c }}
+                  aria-label={`${t.colorLabel}: ${c}`}
+                  aria-pressed={color === c}
                   className={`w-7 h-7 rounded-full transition transform cursor-pointer ${
                     color === c ? 'scale-125 ring-2 ring-white shadow-lg' : 'opacity-70 hover:opacity-100'
                   }`}
