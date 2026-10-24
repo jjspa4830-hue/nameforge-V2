@@ -52,6 +52,9 @@ export const CollectionModal: React.FC<CollectionModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fade-in">
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="collection-modal-title"
         className="w-full max-w-md bg-[#0f172a] border border-slate-700 rounded-2xl p-6 shadow-2xl relative text-left"
         onClick={(e) => e.stopPropagation()}
       >
@@ -67,7 +70,7 @@ export const CollectionModal: React.FC<CollectionModalProps> = ({
           <div className="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center">
             <FolderPlus className="w-4 h-4" />
           </div>
-          <h3 className="text-base font-bold text-white">
+          <h3 id="collection-modal-title" className="text-base font-bold text-white">
             {collection ? t.titleEdit : t.titleNew}
           </h3>
         </div>
