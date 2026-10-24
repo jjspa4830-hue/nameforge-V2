@@ -627,11 +627,11 @@ export function importDataJSON(jsonStr: string): ImportResult {
 
     const rawNames: any[] = Array.isArray(parsed) ? parsed : parsed.names;
     const rawCollections: any[] = Array.isArray(parsed) ? [] : (parsed.collections || []);
-    const importedHistory: HistoryEntry[] = Array.isArray(parsed) && !Array.isArray(parsed.history)
-      ? []
-      : (Array.isArray(parsed.history) ? parsed.history : [])
+    const importedHistory: HistoryEntry[] = !Array.isArray(parsed) && Array.isArray(parsed.history)
+      ? parsed.history
           .map((item: unknown) => normalizeHistoryEntry(item))
-          .filter((item: HistoryEntry | null): item is HistoryEntry => item !== null);
+          .filter((item: HistoryEntry | null): item is HistoryEntry => item !== null)
+      : [];
 
     const existingNames = getSavedNames();
     const existingMap = new Map<string, SavedNameEntry>();
