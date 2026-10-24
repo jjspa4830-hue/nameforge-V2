@@ -182,6 +182,43 @@ for (const locale of PRIORITY_LOCALES) {
 }
 
 // FAQ localization regression checks
+// Full FAQ localization coverage: all 25 supported locales must keep every entry
+// and must not silently fall back to the French or English source content.
+const faqFrenchSource = getLocalizedFaq('fr');
+const faqEnglishSource = getLocalizedFaq('en');
+for (const locale of PRIORITY_LOCALES) {
+  const localized = getLocalizedFaq(locale);
+  assert(
+    localized.length === faqFrenchSource.length,
+    `FAQ preserves all entries for ${locale}`,
+    `Found ${localized.length}`
+  );
+  assert(
+    localized.every((item) => item.q.trim() && item.a.trim()),
+    `Every FAQ question and answer is present for ${locale}`
+  );
+  if (locale !== 'fr') {
+    const frenchFallbacks = localized.filter((item, index) =>
+      item.q === faqFrenchSource[index]?.q || item.a === faqFrenchSource[index]?.a
+    ).length;
+    assert(
+      frenchFallbacks === 0,
+      `FAQ entries do not silently fall back to French for ${locale}`,
+      `${frenchFallbacks} entries match French source text`
+    );
+  }
+  if (locale !== 'fr' && locale !== 'en') {
+    const englishFallbacks = localized.filter((item, index) =>
+      item.q === faqEnglishSource[index]?.q || item.a === faqEnglishSource[index]?.a
+    ).length;
+    assert(
+      englishFallbacks === 0,
+      `FAQ entries do not silently fall back to English for ${locale}`,
+      `${englishFallbacks} entries match English source text`
+    );
+  }
+}
+
 const faqEnglish = getLocalizedFaq('en');
 assert(faqEnglish.length === 18, 'English FAQ preserves all 18 FAQ entries', `Found ${faqEnglish.length}`);
 assert(faqEnglish.every((item) => item.q.trim() && item.a.trim()), 'Every English FAQ entry has a question and answer');
