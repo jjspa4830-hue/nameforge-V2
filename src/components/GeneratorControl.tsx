@@ -210,7 +210,7 @@ export const GeneratorControl: React.FC<GeneratorControlProps> = ({
           {keyword && onKeywordChange && (
             <button
               onClick={() => onKeywordChange('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-xs px-1.5 py-0.5 rounded cursor-pointer"
+              className="absolute end-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-xs px-1.5 py-0.5 rounded cursor-pointer"
               title={keywordLabels.clear}
             >
               ✕
