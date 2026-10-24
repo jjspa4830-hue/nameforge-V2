@@ -1620,6 +1620,7 @@ const GENERATOR_DESCRIPTION_OVERRIDES: Record<string, Record<string, string>> = 
 };
 
 export const LOCALIZED_GENERATOR_DESCRIPTION_LANGUAGES = Object.keys(LOCALIZED_DESCRIPTIONS);
+export const LOCALIZED_GENERATOR_DESCRIPTION_IDS = Object.keys(GENERATOR_DESCRIPTION_OVERRIDES);
 
 /** Localized, honest category-level summary. Detailed editorial guides remain in their authored source language. */
 export function getLocalizedGeneratorDescription(meta: GeneratorMeta, language: LanguageCode): string {
