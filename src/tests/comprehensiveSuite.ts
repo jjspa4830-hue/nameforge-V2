@@ -6,6 +6,7 @@ import { ATTESTED_BABY_NAMES } from '../data/attestedBabyNames';
 import { normalizeSearchText } from '../services/search';
 import { getLocalizedGeneratorDescription, hasLocalizedGeneratorDescription, LOCALIZED_GENERATOR_DESCRIPTION_LANGUAGES } from '../i18n/generatorContent';
 import { getLocalizedFaq } from '../i18n/localizedFaq';
+import { FULL_TRANSLATION_LANGUAGES, isLanguageFullyTranslated } from '../i18n';
 import { getShellLabels } from '../i18n/shell';
 import { getMyNamesAuditLabels } from '../i18n/myNames';
 import { getLocalizedGeneratorTitle, getLocalizedGeneratorShortTitle, LOCALIZED_GENERATOR_TITLE_IDS } from '../i18n/generatorTitles';
@@ -59,6 +60,13 @@ const PRIORITY_LOCALES = [
   'zh', 'ru', 'hi', 'nl', 'pl', 'sv', 'vi', 'id', 'th', 'el',
   'he', 'cs', 'ro', 'da', 'fi',
 ] as const;
+assert(
+  FULL_TRANSLATION_LANGUAGES.length === PRIORITY_LOCALES.length &&
+    PRIORITY_LOCALES.every((locale) => FULL_TRANSLATION_LANGUAGES.includes(locale)) &&
+    PRIORITY_LOCALES.every((locale) => isLanguageFullyTranslated(locale)),
+  'The 25 priority locales are all registered as fully translated',
+  `Expected ${PRIORITY_LOCALES.length} fully translated locales; found ${FULL_TRANSLATION_LANGUAGES.length}`
+);
 for (const locale of PRIORITY_LOCALES) {
   const labels = getShellLabels(locale);
   assert(
@@ -109,7 +117,7 @@ for (const locale of PRIORITY_LOCALES) {
   assert(
     missingTitles.length === 0,
     `Core generator titles and short labels are localized for ${locale}`,
-    missingTitles.join(', ') || '16 core generators checked'
+    missingTitles.join(', ') || `${LOCALIZED_GENERATOR_TITLE_IDS.length} generators checked`
   );
 }
 
