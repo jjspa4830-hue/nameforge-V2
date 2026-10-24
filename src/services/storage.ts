@@ -142,6 +142,12 @@ export function normalizeHistoryEntry(raw: unknown): HistoryEntry | null {
   const generator = safeTrim(item.generator);
   if (!name || !generator) return null;
 
+  const rawGeneratedAt = safeTrim(item.generatedAt);
+  const parsedGeneratedAt = Date.parse(rawGeneratedAt);
+  const generatedAt = rawGeneratedAt && Number.isFinite(parsedGeneratedAt)
+    ? new Date(parsedGeneratedAt).toISOString()
+    : new Date().toISOString();
+
   return {
     id: safeTrim(item.id) || generateId(),
     name,
@@ -150,7 +156,7 @@ export function normalizeHistoryEntry(raw: unknown): HistoryEntry | null {
     tone: safeTrim(item.tone),
     description: safeTrim(item.description),
     bestFor: safeTrim(item.bestFor),
-    generatedAt: safeTrim(item.generatedAt) || new Date().toISOString(),
+    generatedAt,
   };
 }
 
