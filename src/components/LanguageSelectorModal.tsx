@@ -130,6 +130,7 @@ export const LanguageSelectorModal: React.FC<LanguageSelectorModalProps> = ({
               ref={inputRef}
               type="text"
               placeholder={labels.searchPlaceholder}
+              aria-label={labels.searchPlaceholder}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full h-12 pl-12 pr-10 bg-[#080d19] border border-slate-700/80 rounded-2xl text-sm font-medium text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 shadow-inner"
@@ -138,6 +139,7 @@ export const LanguageSelectorModal: React.FC<LanguageSelectorModalProps> = ({
               <button
                 onClick={() => setSearch('')}
                 className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-xs px-2 py-1 cursor-pointer"
+                aria-label={labels.reset}
               >
                 ✕
               </button>
@@ -158,6 +160,7 @@ export const LanguageSelectorModal: React.FC<LanguageSelectorModalProps> = ({
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
+                aria-pressed={activeTab === tab.id}
                 className={`py-1.5 px-3 rounded-xl text-xs font-bold transition cursor-pointer border ${
                   activeTab === tab.id
                     ? 'bg-purple-600 text-white border-purple-500 shadow-sm'
@@ -180,6 +183,7 @@ export const LanguageSelectorModal: React.FC<LanguageSelectorModalProps> = ({
                 <button
                   key={lang.code}
                   onClick={() => handleSelect(lang.code)}
+                  aria-pressed={isSelected}
                   className={`p-3 rounded-2xl border text-left transition flex items-center justify-between group cursor-pointer ${
                     isSelected
                       ? 'bg-purple-600/30 border-purple-500/80 text-white shadow-md shadow-purple-600/20'
@@ -231,6 +235,7 @@ export const LanguageSelectorModal: React.FC<LanguageSelectorModalProps> = ({
                   setActiveTab('all');
                 }}
                 className="text-xs text-purple-400 hover:underline cursor-pointer"
+                aria-label={labels.reset}
               >
                 {labels.reset}
               </button>
