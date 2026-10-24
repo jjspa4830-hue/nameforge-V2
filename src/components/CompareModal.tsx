@@ -163,6 +163,7 @@ export const CompareModal: React.FC<CompareModalProps> = ({
                   onClick={() => handleRemove(item.name)}
                   className="absolute top-3 right-3 text-slate-500 hover:text-red-400 p-1 rounded-lg transition"
                   title={t.remove}
+                  aria-label={t.remove}
                 >
                   <X className="w-4 h-4" />
                 </button>
