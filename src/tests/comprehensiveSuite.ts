@@ -1,4 +1,5 @@
 import { ALL_GENERATORS_LIST, GENERATORS_METADATA } from '../data/generators';
+import { SUPPORTED_LANGUAGES } from '../services/settings';
 import { SUBCATEGORIES_DATA } from '../data/subcategories';
 import { generateNames, isTooSimilar, calculateLevenshteinDistance, scoreCandidate } from '../services/generatorEngine';
 import { generateSvgCode, splitGraphemes } from '../services/textStyler';
@@ -1056,6 +1057,29 @@ for (const generatorId of ['character', 'ai_bot'] as const) {
     failures.join(', ') || '25 languages checked'
   );
 }
+
+// Language registry integrity and right-to-left direction regression checks.
+assert(
+  new Set(SUPPORTED_LANGUAGES.map((language) => language.code)).size === SUPPORTED_LANGUAGES.length,
+  'Supported language codes are unique'
+);
+assert(
+  SUPPORTED_LANGUAGES.every((language) => language.label.trim() && language.native.trim()),
+  'Every supported language has a display and native label'
+);
+const expectedRtlLanguages = ['ar', 'he', 'fa', 'ur', 'ps'] as const;
+for (const code of expectedRtlLanguages) {
+  const language = SUPPORTED_LANGUAGES.find((item) => item.code === code);
+  assert(
+    language?.dir === 'rtl',
+    `Language registry marks ${code} as right-to-left`,
+    language ? `Expected rtl, received ${language.dir}` : 'Language code is missing'
+  );
+}
+assert(
+  SUPPORTED_LANGUAGES.filter((language) => language.dir === 'rtl').length === expectedRtlLanguages.length,
+  'Only explicitly supported right-to-left languages use RTL direction'
+);
 
 // -----------------------------------------------------------------------------
 // SUMMARY
