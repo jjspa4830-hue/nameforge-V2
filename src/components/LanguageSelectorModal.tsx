@@ -91,6 +91,7 @@ export const LanguageSelectorModal: React.FC<LanguageSelectorModalProps> = ({
       onClick={onClose}
     >
       <div
+        dir={SUPPORTED_LANGUAGES.find((language) => language.code === currentLang)?.dir || 'ltr'}
         className="w-full max-w-3xl bg-[#0c1224] border border-purple-500/40 rounded-3xl shadow-2xl flex flex-col text-slate-100 overflow-hidden max-h-[90vh] my-auto"
         onClick={(e) => e.stopPropagation()}
       >
@@ -125,19 +126,19 @@ export const LanguageSelectorModal: React.FC<LanguageSelectorModalProps> = ({
         {/* Search Toolbar */}
         <div className="p-4 sm:p-5 border-b border-slate-800 space-y-3 bg-[#0a0f1d]">
           <div className="relative">
-            <Search className="w-5 h-5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
+            <Search className="w-5 h-5 text-slate-400 absolute start-4 top-1/2 -translate-y-1/2" />
             <input
               ref={inputRef}
               type="text"
               placeholder={labels.searchPlaceholder}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full h-12 pl-12 pr-10 bg-[#080d19] border border-slate-700/80 rounded-2xl text-sm font-medium text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 shadow-inner"
+              className="w-full h-12 ps-12 pe-10 bg-[#080d19] border border-slate-700/80 rounded-2xl text-sm font-medium text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 shadow-inner"
             />
             {search && (
               <button
                 onClick={() => setSearch('')}
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-xs px-2 py-1 cursor-pointer"
+                className="absolute end-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-xs px-2 py-1 cursor-pointer"
               >
                 ✕
               </button>
@@ -180,7 +181,7 @@ export const LanguageSelectorModal: React.FC<LanguageSelectorModalProps> = ({
                 <button
                   key={lang.code}
                   onClick={() => handleSelect(lang.code)}
-                  className={`p-3 rounded-2xl border text-left transition flex items-center justify-between group cursor-pointer ${
+                  className={`p-3 rounded-2xl border text-start transition flex items-center justify-between group cursor-pointer ${
                     isSelected
                       ? 'bg-purple-600/30 border-purple-500/80 text-white shadow-md shadow-purple-600/20'
                       : 'bg-[#0f172a]/90 border-slate-800 hover:border-purple-500/60 hover:bg-[#131d33] text-slate-200'
