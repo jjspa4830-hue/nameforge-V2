@@ -99,14 +99,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               </span>
             </div>
             <p className="text-slate-400 leading-relaxed">{t.languageDesc}</p>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 pt-1 max-h-56 overflow-y-auto pr-1">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 pt-1 max-h-56 overflow-y-auto pe-1">
               {SUPPORTED_LANGUAGES.map((lang) => {
                 const isActive = settings.language === lang.code;
                 return (
                   <button
                     key={lang.code}
                     onClick={() => handleUpdate({ language: lang.code })}
-                    className={`py-2 px-3 rounded-xl border text-left transition flex items-center gap-2.5 cursor-pointer ${
+                    className={`py-2 px-3 rounded-xl border text-start transition flex items-center gap-2.5 cursor-pointer ${
                       isActive
                         ? 'bg-purple-600/35 border-purple-500 text-white font-bold shadow-sm'
                         : 'bg-[#10182c] border-slate-800 hover:border-slate-700 text-slate-300 hover:text-white'
@@ -219,7 +219,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   onChange={(e) => handleUpdate({ reduceMotion: e.target.checked })}
                   className="sr-only peer"
                 />
-                <div className="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
+                <div className="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
               </label>
             </div>
           </section>
