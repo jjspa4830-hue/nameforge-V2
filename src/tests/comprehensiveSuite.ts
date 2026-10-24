@@ -43,6 +43,9 @@ assert(normalizeHistoryEntry({ name: '  Aria  ', generator: 'fantasy' })?.name =
 assert(normalizeHistoryEntry({ name: '', generator: 'fantasy' }) === null, 'Imported history rejects empty names');
 assert(normalizeHistoryEntry(null) === null, 'Imported history rejects null records');
 assert(normalizeHistoryEntry({ name: 'Aria', generator: '' }) === null, 'Imported history rejects missing generator IDs');
+const invalidHistoryDate = normalizeHistoryEntry({ name: 'Luna', generator: 'fantasy', generatedAt: 'not-a-date' });
+assert(Boolean(invalidHistoryDate && Number.isFinite(Date.parse(invalidHistoryDate.generatedAt))), 'Imported history replaces invalid timestamps with a valid date');
+assert(normalizeHistoryEntry({ name: 'Luna', generator: 'fantasy', generatedAt: '2025-01-02T03:04:05Z' })?.generatedAt === '2025-01-02T03:04:05.000Z', 'Imported history normalizes valid timestamps to ISO format');
 
 // Global shell localization regression checks (25 priority locales).
 const PRIORITY_LOCALES = [
