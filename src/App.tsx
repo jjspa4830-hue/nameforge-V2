@@ -11,6 +11,7 @@ import { GENERATORS_METADATA, ALL_GENERATORS_LIST } from './data/generators';
 import { applySettingsToDOM, getAppSettings, subscribeToSettings, SUPPORTED_LANGUAGES } from './services/settings';
 import { getShellLabels } from './i18n/shell';
 import { getLocalizedGeneratorTitle } from './i18n/generatorTitles';
+import './styles/animated-headings.css';
 
 export const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<string>('home');
