@@ -8,6 +8,7 @@ import { getLocalizedGeneratorDescription, hasLocalizedGeneratorDescription, LOC
 import { getLocalizedFaq } from '../i18n/localizedFaq';
 import { LOCALIZED_GENERATOR_DESCRIPTION_IDS } from '../i18n/generatorContent';
 import { getShellLabels } from '../i18n/shell';
+import { getStudioLabel } from '../i18n/studio';
 import { getMyNamesAuditLabels } from '../i18n/myNames';
 import { getLocalizedGeneratorTitle, getLocalizedGeneratorShortTitle, LOCALIZED_GENERATOR_TITLE_IDS } from '../i18n/generatorTitles';
 import { getLanguageModalLabels } from '../i18n/languageModal';
@@ -1278,6 +1279,18 @@ assert(
   SUPPORTED_LANGUAGES.filter((language) => language.dir === 'rtl').length === expectedRtlLanguages.length,
   'Only explicitly supported right-to-left languages use RTL direction'
 );
+
+// The Style Studio's apply-to-canvas action must not silently fall back to English.
+const studioPriorityLocales = ['fr', 'en', 'ar', 'tr', 'es', 'de', 'it', 'pt', 'ja', 'ko', 'zh', 'ru', 'hi', 'nl', 'pl', 'sv', 'vi', 'id', 'th', 'el', 'he', 'cs', 'ro', 'da', 'fi'] as const;
+const englishApplyToCanvas = getStudioLabel('en', 'applyToCanvas');
+for (const locale of studioPriorityLocales) {
+  const label = getStudioLabel(locale, 'applyToCanvas');
+  assert(
+    label.trim().length > 0 && (locale === 'en' || label !== englishApplyToCanvas),
+    `Style Studio apply-to-canvas label is localized for ${locale}`,
+    `Received "${label}"`
+  );
+}
 
 // -----------------------------------------------------------------------------
 // SUMMARY
