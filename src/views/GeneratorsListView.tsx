@@ -6,6 +6,7 @@ import { getAppSettings, subscribeToSettings } from '../services/settings';
 import { getLocalizedGeneratorDescription } from '../i18n/generatorContent';
 import { normalizeSearchText } from '../services/search';
 import { getLocalizedGeneratorTitle, getLocalizedGeneratorShortTitle } from '../i18n/generatorTitles';
+import { getShellLabels } from '../i18n/shell';
 
 interface GeneratorsListViewProps {
   onNavigate: (view: string, generatorId?: GeneratorId) => void;
@@ -53,7 +54,7 @@ export const GeneratorsListView: React.FC<GeneratorsListViewProps> = ({ onNaviga
   useEffect(() => subscribeToSettings((settings) => setLanguage(settings.language)), []);
 
   const t = CATALOGUE_COPY[language] || EN_COPY;
-  const categoryLabel = (id: string, fallback: string) => t.categories[id] || fallback;
+  const categoryLabel = (id: string, fallback: string) => t.categories[id] || getShellLabels(language).families[id as keyof ReturnType<typeof getShellLabels>['families']] || fallback;
   const filtered = ALL_GENERATORS_LIST.filter((gen) => {
     const query = normalizeSearchText(search);
     const searchableFields = [

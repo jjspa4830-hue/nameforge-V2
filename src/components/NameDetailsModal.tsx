@@ -224,7 +224,7 @@ export const NameDetailsModal: React.FC<NameDetailsModalProps> = ({
                     className={`w-4 h-4 ${nameItem.isAttested ? 'text-emerald-400' : 'text-indigo-400'}`}
                   />
                   <span className={nameItem.isAttested ? 'text-emerald-300' : 'text-indigo-300'}>
-                    {nameItem.isAttested ? '{t.attested}' : '{t.invented}'}
+                    {nameItem.isAttested ? t.attested : t.invented}
                   </span>
                 </span>
                 {nameItem.origin && (
