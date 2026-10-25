@@ -817,6 +817,19 @@ assert(
   'French phonetic profile generates 5 consistent names'
 );
 
+const generationLocales = [
+  'fr', 'en', 'es', 'de', 'it', 'pt', 'ar', 'tr', 'ja', 'ko', 'zh', 'ru', 'hi',
+  'nl', 'pl', 'sv', 'vi', 'id', 'th', 'el', 'he', 'cs', 'ro', 'da', 'fi',
+] as const;
+const allLocaleBatches = generationLocales.map((genLanguage) =>
+  generateNames({ generatorId: 'fantasy', genLanguage, quantity: 3 })
+);
+assert(
+  allLocaleBatches.length === 25 &&
+    allLocaleBatches.every((batch) => batch.length === 3 && batch.every((item) => item.name.trim().length > 0)),
+  'All 25 supported languages generate non-empty names without errors'
+);
+
 // SVG export must preserve letter spacing and Unicode content.
 const spacedSvg = generateSvgCode('星😀辰', 48, 'Arial', 'cyber-neon', 'cosmic-nebula-texture', true, 3);
 assert(
