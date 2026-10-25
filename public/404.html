@@ -12,22 +12,27 @@
         var parts = path.split('/').filter(Boolean);
         var basePrefix = '';
 
-        // If hosted on GitHub Pages (*.github.io/<repo>/...)
+        // GitHub Pages project sites use /<repository>/ as their base path.
         if (window.location.hostname.indexOf('github.io') !== -1 && parts.length > 0) {
           basePrefix = '/' + parts[0];
           path = '/' + parts.slice(1).join('/');
         } else if (path.indexOf('/nameforge') === 0) {
+          // Keep compatibility with the previous /nameforge deployment.
           basePrefix = '/nameforge';
           path = path.slice(basePrefix.length);
         }
 
-        var cleanPath = path.replace(/^\/+/, '');
-        var targetHash = cleanPath ? '/' + cleanPath : '';
-        if (hash) {
-          targetHash = hash.replace(/^#\/?/, '/');
+        var cleanPath = path.replace(/^\/+|\/+$/g, '');
+        var targetRoute = hash
+          ? hash.replace(/^#\/?/, '')
+          : cleanPath;
+
+        // Query parameters must stay before the hash so the app can read them.
+        var targetUrl = (basePrefix || '') + '/' + search;
+        if (targetRoute) {
+          targetUrl += '#/' + targetRoute.replace(/^\/+/, '');
         }
 
-        var targetUrl = (basePrefix || '') + '/#' + (targetHash ? targetHash.replace(/^\//, '') : '') + search;
         window.location.replace(targetUrl);
       })();
     </script>
