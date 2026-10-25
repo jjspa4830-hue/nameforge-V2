@@ -1,6 +1,6 @@
 import { GENERATORS_METADATA } from '../src/data/generators.ts';
 import { hasLocalizedGeneratorDescription } from '../src/i18n/generatorContent.ts';
-import { hasLocalizedGeneratorTitle } from '../src/i18n/generatorTitles.ts';
+import { LOCALIZED_GENERATOR_TITLE_IDS } from '../src/i18n/generatorTitles.ts';
 
 const locales = [
   'en', 'fr', 'es', 'de', 'it', 'pt', 'ar', 'tr', 'ja', 'ko',
@@ -19,7 +19,7 @@ const findings = [];
 for (const generator of generators) {
   for (const locale of locales) {
     if (locale === 'fr') continue;
-    if (!hasLocalizedGeneratorTitle(generator.id, locale)) {
+    if (!LOCALIZED_GENERATOR_TITLE_IDS.includes(generator.id as never)) {
       findings.push({ generator: generator.id, locale, field: 'title', reason: 'no explicit localized title' });
     }
     if (!hasLocalizedGeneratorDescription(generator.id, locale)) {
