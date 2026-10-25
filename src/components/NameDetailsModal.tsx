@@ -266,12 +266,12 @@ export const NameDetailsModal: React.FC<NameDetailsModalProps> = ({
                   </span>
                 )}
               </div>
-              {nameItem.meaning && (
+              {nameItem.isAttested && nameItem.meaning && (
                 <div className="text-slate-200 text-xs">
                   <strong className="text-white">{t.etymology}</strong> « {nameItem.meaning} »
                 </div>
               )}
-              {nameItem.variants && nameItem.variants.length > 0 && (
+              {nameItem.isAttested && nameItem.variants && nameItem.variants.length > 0 && (
                 <div className="text-slate-400 text-[11px]">
                   <strong>{t.variants}</strong> {nameItem.variants.join(', ')}
                 </div>
