@@ -41,9 +41,10 @@ export function getLocalizedStyleLabel(style: string | undefined, language: Lang
     .find(([key, label]) => key === trimmed || label === trimmed || label.replace(/^\S+\s/, '') === trimmed)?.[0]
     || trimmed.toLowerCase().replace(/\s+/g, '-');
   const labels = LABELS[language] || COMMON_EN;
-  if (labels[styleKey]) {
+  const localizedLabel = labels[styleKey] || COMMON_EN[styleKey];
+  if (localizedLabel) {
     const icon = [...NAMEFORGE_STYLES, ...(CATEGORY_SPECIFIC_STYLES[generatorId || ''] || [])].find(([key]) => key === styleKey)?.[1].split(' ')[0];
-    return icon && !trimmed.startsWith(icon) ? `${icon} ${labels[styleKey]}` : labels[styleKey];
+    return icon ? `${icon} ${localizedLabel}` : localizedLabel;
   }
   // Preserve unknown user-authored values rather than replacing real data with a guess.
   return trimmed;
