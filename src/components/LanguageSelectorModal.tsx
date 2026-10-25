@@ -225,7 +225,7 @@ export const LanguageSelectorModal: React.FC<LanguageSelectorModalProps> = ({
                   }`}
                 >
                   <div className="flex items-center gap-3 truncate">
-                    <span className="text-2xl shrink-0">{lang.flag}</span>
+                    <span aria-hidden="true" className="text-base sm:text-lg leading-none shrink-0">{lang.flag}</span>
                     <div className="truncate">
                       <div className="text-sm font-bold text-white group-hover:text-cyan-200 transition truncate flex items-center gap-1.5">
                         <span>{lang.native}</span>
