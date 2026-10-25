@@ -65,7 +65,7 @@ const LEGAL_DISCLAIMER: Record<string, string> = {
   fi: 'Luodut nimet ovat luovia ehdotuksia. Tarkista tavaramerkkioikeudet ja verkkotunnuksen saatavuus virallisista lähteistä ennen käyttöä.',
 };
 
-const CORE_IDS = new Set(['brand', 'business', 'baby_name', 'gaming', 'startup', 'fantasy', 'anime', 'domain', 'videogame', 'gamertag', 'boss', 'weapon', 'spell', 'tavern', 'dungeon', 'mecha', 'cyberpunk', 'steampunk', 'mythic_creature', 'crypto_token', 'server_cluster', 'os_system']);
+const CORE_IDS = new Set(['brand', 'business', 'baby_name', 'gaming', 'startup', 'fantasy', 'anime', 'domain', 'videogame', 'gamertag', 'boss', 'weapon', 'spell', 'tavern', 'dungeon', 'mecha', 'cyberpunk', 'steampunk', 'mythic_creature', 'crypto_token', 'server_cluster', 'os_system', 'restaurant', 'coffee_shop', 'bakery', 'food_truck', 'clothing_brand', 'jewelry_brand', 'cosmetics_brand', 'fitness_studio', 'travel_agency', 'hotel_name', 'real_estate', 'architecture_studio', 'interior_decor']);
 
 export function hasLocalizedEditorialMeta(generatorId: string, language: LanguageCode): boolean {
   return CORE_IDS.has(generatorId) && Boolean(COPY[language]);
