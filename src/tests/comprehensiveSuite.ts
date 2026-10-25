@@ -113,20 +113,30 @@ for (const locale of PRIORITY_LOCALES) {
   );
 }
 
-// Language selector modal must expose translated core controls for every priority locale.
+// Language selector modal must expose every translated label for all 25 priority locales.
 for (const locale of PRIORITY_LOCALES) {
   const labels = getLanguageModalLabels(locale);
   assert(
-    Boolean(labels.title.trim() && labels.close.trim() && labels.searchPlaceholder.trim() &&
-      labels.all.trim() && labels.fullyTranslated.trim() && labels.complete.trim() &&
-      labels.fallback.trim() && labels.noResults.trim() && labels.reset.trim() &&
-      labels.active.trim() && labels.completeStatus.trim() && labels.standardStatus.trim()),
-    `Language selector labels exist for ${locale}`
+    Object.values(labels).every((value) => typeof value === 'string' && value.trim().length > 0),
+    `All language selector labels are non-empty for ${locale}`
   );
   assert(
     locale === 'fr' || labels.title !== 'Choisir la langue',
     `Language selector title is not left in French for ${locale}`
   );
+  if (locale !== 'en') {
+    assert(
+      labels.close !== 'Close' &&
+      labels.searchPlaceholder !== 'Search by language name (e.g. Français, English, 日本語, Arabic)…' &&
+      labels.reset !== 'Reset search' &&
+      labels.europe !== 'Europe' &&
+      labels.asia !== 'Asia' &&
+      labels.middleEast !== 'Middle East & RTL' &&
+      labels.southAsia !== 'South Asia' &&
+      labels.africa !== 'Africa',
+      `Language selector controls and region filters avoid English fallback for ${locale}`
+    );
+  }
 }
 
 // Name analysis modal labels must be available in all 25 priority locales.
