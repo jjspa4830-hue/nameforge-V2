@@ -8,6 +8,7 @@ import { getLocalizedGeneratorDescription, hasLocalizedGeneratorDescription, LOC
 import { getLocalizedFaq } from '../i18n/localizedFaq';
 import { LOCALIZED_GENERATOR_DESCRIPTION_IDS } from '../i18n/generatorContent';
 import { getShellLabels } from '../i18n/shell';
+import { getLocalizedStyleLabel } from '../i18n/styleLabels';
 import { getMyNamesAuditLabels } from '../i18n/myNames';
 import { getLocalizedGeneratorTitle, getLocalizedGeneratorShortTitle, LOCALIZED_GENERATOR_TITLE_IDS } from '../i18n/generatorTitles';
 import { getLanguageModalLabels } from '../i18n/languageModal';
@@ -1290,6 +1291,44 @@ for (const locale of studioPriorityLocales) {
     `Received "${label}"`
   );
 }
+
+// Style label localization regression checks across all 25 priority locales.
+const styleLocaleSamples = [
+  { key: 'assassin', source: 'Shadow Assassin' },
+  { key: 'warrior', source: 'Heroic Warrior' },
+  { key: 'brandable', source: 'Brandable Domain' },
+  { key: 'cocktail', source: 'Signature Cocktail' },
+] as const;
+for (const locale of PRIORITY_LOCALES) {
+  for (const sample of styleLocaleSamples) {
+    const label = getLocalizedStyleLabel(sample.key, locale);
+    assert(
+      label.trim().length > 0,
+      `Style label ${sample.key} is available for ${locale}`,
+      `Received "${label}"`
+    );
+    if (locale !== 'en') {
+      assert(
+        label !== sample.source,
+        `Style label ${sample.key} does not silently fall back to English for ${locale}`,
+        `Received "${label}"`
+      );
+    }
+  }
+}
+assert(
+  getLocalizedStyleLabel('assassin', 'ar').includes('قاتل الظلال'),
+  'Arabic style labels use Arabic text'
+);
+assert(
+  getLocalizedStyleLabel('high-elf', 'fi').includes('Ylähaltia') &&
+    getLocalizedStyleLabel('shadow-rogue', 'fi').includes('Varjovaras'),
+  'Finnish style labels do not contain accidental internal spaces'
+);
+assert(
+  getLocalizedStyleLabel('User custom style', 'fr') === 'User custom style',
+  'Unknown custom style labels are preserved unchanged'
+);
 
 // -----------------------------------------------------------------------------
 // SUMMARY
