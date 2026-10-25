@@ -8,7 +8,6 @@ import { getLocalizedGeneratorDescription, hasLocalizedGeneratorDescription, LOC
 import { getLocalizedFaq } from '../i18n/localizedFaq';
 import { LOCALIZED_GENERATOR_DESCRIPTION_IDS } from '../i18n/generatorContent';
 import { getShellLabels } from '../i18n/shell';
-import { getStudioLabel } from '../i18n/studio';
 import { getMyNamesAuditLabels } from '../i18n/myNames';
 import { getLocalizedGeneratorTitle, getLocalizedGeneratorShortTitle, LOCALIZED_GENERATOR_TITLE_IDS } from '../i18n/generatorTitles';
 import { getLanguageModalLabels } from '../i18n/languageModal';
