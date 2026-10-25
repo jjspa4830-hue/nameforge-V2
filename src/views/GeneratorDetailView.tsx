@@ -343,7 +343,7 @@ export const GeneratorDetailView: React.FC<GeneratorDetailViewProps> = ({
             <span>{meta.badge}</span>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight mb-4">
+          <h1 className="nf-animated-heading text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight mb-4">
             <span className="bg-gradient-to-r from-white via-cyan-300 to-purple-400 bg-clip-text text-transparent">
               {localizedTitle}
             </span>
@@ -368,7 +368,7 @@ export const GeneratorDetailView: React.FC<GeneratorDetailViewProps> = ({
         <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-b from-[#141d2f]/95 to-[#0c111d]/95 border border-slate-700/80 shadow-2xl relative overflow-hidden">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
             <div>
-              <h2 className="text-xl sm:text-2xl font-black text-white flex items-center gap-2">
+              <h2 className="nf-animated-heading text-xl sm:text-2xl font-black flex items-center gap-2">
                 <span>{meta.icon}</span>
                 <span>{localizedTitle}</span>
               </h2>
@@ -480,7 +480,7 @@ export const GeneratorDetailView: React.FC<GeneratorDetailViewProps> = ({
                 <Award className="w-3.5 h-3.5 text-amber-400" />
                 <span>{text.leaderboard} • {localizedShortTitle.toUpperCase()}</span>
               </div>
-              <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+              <h2 className="nf-animated-heading text-xl sm:text-2xl font-black tracking-tight">
                 {text.bestNames} ({localizedShortTitle})
               </h2>
               <p className="text-xs text-slate-400 mt-1">
@@ -558,7 +558,7 @@ export const GeneratorDetailView: React.FC<GeneratorDetailViewProps> = ({
       {/* Guidance Section */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6">
         <div className="p-8 rounded-3xl bg-[#0c1222] border border-slate-800 shadow-xl space-y-6">
-          <h2 className="text-xl sm:text-2xl font-black text-white">
+          <h2 className="nf-animated-heading text-xl sm:text-2xl font-black">
             {meta.guideTitle}
           </h2>
           <div className="space-y-4">
@@ -574,7 +574,7 @@ export const GeneratorDetailView: React.FC<GeneratorDetailViewProps> = ({
 
       {/* Category Cards Section */}
       <section className="max-w-7xl xl:max-w-[1440px] mx-auto px-4 sm:px-8">
-        <h2 className="text-xl sm:text-2xl font-black text-white text-center mb-8">
+        <h2 className="nf-animated-heading text-xl sm:text-2xl font-black text-center mb-8">
           {meta.cardsTitle}
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -637,7 +637,7 @@ export const GeneratorDetailView: React.FC<GeneratorDetailViewProps> = ({
       {/* FAQ specific to category */}
       {meta.faq && meta.faq.length > 0 && (
         <section className="max-w-4xl mx-auto px-4 sm:px-6">
-          <h2 className="text-xl sm:text-2xl font-black text-white text-center mb-6">
+          <h2 className="nf-animated-heading text-xl sm:text-2xl font-black text-center mb-6">
             {meta.faqTitle}
           </h2>
           <div className="space-y-3">
