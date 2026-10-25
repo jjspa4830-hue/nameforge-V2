@@ -164,19 +164,22 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
     );
   }, [searchQuery, settings.language]);
 
-  // Featured Generators
+  // Featured Generators: prioritize the broadest, most intuitive naming needs.
+  // This is a curated editorial selection, not a live search-volume ranking.
   const featuredGenerators = useMemo(() => {
     const featuredIds: GeneratorId[] = [
       'brand',
-      'fantasy',
+      'baby_name',
+      'gaming',
       'startup',
-      'dragon',
+      'fantasy',
       'anime',
       'domain',
       'videogame',
-      'rpg',
     ];
-    return ALL_GENERATORS_LIST.filter((g) => featuredIds.includes(g.id));
+    return featuredIds
+      .map((id) => ALL_GENERATORS_LIST.find((generator) => generator.id === id))
+      .filter((generator): generator is (typeof ALL_GENERATORS_LIST)[number] => Boolean(generator));
   }, []);
 
   // Top Rated Names calculation (Bayesian weighted based on user evaluations with fallback gems)
