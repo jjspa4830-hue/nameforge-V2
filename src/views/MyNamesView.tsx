@@ -610,6 +610,7 @@ export const MyNamesView: React.FC<MyNamesViewProps> = ({ onNavigate }) => {
                   <button
                     key={tabKey}
                     onClick={() => setFilterTab(tabKey)}
+                    aria-pressed={filterTab === tabKey}
                     className={`px-3 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap cursor-pointer border ${
                       filterTab === tabKey
                         ? 'bg-purple-600 text-white border-purple-400'
@@ -624,6 +625,7 @@ export const MyNamesView: React.FC<MyNamesViewProps> = ({ onNavigate }) => {
               {/* Generator & Collection dropdowns */}
               <div className="flex items-center gap-2 flex-wrap">
                 <select
+                  aria-label={controls.allCollections}
                   value={filterCollectionId}
                   onChange={(e) => setFilterCollectionId(e.target.value)}
                   className="h-9 px-3 bg-[#0a0f1d] border border-slate-700/80 rounded-xl text-xs font-semibold text-white cursor-pointer"
@@ -638,6 +640,7 @@ export const MyNamesView: React.FC<MyNamesViewProps> = ({ onNavigate }) => {
                 </select>
 
                 <select
+                  aria-label={controls.allGenerators}
                   value={filterGenerator}
                   onChange={(e) => setFilterGenerator(e.target.value)}
                   className="h-9 px-3 bg-[#0a0f1d] border border-slate-700/80 rounded-xl text-xs font-semibold text-white cursor-pointer"
@@ -807,6 +810,7 @@ export const MyNamesView: React.FC<MyNamesViewProps> = ({ onNavigate }) => {
                       {/* Collection assigner */}
                       <div className="mt-2.5">
                         <select
+                          aria-label={actions.assignFolder}
                           value={item.collectionId || ''}
                           onChange={(e) => {
                             assignNameToCollection(item.name, e.target.value || undefined);
