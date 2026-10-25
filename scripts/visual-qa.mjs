@@ -133,17 +133,18 @@ try {
         if (state.bodyTextLength < 100) failures.push(label + ': likely blank/incomplete page (' + state.bodyTextLength + ' text characters)');
         if (!state.htmlClass.includes(theme === 'light' ? 'light' : 'dark')) failures.push(label + ': requested theme class missing; html class=' + state.htmlClass);
         if (state.documentWidth > state.viewportWidth + 2) failures.push(label + ': horizontal overflow (' + state.documentWidth + 'px content vs ' + state.viewportWidth + 'px viewport)');
+        for (const select of state.selects) {
+          if (!select.visible) failures.push(label + ': selector ' + (select.id || select.label || '(unlabelled)') + ' is not visible');
+          if (select.optionCount < 2) failures.push(label + ': selector ' + (select.id || select.label || '(unlabelled)') + ' has fewer than 2 options');
+          if (select.backgroundImage === 'none') failures.push(label + ': selector ' + (select.id || select.label || '(unlabelled)') + ' has no visible dropdown indicator');
+          if (!select.label) failures.push(label + ': selector ' + (select.id || '(unlabelled)') + ' has no accessible label');
+        }
+        if (view.name === 'home' && state.visiblePressedChoiceCount < 5) failures.push(label + ': home-page multi-choice filters are missing selected-state semantics or are not visible');
         if (view.name === 'catalog' && state.articleCount !== 234) failures.push(label + ': expected 234 generator cards, found ' + state.articleCount);
         if (view.name === 'catalog' && state.visiblePressedChoiceCount < 2) failures.push(label + ': category choice buttons are missing or not visible');
         if (view.name === 'style-studio' && state.visiblePressedChoiceCount < 4) failures.push(label + ': expected the four visible Style Studio tab choices');
         if (view.name === 'generator-detail') {
           if (state.selects.length < 6) failures.push(label + ': expected 6 generator selectors, found ' + state.selects.length);
-          for (const select of state.selects) {
-            if (!select.visible) failures.push(label + ': selector ' + (select.id || select.label || '(unlabelled)') + ' is not visible');
-            if (select.optionCount < 2) failures.push(label + ': selector ' + (select.id || select.label || '(unlabelled)') + ' has fewer than 2 options');
-            if (select.backgroundImage === 'none') failures.push(label + ': selector ' + (select.id || select.label || '(unlabelled)') + ' has no visible dropdown indicator');
-            if (!select.label) failures.push(label + ': selector ' + (select.id || '(unlabelled)') + ' has no accessible label');
-          }
           // Exercise each control to verify the choice is functional, not just decorative.
           for (const id of ['generator-style', 'generator-language', 'generator-length', 'generator-format', 'generator-gender', 'generator-quantity']) {
             const control = page.locator('#' + id);
