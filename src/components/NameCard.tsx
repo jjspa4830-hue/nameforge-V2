@@ -199,7 +199,7 @@ export const NameCard: React.FC<NameCardProps> = ({
           </p>
 
           <div className="mt-3 pt-2.5 border-t border-slate-800/90 text-xs sm:text-[13px] text-slate-400 line-clamp-2 min-h-[34px]">
-            <strong className="text-slate-200">{t.idealFor}</strong> {familyLabels[GENERATORS_METADATA[item.generatorId].category as keyof typeof familyLabels] || detailLabels.idealFor}
+            <strong className="text-slate-200">{t.idealFor}</strong> {familyLabels[GENERATORS_METADATA[item.generatorId].category as keyof typeof familyLabels] || familyLabels.all}
           </div>
         </div>
 
