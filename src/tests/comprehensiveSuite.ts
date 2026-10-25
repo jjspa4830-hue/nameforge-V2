@@ -1279,6 +1279,18 @@ assert(
   'Only explicitly supported right-to-left languages use RTL direction'
 );
 
+// The Style Studio's apply-to-canvas action must not silently fall back to English.
+const studioPriorityLocales = ['fr', 'en', 'ar', 'tr', 'es', 'de', 'it', 'pt', 'ja', 'ko', 'zh', 'ru', 'hi', 'nl', 'pl', 'sv', 'vi', 'id', 'th', 'el', 'he', 'cs', 'ro', 'da', 'fi'] as const;
+const englishApplyToCanvas = getStudioLabel('en', 'applyToCanvas');
+for (const locale of studioPriorityLocales) {
+  const label = getStudioLabel(locale, 'applyToCanvas');
+  assert(
+    label.trim().length > 0 && (locale === 'en' || label !== englishApplyToCanvas),
+    `Style Studio apply-to-canvas label is localized for ${locale}`,
+    `Received "${label}"`
+  );
+}
+
 // -----------------------------------------------------------------------------
 // SUMMARY
 // -----------------------------------------------------------------------------
