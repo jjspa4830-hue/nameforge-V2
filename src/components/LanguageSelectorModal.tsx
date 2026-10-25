@@ -11,6 +11,26 @@ import {
 import { isLanguageFullyTranslated, FULL_TRANSLATION_LANGUAGES } from '../i18n';
 import { getLanguageModalLabels } from '../i18n/languageModal';
 
+// Use image-based flags instead of relying on the operating system's emoji font.
+// Regional-indicator emoji (🇫🇷) encode their ISO country code directly.
+const getFlagCountryCode = (flag: string, languageCode: string): string | null => {
+  const regionalIndicators = Array.from(flag)
+    .map((character) => character.codePointAt(0) ?? 0)
+    .filter((point) => point >= 0x1f1e6 && point <= 0x1f1ff);
+
+  if (regionalIndicators.length >= 2) {
+    return regionalIndicators
+      .slice(0, 2)
+      .map((point) => String.fromCharCode(point - 0x1f1e6 + 65))
+      .join('')
+      .toLowerCase();
+  }
+
+  // The Welsh flag is a subdivision emoji rather than a two-letter country flag.
+  if (languageCode === 'cy') return 'gb';
+  return null;
+};
+
 interface LanguageSelectorModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -225,7 +245,24 @@ export const LanguageSelectorModal: React.FC<LanguageSelectorModalProps> = ({
                   }`}
                 >
                   <div className="flex items-center gap-3 truncate">
-                    <span aria-hidden="true" className="text-base sm:text-lg leading-none shrink-0">{lang.flag}</span>
+                    {getFlagCountryCode(lang.flag, lang.code) ? (
+                      <img
+                        aria-hidden="true"
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                        width={24}
+                        height={18}
+                        src={`https://flagcdn.com/24x18/${getFlagCountryCode(lang.flag, lang.code)}.png`}
+                        className="w-6 h-[18px] object-cover rounded-[2px] shrink-0 border border-white/10 bg-slate-800"
+                        onError={(event) => {
+                          // Keep the language choice usable if the image host is unavailable.
+                          event.currentTarget.replaceWith(document.createTextNode(lang.flag));
+                        }}
+                      />
+                    ) : (
+                      <span aria-hidden="true" className="text-base leading-none shrink-0">{lang.flag}</span>
+                    )}
                     <div className="truncate">
                       <div className="text-sm font-bold text-white group-hover:text-cyan-200 transition truncate flex items-center gap-1.5">
                         <span>{lang.native}</span>
