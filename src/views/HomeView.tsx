@@ -658,7 +658,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
                         <div className="font-bold text-white text-xs group-hover:text-cyan-300 transition truncate">
                           {getLocalizedGeneratorTitle(gen.id, settings.language, gen.title)}
                         </div>
-                        <div className="text-[10px] text-slate-400 truncate">{familyLabels[gen.category as keyof typeof familyLabels] || gen.category}</div>
+                        <div className="text-[10px] text-slate-400 truncate">{familyLabels[gen.category as keyof typeof familyLabels] || familyLabels.all}</div>
                       </div>
                     </div>
                     <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-white transition flex-shrink-0" />
@@ -706,7 +706,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
                     {gen.icon}
                   </div>
                   <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-300">
-                    {familyLabels[gen.category as keyof typeof familyLabels] || gen.category}
+                    {familyLabels[gen.category as keyof typeof familyLabels] || familyLabels.all}
                   </span>
                 </div>
 
@@ -787,7 +787,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
                     {getLocalizedGeneratorShortTitle(gen.id, settings.language, gen.shortTitle)}
                   </h4>
                   <span className="text-[10px] font-bold text-purple-400 uppercase tracking-wider">
-                    {familyLabels[gen.category as keyof typeof familyLabels] || gen.category}
+                    {familyLabels[gen.category as keyof typeof familyLabels] || familyLabels.all}
                   </span>
                 </div>
                 <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">

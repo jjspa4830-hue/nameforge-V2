@@ -17,6 +17,7 @@ import {
 } from '../types';
 import { getAppSettings, subscribeToSettings } from '../services/settings';
 import { getLocalizedGeneratorDescription } from '../i18n/generatorContent';
+import { getLocalizedStyleLabel } from '../i18n/styleLabels';
 import { getLocalizedGeneratorTitle, getLocalizedGeneratorShortTitle } from '../i18n/generatorTitles';
 
 interface GeneratorDetailViewProps {
@@ -243,13 +244,23 @@ export const GeneratorDetailView: React.FC<GeneratorDetailViewProps> = ({
     setIsGenerating(true);
     // Debounce rapid control/keyword edits so typing does not trigger a full batch for every keystroke.
     generationTimeout.current = setTimeout(() => {
+      // In Auto mode, generate names in the currently selected interface language
+      // whenever a matching phonetic profile exists. Explicit user choices always win.
+      const localizedGenerationLanguages: GenLanguageCode[] = [
+        'fr', 'en', 'es', 'de', 'it', 'pt', 'ar', 'tr', 'ja', 'ko', 'zh', 'ru',
+        'hi', 'nl', 'pl', 'sv', 'vi', 'id', 'th', 'el', 'he', 'cs', 'ro', 'da', 'fi',
+      ];
+      const effectiveGenLanguage: GenLanguageCode =
+        selectedGenLanguage === 'auto' && localizedGenerationLanguages.includes(language as GenLanguageCode)
+          ? (language as GenLanguageCode)
+          : selectedGenLanguage;
       const generated = generateNames({
         generator: generatorId,
         style: selectedStyle,
         length: selectedLength,
         format: selectedFormat,
         gender: selectedGender,
-        genLanguage: selectedGenLanguage,
+        genLanguage: effectiveGenLanguage,
         quantity,
         keyword,
       });
@@ -495,7 +506,7 @@ export const GeneratorDetailView: React.FC<GeneratorDetailViewProps> = ({
                         <span>{item.rating || 5}/5 {text.stars}</span>
                       </span>
                       <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-800 text-slate-300">
-                        {item.style}
+                        {getLocalizedStyleLabel(item.style, language, generatorId)}
                       </span>
                     </div>
                     <h3 className="text-base font-black text-white tracking-tight">{item.name}</h3>

@@ -139,16 +139,16 @@ const LANGUAGE_PHONETICS: Record<
     consonants: ['b', 'c', 'd', 'f', 'g', 'h', 'k', 'l', 'm', 'n', 'p', 'r', 's', 't', 'w'],
   },
   ja: {
-    prefixes: ['Kae', 'Shin', 'Ryu', 'Sora', 'Ren', 'Haru', 'Aki', 'Taka', 'Yuki', 'Kaze', 'Kira', 'Hana', 'Mio'],
-    suffixes: ['maru', 'to', 'ya', 'shi', 'zen', 'jin', 'nari', 'ro', 'sora', 'ka', 'ki', 'ko', 'suke'],
-    titleWords: ['le Gardien', 'l’Éveillé', 'le Maître', 'le Lame-Noire', 'l’Ombre'],
+    prefixes: ['カイ', 'シン', 'リュウ', 'ソラ', 'レン', 'ハル', 'アキ', 'タカ', 'ユキ', 'カゼ', 'キラ', 'ハナ', 'ミオ'],
+    suffixes: ['マル', 'ト', 'ヤ', 'シ', 'ゼン', 'ジン', 'ナリ', 'ロ', 'ソラ', 'カ', 'キ', 'コ', 'スケ'],
+    titleWords: ['Mamoru', 'Kage no Senshi', 'Tsuki no Kishi', 'Yoru no Kage', 'Hoshi no Tabibito'],
     vowels: ['a', 'i', 'u', 'e', 'o'],
     consonants: ['k', 's', 't', 'n', 'h', 'm', 'y', 'r', 'w'],
   },
   ar: {
-    prefixes: ['Al-', 'Nour', 'Tariq', 'Zayd', 'Malik', 'Rayan', 'Qas', 'Badr', 'Farid', 'Karim', 'Sami', 'Amir'],
-    suffixes: ['an', 'ir', 'din', 'i', 'our', 'am', 'al', 'eh', 'im', 'as', 'id', 'oun'],
-    titleWords: ['le Noble', 'le Magnanime', 'le Conquérant', 'le Juste', 'le Bienveillant'],
+    prefixes: ['نور', 'طارق', 'زيد', 'مالك', 'ريان', 'قمر', 'بدر', 'فريد', 'كريم', 'سامي', 'أمير', 'ليث'],
+    suffixes: ['الدين', 'النور', 'الحق', 'ان', 'ير', 'يم', 'ون', 'اد', 'ين', 'ار', 'يا', 'ور'],
+    titleWords: ['النَبيل', 'الفارس', 'حارس النور', 'سيف الظل', 'المسافر'],
     vowels: ['a', 'i', 'u', 'ou', 'ai'],
     consonants: ['b', 't', 'j', 'd', 'r', 'z', 's', 'q', 'k', 'l', 'm', 'n', 'h'],
   },
@@ -173,6 +173,27 @@ const LANGUAGE_PHONETICS: Record<
     vowels: ['a', 'e', 'i', 'o', 'u', 'y'],
     consonants: ['b', 'c', 'd', 'f', 'k', 'l', 'm', 'n', 'p', 'r', 's', 't', 'v', 'x', 'z'],
   },
+  es: { prefixes: ['Sol', 'Luz', 'Monte', 'Bella', 'Cielo', 'Brisa', 'Fuego', 'Luna', 'Val', 'Flor'], suffixes: ['ero', 'era', 'ado', 'ada', 'illa', 'oso', 'osa', 'ez', 'iel', 'ano'], titleWords: ['el Valiente', 'la Estrella', 'el Guardián', 'la Sombra'], vowels: ['a','e','i','o','u'], consonants: ['b','c','d','f','g','j','l','m','n','ñ','p','r','s','t','v','z'] },
+  de: { prefixes: ['Stern', 'Wald', 'Eisen', 'Gold', 'Nebel', 'Dunkel', 'Falk', 'Mond', 'Stein', 'Winter'], suffixes: ['berg', 'wald', 'stein', 'heim', 'mann', 'hardt', 'fried', 'burg', 'tal', 'reich'], titleWords: ['der Kühne', 'der Wächter', 'die Schattenklinge', 'der Wanderer'], vowels: ['a','e','i','o','u','ä','ö','ü'], consonants: ['b','d','f','g','h','k','l','m','n','r','s','t','w','z'] },
+  it: { prefixes: ['Luna', 'Bella', 'Monte', 'Sole', 'Fiore', 'Stella', 'Oro', 'Vento', 'Rosa', 'Alba'], suffixes: ['ello', 'ella', 'ini', 'ino', 'etto', 'etta', 'aro', 'ora', 'ano', 'ina'], titleWords: ['il Coraggioso', 'la Stella', 'il Custode', 'l’Ombra'], vowels: ['a','e','i','o','u'], consonants: ['b','c','d','f','g','l','m','n','p','r','s','t','v','z'] },
+  pt: { prefixes: ['Sol', 'Luz', 'Monte', 'Brisa', 'Estrela', 'Flor', 'Lua', 'Vale', 'Ouro', 'Mar'], suffixes: ['eiro', 'eira', 'inho', 'inha', 'ado', 'ada', 'oso', 'osa', 'ano', 'ela'], titleWords: ['o Valente', 'a Estrela', 'o Guardião', 'a Sombra'], vowels: ['a','e','i','o','u','ã','õ'], consonants: ['b','c','d','f','g','j','l','m','n','p','r','s','t','v','z'] },
+  tr: { prefixes: ['Ay', 'Gök', 'Yıldız', 'Demir', 'Ateş', 'Kara', 'Ak', 'Deniz', 'Alp', 'Güneş'], suffixes: ['han', 'can', 'ay', 'taş', 'soy', 'demir', 'er', 'nur', 'kaya', 'alp'], titleWords: ['Cesur', 'Koruyucu', 'Gölge Kılıcı', 'Yolcu'], vowels: ['a','e','ı','i','o','ö','u','ü'], consonants: ['b','ç','d','g','ğ','k','l','m','n','r','s','ş','t','y','z'] },
+  ko: { prefixes: ['하늘', '별', '달', '빛', '바람', '은', '진', '서', '민', '유'], suffixes: ['준', '아', '윤', '호', '린', '우', '현', '솔', '빈', '라'], titleWords: ['용감한 자', '수호자', '그림자 검', '방랑자'], vowels: ['ㅏ','ㅓ','ㅗ','ㅜ','ㅡ','ㅣ'], consonants: ['ㄱ','ㄴ','ㄷ','ㄹ','ㅁ','ㅂ','ㅅ','ㅇ','ㅈ','ㅎ'] },
+  zh: { prefixes: ['星', '云', '风', '月', '明', '龙', '天', '雪', '灵', '青'], suffixes: ['辰', '岚', '影', '霖', '宇', '瑶', '轩', '宁', '羽', '阳'], titleWords: ['勇者', '守护者', '影之刃', '流浪者'], vowels: ['a','e','i','o','u'], consonants: ['b','d','f','g','h','j','k','l','m','n','q','r','s','t','x','y','z'] },
+  ru: { prefixes: ['Звезд', 'Волк', 'Мороз', 'Свет', 'Злат', 'Север', 'Яро', 'Миро', 'Влад', 'Луна'], suffixes: ['мир', 'слав', 'вич', 'ова', 'ев', 'ин', 'ая', 'ский', 'рад', 'гор'], titleWords: ['Храбрый', 'Хранитель', 'Теневой клинок', 'Странник'], vowels: ['a','e','i','o','u','y'], consonants: ['b','d','g','k','l','m','n','r','s','t','v','z'] },
+  hi: { prefixes: ['आरव', 'देव', 'सूर्य', 'चंद्र', 'नील', 'राज', 'किरण', 'आनंद', 'वीर', 'ईशा'], suffixes: ['अंश', 'दीप', 'राज', 'ईश', 'इका', 'इंद्र', 'वीर', 'इता', 'अंशु', 'ओम'], titleWords: ['वीर', 'रक्षक', 'छाया तलवार', 'यात्री'], vowels: ['a','ā','i','ī','u','ū','e','o'], consonants: ['b','d','g','h','k','l','m','n','p','r','s','t','v','y'] },
+  nl: { prefixes: ['Ster', 'Woud', 'Goud', 'Storm', 'Maan', 'Vuur', 'Zilver', 'Noord', 'Wolf', 'Droom'], suffixes: ['berg', 'veld', 'man', 'dam', 'burg', 'hout', 'wijk', 'meer', 'rijk', 'land'], titleWords: ['de Dappere', 'de Wachter', 'het Schaduwzwaard', 'de Reiziger'], vowels: ['a','e','i','o','u','ij'], consonants: ['b','d','f','g','h','k','l','m','n','r','s','t','v','w','z'] },
+  pl: { prefixes: ['Gwiazd', 'Wilk', 'Złot', 'Cień', 'Mroź', 'Jas', 'Wich', 'Kamień', 'Las', 'Srebr'], suffixes: ['owski', 'wicz', 'mir', 'sław', 'bor', 'ek', 'ak', 'ina', 'ora', 'yn'], titleWords: ['Odważny', 'Strażnik', 'Miecz Cienia', 'Wędrowiec'], vowels: ['a','e','i','o','u','y'], consonants: ['b','c','d','k','l','m','n','p','r','s','t','w','z','ł'] },
+  sv: { prefixes: ['Stjärn', 'Skog', 'Järn', 'Guld', 'Norr', 'Frost', 'Björn', 'Mån', 'Storm', 'Silver'], suffixes: ['berg', 'ström', 'lund', 'gren', 'holm', 'son', 'borg', 'mark', 'kvist', 'dal'], titleWords: ['den Modige', 'Väktaren', 'Skuggsvärdet', 'Vandraren'], vowels: ['a','e','i','o','u','y','å','ä','ö'], consonants: ['b','d','f','g','h','k','l','m','n','r','s','t','v'] },
+  vi: { prefixes: ['Minh', 'An', 'Bảo', 'Thiên', 'Ngọc', 'Quang', 'Hải', 'Lan', 'Linh', 'Tâm'], suffixes: ['anh', 'bình', 'chi', 'dương', 'huy', 'khanh', 'linh', 'nam', 'phúc', 'vy'], titleWords: ['Dũng Sĩ', 'Người Bảo Hộ', 'Kiếm Bóng Tối', 'Lữ Khách'], vowels: ['a','ă','â','e','ê','i','o','ô','ơ','u','ư','y'], consonants: ['b','c','d','đ','g','h','k','l','m','n','p','q','r','s','t','v','x'] },
+  id: { prefixes: ['Bintang', 'Cahaya', 'Banyu', 'Surya', 'Mega', 'Bayu', 'Candra', 'Indra', 'Jaya', 'Wira'], suffixes: ['putra', 'dewi', 'sari', 'wan', 'wati', 'jaya', 'kusuma', 'adi', 'tara', 'ning'], titleWords: ['Sang Pemberani', 'Penjaga', 'Pedang Bayangan', 'Pengembara'], vowels: ['a','e','i','o','u'], consonants: ['b','c','d','g','h','j','k','l','m','n','p','r','s','t','w','y'] },
+  th: { prefixes: ['ดาว', 'ฟ้า', 'แสง', 'จันทร์', 'นที', 'ธารา', 'นภา', 'กานต์', 'ศิลา', 'พิม'], suffixes: ['พร', 'ชัย', 'ภัทร', 'วัฒน์', 'ริน', 'กานต์', 'พล', 'นภา', 'มณี', 'ธร'], titleWords: ['ผู้กล้า', 'ผู้พิทักษ์', 'ดาบเงา', 'นักเดินทาง'], vowels: ['ะ','า','ิ','ี','ุ','ู','เ','แ','โ'], consonants: ['ก','ข','ค','ง','จ','ช','ด','ต','ท','น','พ','ม','ร','ล','ว','ส'] },
+  el: { prefixes: ['Αστέρ', 'Ήλιο', 'Νικο', 'Δωρο', 'Καλλ', 'Θεο', 'Ξενο', 'Δημητ', 'Ελένη', 'Κυρ'], suffixes: ['ανδρος', 'ια', 'ος', 'ης', 'ευς', 'ινα', 'οδωρ', 'ικος', 'αιων', 'αρα'], titleWords: ['ο Γενναίος', 'ο Φύλακας', 'η Σκιά', 'ο Περιπλανώμενος'], vowels: ['a','e','i','o','u'], consonants: ['b','d','g','k','l','m','n','p','r','s','t','v','x'] },
+  he: { prefixes: ['אור', 'נועם', 'ארי', 'אלי', 'שי', 'טל', 'זיו', 'לב', 'גל', 'ניר'], suffixes: ['אל', 'יה', 'אור', 'עמי', 'אלי', 'יה', 'אבי', 'רון', 'דן', 'לי'], titleWords: ['האמיץ', 'השומר', 'חרב הצללים', 'הנודד'], vowels: ['a','e','i','o','u'], consonants: ['b','d','g','k','l','m','n','r','s','t','v','z'] },
+  cs: { prefixes: ['Hvězd', 'Les', 'Zlat', 'Stín', 'Mraz', 'Větr', 'Kamen', 'Běl', 'Vlč', 'Slun'], suffixes: ['ek', 'ák', 'ík', 'ova', 'oslav', 'mir', 'an', 'ena', 'ice', 'rad'], titleWords: ['Odvážný', 'Strážce', 'Stínový meč', 'Poutník'], vowels: ['a','e','i','o','u','y','á','é','í'], consonants: ['b','d','k','l','m','n','p','r','s','t','v','z','ř','č'] },
+  ro: { prefixes: ['Stea', 'Lup', 'Aur', 'Codr', 'Vânt', 'Lun', 'Argint', 'Flac', 'Dor', 'Mir'], suffixes: ['escu', 'eanu', 'aru', 'ina', 'el', 'an', 'ora', 'ica', 'uș', 'ian'], titleWords: ['Cel Viteaz', 'Păzitorul', 'Sabia Umbrei', 'Călătorul'], vowels: ['a','ă','â','e','i','î','o','u'], consonants: ['b','c','d','f','g','h','l','m','n','p','r','s','t','v','z','ș','ț'] },
+  da: { prefixes: ['Stjerne', 'Skov', 'Jern', 'Guld', 'Nord', 'Frost', 'Måne', 'Storm', 'Sølv', 'Ulv'], suffixes: ['berg', 'lund', 'holm', 'sen', 'gaard', 'mark', 'dal', 'borg', 'strøm', 'vig'], titleWords: ['den Modige', 'Vogteren', 'Skyggesværdet', 'Vandreren'], vowels: ['a','e','i','o','u','y','æ','ø','å'], consonants: ['b','d','f','g','h','k','l','m','n','r','s','t','v'] },
+  fi: { prefixes: ['Tähti', 'Metsä', 'Kulta', 'Varjo', 'Jää', 'Pohja', 'Susi', 'Kuura', 'Valo', 'Rauta'], suffixes: ['nen', 'la', 'lä', 'maa', 'järvi', 'koski', 'virta', 'saari', 'mäki', 'kari'], titleWords: ['Rohkea', 'Vartija', 'Varjomiekka', 'Vaeltaja'], vowels: ['a','e','i','o','u','y','ä','ö'], consonants: ['h','j','k','l','m','n','p','r','s','t','v'] },
 };
 
 /* =====================================================================
@@ -316,12 +337,14 @@ function generatePhoneticHarmony(
   genLang: GenLanguageCode
 ): string {
   const langRules = LANGUAGE_PHONETICS[genLang] || LANGUAGE_PHONETICS.auto;
+  // An explicit language must control the linguistic roots, not just influence them randomly.
+  // "auto" keeps the generator's category-specific vocabulary.
   const prefixes =
-    langRules.prefixes.length > 0 && Math.random() < 0.4
+    genLang !== 'auto' && langRules.prefixes.length > 0
       ? langRules.prefixes
       : d.prefixes;
   const suffixes =
-    langRules.suffixes.length > 0 && Math.random() < 0.4
+    genLang !== 'auto' && langRules.suffixes.length > 0
       ? langRules.suffixes
       : d.suffixes;
 
@@ -356,8 +379,11 @@ function generateNeologism(
   genLang: GenLanguageCode
 ): string {
   // Only use single standalone words without spaces or apostrophes
-  const singleWords = [...d.prefixes, ...d.suffixes].filter(
-    (w) => !w.includes(' ') && !w.includes("'") && !w.includes('’') && w.length >= 4
+  const langRules = LANGUAGE_PHONETICS[genLang] || LANGUAGE_PHONETICS.auto;
+  const sourcePrefixes = genLang !== 'auto' && langRules.prefixes.length ? langRules.prefixes : d.prefixes;
+  const sourceSuffixes = genLang !== 'auto' && langRules.suffixes.length ? langRules.suffixes : d.suffixes;
+  const singleWords = [...sourcePrefixes, ...sourceSuffixes].filter(
+    (w) => !w.includes(' ') && !w.includes("'") && !w.includes('’') && w.length >= 2
   );
   if (singleWords.length >= 2) {
     const w1 = randomItem(singleWords) || 'Nova';
@@ -384,8 +410,13 @@ function generatePortmanteauBlend(
   d: SubcategoryData,
   genLang: GenLanguageCode
 ): string {
-  const rootsA = d.prefixes.length > 0 ? d.prefixes : ['Nova', 'Kaly', 'Velo', 'Aero', 'Zeta', 'Sol'];
-  const rootsB = d.suffixes.length > 0 ? d.suffixes : ['tech', 'flow', 'is', 'ora', 'craft', 'wave'];
+  const langRules = LANGUAGE_PHONETICS[genLang] || LANGUAGE_PHONETICS.auto;
+  const rootsA = genLang !== 'auto' && langRules.prefixes.length
+    ? langRules.prefixes
+    : (d.prefixes.length > 0 ? d.prefixes : ['Nova', 'Kaly', 'Velo', 'Aero', 'Zeta', 'Sol']);
+  const rootsB = genLang !== 'auto' && langRules.suffixes.length
+    ? langRules.suffixes
+    : (d.suffixes.length > 0 ? d.suffixes : ['tech', 'flow', 'is', 'ora', 'craft', 'wave']);
 
   const first = (randomItem(rootsA) as string) || 'Nova';
   const second = (randomItem(rootsB) as string) || 'craft';
@@ -424,9 +455,14 @@ function generateSymbolicEvocative(
     cyberpunk: ['Chrome', 'Neon', 'Glitch', 'Spike', 'Wire', 'Cyber', 'Data'],
   };
 
-  const pool = symbolicMap[generatorId] || d.prefixes;
+  const langRules = LANGUAGE_PHONETICS[genLang] || LANGUAGE_PHONETICS.auto;
+  const pool = genLang !== 'auto' && langRules.prefixes.length
+    ? langRules.prefixes
+    : (symbolicMap[generatorId] || d.prefixes);
   const root = randomItem(pool) || 'Nova';
-  const suffixPool = d.suffixes.length > 0 ? d.suffixes : ['is', 'or', 'ex', 'ix', 'um', 'ia'];
+  const suffixPool = genLang !== 'auto' && langRules.suffixes.length
+    ? langRules.suffixes
+    : (d.suffixes.length > 0 ? d.suffixes : ['is', 'or', 'ex', 'ix', 'um', 'ia']);
   const suffix = randomItem(suffixPool) || 'is';
 
   return combineParts(root, suffix);
@@ -435,9 +471,12 @@ function generateSymbolicEvocative(
 /**
  * Strategy 5: Punchy Minimal (Compact, 1-2 sharp syllables)
  */
-function generatePunchyMinimal(d: SubcategoryData): string {
-  const p = (randomItem(d.prefixes) as string) || 'Vex';
-  const s = (randomItem(d.suffixes) as string) || 'o';
+function generatePunchyMinimal(d: SubcategoryData, genLang: GenLanguageCode = 'auto'): string {
+  const langRules = LANGUAGE_PHONETICS[genLang] || LANGUAGE_PHONETICS.auto;
+  const prefixes = genLang !== 'auto' && langRules.prefixes.length ? langRules.prefixes : d.prefixes;
+  const suffixes = genLang !== 'auto' && langRules.suffixes.length ? langRules.suffixes : d.suffixes;
+  const p = (randomItem(prefixes) as string) || 'Vex';
+  const s = (randomItem(suffixes) as string) || 'o';
 
   // If p is a full multi-word phrase, combine cleanly without chopping
   if (p.includes(' ') || s.includes(' ') || p.includes("'") || s.includes("'") || p.length > 8) {
@@ -860,7 +899,7 @@ export function generateNames(options: GenerateOptions): GeneratedName[] {
             baseName = generateSymbolicEvocative(targetGenerator, resolved, genLanguage);
             break;
           case 'punchy_minimal':
-            baseName = generatePunchyMinimal(resolved);
+            baseName = generatePunchyMinimal(resolved, genLanguage);
             break;
           case 'epic_compound': {
             const part1 = generatePhoneticHarmony(resolved, 'short', genLanguage);
@@ -914,16 +953,19 @@ export function generateNames(options: GenerateOptions): GeneratedName[] {
       } else if (isFantasyOrLore && Math.random() < 0.22) {
         const langRules = LANGUAGE_PHONETICS[genLanguage] || LANGUAGE_PHONETICS.auto;
         const titlesPool =
-          langRules.titleWords.length > 0 && Math.random() < 0.6
+          genLanguage !== 'auto' && langRules.titleWords.length > 0
             ? langRules.titleWords
-            : ['le Brave', 'l’Ancien', 'le Silencieux', 'le Juste', 'le Gardien'];
+            : ['the Brave', 'the Ancient', 'the Silent', 'the Just', 'the Guardian'];
         const title = (randomItem(titlesPool) as string) || 'le Brave';
         formattedName = combineParts(baseName, title);
       }
     }
 
+    // Latin-script gender suffix rules must not append Latin letters to CJK, Arabic,
+    // Cyrillic, Devanagari, Thai, Greek, or Hebrew names.
+    const usesNonLatinGenderRules = ['ja', 'ar', 'ko', 'zh', 'ru', 'hi', 'th', 'el', 'he'].includes(genLanguage);
     // Gender adaptations
-    if (gender === 'female' && !formattedName.includes(' ')) {
+    if (!usesNonLatinGenderRules && gender === 'female' && !formattedName.includes(' ')) {
       if (resolved.femaleStarts && resolved.femaleStarts.length > 0 && Math.random() < 0.4) {
         const fPrefix = randomItem(resolved.femaleStarts);
         if (fPrefix) {
@@ -934,7 +976,7 @@ export function generateNames(options: GenerateOptions): GeneratedName[] {
       } else if (!/[aeiouy]$/i.test(formattedName)) {
         formattedName = formattedName + 'a';
       }
-    } else if (gender === 'male' && !formattedName.includes(' ')) {
+    } else if (!usesNonLatinGenderRules && gender === 'male' && !formattedName.includes(' ')) {
       if (resolved.maleStarts && resolved.maleStarts.length > 0 && Math.random() < 0.4) {
         const mPrefix = randomItem(resolved.maleStarts);
         if (mPrefix) {

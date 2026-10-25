@@ -8,6 +8,7 @@ import { getLocalizedGeneratorDescription, hasLocalizedGeneratorDescription, LOC
 import { getLocalizedFaq } from '../i18n/localizedFaq';
 import { LOCALIZED_GENERATOR_DESCRIPTION_IDS } from '../i18n/generatorContent';
 import { getShellLabels } from '../i18n/shell';
+import { getLocalizedStyleLabel } from '../i18n/styleLabels';
 import { getMyNamesAuditLabels } from '../i18n/myNames';
 import { getLocalizedGeneratorTitle, getLocalizedGeneratorShortTitle, LOCALIZED_GENERATOR_TITLE_IDS } from '../i18n/generatorTitles';
 import { getLanguageModalLabels } from '../i18n/languageModal';
@@ -123,6 +124,15 @@ for (const locale of PRIORITY_LOCALES) {
     Object.values(labels.families).every((value) => value.trim().length > 0),
     `All generator-family labels exist for ${locale}`
   );
+  if (locale !== 'fr') {
+    const frenchFamilyLabels = getShellLabels('fr').families;
+    assert(
+      (Object.keys(frenchFamilyLabels) as Array<keyof typeof frenchFamilyLabels>).every(
+        (key) => labels.families[key] !== frenchFamilyLabels[key]
+      ),
+      `Generator-family labels are localized instead of staying French for ${locale}`
+    );
+  }
   if (locale !== 'en') {
     assert(
       labels.skipToMain !== 'Skip to main content' && labels.loading !== 'Loading NameForge…' && labels.surpriseMe !== '🎲 Surprise me!' && labels.changeLanguage !== 'Change language',
@@ -807,6 +817,19 @@ assert(
   'French phonetic profile generates 5 consistent names'
 );
 
+const generationLocales = [
+  'fr', 'en', 'es', 'de', 'it', 'pt', 'ar', 'tr', 'ja', 'ko', 'zh', 'ru', 'hi',
+  'nl', 'pl', 'sv', 'vi', 'id', 'th', 'el', 'he', 'cs', 'ro', 'da', 'fi',
+] as const;
+const allLocaleBatches = generationLocales.map((genLanguage) =>
+  generateNames({ generatorId: 'fantasy', genLanguage, quantity: 3 })
+);
+assert(
+  allLocaleBatches.length === 25 &&
+    allLocaleBatches.every((batch) => batch.length === 3 && batch.every((item) => item.name.trim().length > 0)),
+  'All 25 supported languages generate non-empty names without errors'
+);
+
 // SVG export must preserve letter spacing and Unicode content.
 const spacedSvg = generateSvgCode('星😀辰', 48, 'Arial', 'cyber-neon', 'cosmic-nebula-texture', true, 3);
 assert(
@@ -1290,6 +1313,44 @@ for (const locale of studioPriorityLocales) {
     `Received "${label}"`
   );
 }
+
+// Style label localization regression checks across all 25 priority locales.
+const styleLocaleSamples = [
+  { key: 'assassin', source: 'Shadow Assassin' },
+  { key: 'warrior', source: 'Heroic Warrior' },
+  { key: 'brandable', source: 'Brandable Domain' },
+  { key: 'cocktail', source: 'Signature Cocktail' },
+] as const;
+for (const locale of PRIORITY_LOCALES) {
+  for (const sample of styleLocaleSamples) {
+    const label = getLocalizedStyleLabel(sample.key, locale);
+    assert(
+      label.trim().length > 0,
+      `Style label ${sample.key} is available for ${locale}`,
+      `Received "${label}"`
+    );
+    if (locale !== 'en') {
+      assert(
+        label !== sample.source,
+        `Style label ${sample.key} does not silently fall back to English for ${locale}`,
+        `Received "${label}"`
+      );
+    }
+  }
+}
+assert(
+  getLocalizedStyleLabel('assassin', 'ar').includes('قاتل الظلال'),
+  'Arabic style labels use Arabic text'
+);
+assert(
+  getLocalizedStyleLabel('high-elf', 'fi').includes('Ylähaltia') &&
+    getLocalizedStyleLabel('shadow-rogue', 'fi').includes('Varjovaras'),
+  'Finnish style labels do not contain accidental internal spaces'
+);
+assert(
+  getLocalizedStyleLabel('User custom style', 'fr') === 'User custom style',
+  'Unknown custom style labels are preserved unchanged'
+);
 
 // -----------------------------------------------------------------------------
 // SUMMARY

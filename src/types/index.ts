@@ -280,10 +280,9 @@ export type LanguageCode =
 
 export type GenLanguageCode =
   | 'auto'
-  | 'fr'
-  | 'en'
-  | 'ja'
-  | 'ar'
+  | 'fr' | 'en' | 'es' | 'de' | 'it' | 'pt' | 'ar' | 'tr' | 'ja' | 'ko'
+  | 'zh' | 'ru' | 'hi' | 'nl' | 'pl' | 'sv' | 'vi' | 'id' | 'th' | 'el'
+  | 'he' | 'cs' | 'ro' | 'da' | 'fi'
   | 'latin'
   | 'nordic'
   | 'tech';

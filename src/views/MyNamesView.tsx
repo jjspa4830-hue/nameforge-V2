@@ -44,6 +44,7 @@ import { ALL_GENERATORS_LIST } from '../data/generators';
 import { getAppSettings, subscribeToSettings } from '../services/settings';
 import { getTranslations } from '../i18n';
 import { getMyNamesAuditLabels } from '../i18n/myNames';
+import { getLocalizedStyleLabel } from '../i18n/styleLabels';
 
 interface MyNamesViewProps {
   onNavigate: (view: string, generatorId?: GeneratorId) => void;
@@ -777,7 +778,7 @@ export const MyNamesView: React.FC<MyNamesViewProps> = ({ onNavigate }) => {
 
                       <h3 className="text-xl font-black text-white break-words">{item.name}</h3>
                       {item.style && (
-                        <p className="text-xs text-pink-400 font-semibold mt-0.5">Style : {item.style}</p>
+                        <p className="text-xs text-pink-400 font-semibold mt-0.5">Style : {getLocalizedStyleLabel(item.style, currentLanguage, item.generator)}</p>
                       )}
 
                       {/* 5-star rating */}
@@ -1067,6 +1068,7 @@ export const MyNamesView: React.FC<MyNamesViewProps> = ({ onNavigate }) => {
                       </div>
 
                       <h4 className="text-lg font-black text-white">{item.name}</h4>
+                      {item.style && <p className="text-xs text-pink-400 font-semibold mt-0.5">{getLocalizedStyleLabel(item.style, currentLanguage, item.generator)}</p>}
                       <p className="text-xs text-slate-400 line-clamp-2 mt-1">{item.description}</p>
                     </div>
 

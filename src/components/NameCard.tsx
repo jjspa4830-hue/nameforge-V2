@@ -15,6 +15,7 @@ import { GENERATORS_METADATA } from '../data/generators';
 import { getLocalizedGeneratorDescription } from '../i18n/generatorContent';
 import { getNameDetailsLabels } from '../i18n/nameDetails';
 import { getShellLabels } from '../i18n/shell';
+import { getLocalizedStyleLabel } from '../i18n/styleLabels';
 
 interface NameCardProps {
   item: GeneratedName;
@@ -131,7 +132,7 @@ export const NameCard: React.FC<NameCardProps> = ({
           <div className="flex items-center justify-between gap-1 mb-2">
             <span className="text-xs sm:text-sm font-bold text-pink-400 flex items-center gap-1.5">
               <span className="text-base">{item.icon}</span>
-              <span>{item.style}</span>
+              <span>{getLocalizedStyleLabel(item.style, settings.language, item.generatorId)}</span>
             </span>
 
             <div className="flex items-center gap-1.5 sm:gap-2">
@@ -199,7 +200,7 @@ export const NameCard: React.FC<NameCardProps> = ({
           </p>
 
           <div className="mt-3 pt-2.5 border-t border-slate-800/90 text-xs sm:text-[13px] text-slate-400 line-clamp-2 min-h-[34px]">
-            <strong className="text-slate-200">{t.idealFor}</strong> {familyLabels[GENERATORS_METADATA[item.generatorId].category as keyof typeof familyLabels] || detailLabels.idealFor}
+            <strong className="text-slate-200">{t.idealFor}</strong> {familyLabels[GENERATORS_METADATA[item.generatorId].category as keyof typeof familyLabels] || familyLabels.all}
           </div>
         </div>
 
