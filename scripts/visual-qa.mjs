@@ -178,10 +178,16 @@ try {
               const optionCount = await control.locator('option').count();
               const oldValue = await control.inputValue();
               if (optionCount > 1) {
-                const nextValue = await control.locator('option').nth(1).getAttribute('value');
-                await control.selectOption({ index: 1 });
-                const selectedValue = await control.inputValue();
-                if (selectedValue !== nextValue || selectedValue === oldValue) failures.push(label + ': ' + id + ' did not accept a new selection');
+                const secondValue = await control.locator('option').nth(1).getAttribute('value');
+                const nextIndex = oldValue === secondValue ? 0 : 1;
+                const nextValue = await control.locator('option').nth(nextIndex).getAttribute('value');
+                if (nextValue !== oldValue) {
+                  await control.selectOption({ index: nextIndex });
+                  const selectedValue = await control.inputValue();
+                  if (selectedValue !== nextValue) failures.push(label + ': ' + id + ' did not accept a new selection');
+                } else {
+                  failures.push(label + ': ' + id + ' has no distinct selectable value');
+                }
               }
             }
           }
