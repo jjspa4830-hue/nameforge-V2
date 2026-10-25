@@ -144,6 +144,15 @@ try {
               await item.screenshot({ path: faqShot, animations: 'disabled' });
             }
           }
+          const familyChoices = page.locator('button[aria-pressed]');
+          if (await familyChoices.count() > 1) {
+            await familyChoices.nth(1).click();
+            if (await familyChoices.nth(1).getAttribute('aria-pressed') !== 'true') {
+              failures.push(label + ': home category choice did not expose its selected state after interaction');
+            }
+          } else {
+            failures.push(label + ': home category choice buttons are missing');
+          }
         }
 
         if (!response || response.status() >= 400) failures.push(label + ': HTTP response failed (' + (response?.status() ?? 'none') + ')');
