@@ -244,13 +244,23 @@ export const GeneratorDetailView: React.FC<GeneratorDetailViewProps> = ({
     setIsGenerating(true);
     // Debounce rapid control/keyword edits so typing does not trigger a full batch for every keystroke.
     generationTimeout.current = setTimeout(() => {
+      // In Auto mode, generate names in the currently selected interface language
+      // whenever a matching phonetic profile exists. Explicit user choices always win.
+      const localizedGenerationLanguages: GenLanguageCode[] = [
+        'fr', 'en', 'es', 'de', 'it', 'pt', 'ar', 'tr', 'ja', 'ko', 'zh', 'ru',
+        'hi', 'nl', 'pl', 'sv', 'vi', 'id', 'th', 'el', 'he', 'cs', 'ro', 'da', 'fi',
+      ];
+      const effectiveGenLanguage: GenLanguageCode =
+        selectedGenLanguage === 'auto' && localizedGenerationLanguages.includes(language as GenLanguageCode)
+          ? (language as GenLanguageCode)
+          : selectedGenLanguage;
       const generated = generateNames({
         generator: generatorId,
         style: selectedStyle,
         length: selectedLength,
         format: selectedFormat,
         gender: selectedGender,
-        genLanguage: selectedGenLanguage,
+        genLanguage: effectiveGenLanguage,
         quantity,
         keyword,
       });
