@@ -798,7 +798,7 @@ assert(
 console.log('\n--- LOT 5: TEXT STYLER, UNICODE & RTL ---');
 
 import { UNICODE_STYLES, VISUAL_EFFECTS, TEXTURE_FILLS } from '../services/textStyler';
-import { SUPPORTED_LANGUAGES, getAppSettings } from '../services/settings';
+import { getAppSettings } from '../services/settings';
 import { getStudioLabel } from '../i18n/studio';
 
 // Test 34: Unicode styles library count
