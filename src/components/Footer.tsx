@@ -71,7 +71,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               href="https://web.facebook.com/profile.php?id=61593116982219"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="NameForge on Facebook (opens in a new tab)"
+              aria-label="Facebook — NameForge"
               className="inline-flex items-center gap-2 rounded-xl border border-blue-500/30 bg-blue-500/10 px-3 py-2 text-xs font-semibold text-blue-300 transition hover:border-blue-400/60 hover:bg-blue-500/20 hover:text-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
             >
               <Facebook className="h-4 w-4" aria-hidden="true" />
@@ -79,7 +79,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               <span className="sr-only"> — NameForge</span>
             </a>
             <div className="text-xs text-purple-400 font-semibold pt-1">
-              ✨ {ALL_GENERATORS_LIST.length} {labels.generators} • 300+ {labels.styles} • {labels.free}
+              ✨ {ALL_GENERATORS_LIST.length} {labels.generators} • {getTranslations(settings.language).hero.fastStatStyles} • {labels.free}
             </div>
             {/* Legal Notice */}
             <div className="p-3 rounded-2xl bg-slate-900/80 border border-slate-800 text-[11px] text-slate-400 leading-relaxed flex items-start gap-2 max-w-md">
