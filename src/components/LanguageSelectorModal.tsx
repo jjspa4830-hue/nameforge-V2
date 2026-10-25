@@ -240,8 +240,8 @@ export const LanguageSelectorModal: React.FC<LanguageSelectorModalProps> = ({
 
         {/* Footer info */}
         <div className="p-3.5 px-6 border-t border-slate-800 bg-[#090e1c] flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-400">
-          <span>{labels.active} <strong className="text-white">{SUPPORTED_LANGUAGES.find(l => l.code === currentLang)?.native || currentLang}</strong> {isLanguageFullyTranslated(currentLang) ? '({labels.completeStatus})' : '({labels.standardStatus})'}</span>
-          <span className="text-slate-500">25 {labels.fullCount} • 57 {labels.fallbackCount} • UTF-8 & RTL</span>
+          <span>{labels.active} <strong className="text-white">{SUPPORTED_LANGUAGES.find(l => l.code === currentLang)?.native || currentLang}</strong> ({isLanguageFullyTranslated(currentLang) ? labels.completeStatus : labels.standardStatus})</span>
+          <span className="text-slate-500">{FULL_TRANSLATION_LANGUAGES.length} {labels.fullCount} • {SUPPORTED_LANGUAGES.length - FULL_TRANSLATION_LANGUAGES.length} {labels.fallbackCount} • UTF-8 & RTL</span>
         </div>
       </div>
     </div>
