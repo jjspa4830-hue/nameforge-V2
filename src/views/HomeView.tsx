@@ -754,6 +754,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
               <button
                 key={fam.id}
                 onClick={() => setSelectedFamily(fam.id)}
+                aria-pressed={selectedFamily === fam.id}
                 className={`py-2 px-4 rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer border ${
                   selectedFamily === fam.id
                     ? 'bg-purple-600 text-white border-purple-500 shadow-md shadow-purple-600/30'
@@ -828,6 +829,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
             <span className="text-xs text-slate-400 font-bold me-1">{topRatedLabels.filterLabel}</span>
             <button
               onClick={() => setRatedCategoryFilter('all')}
+              aria-pressed={ratedCategoryFilter === 'all'}
               className={`py-1.5 px-3 rounded-xl text-xs font-bold transition cursor-pointer ${
                 ratedCategoryFilter === 'all'
                   ? 'bg-amber-500 text-slate-950 font-black shadow-md shadow-amber-500/20'
@@ -838,6 +840,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
             </button>
             <button
               onClick={() => setRatedCategoryFilter('fantasy')}
+              aria-pressed={ratedCategoryFilter === 'fantasy'}
               className={`py-1.5 px-3 rounded-xl text-xs font-bold transition cursor-pointer ${
                 ratedCategoryFilter === 'fantasy'
                   ? 'bg-amber-500 text-slate-950 font-black shadow-md shadow-amber-500/20'
@@ -848,6 +851,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
             </button>
             <button
               onClick={() => setRatedCategoryFilter('business')}
+              aria-pressed={ratedCategoryFilter === 'business'}
               className={`py-1.5 px-3 rounded-xl text-xs font-bold transition cursor-pointer ${
                 ratedCategoryFilter === 'business'
                   ? 'bg-amber-500 text-slate-950 font-black shadow-md shadow-amber-500/20'
@@ -858,6 +862,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
             </button>
             <button
               onClick={() => setRatedCategoryFilter('creative')}
+              aria-pressed={ratedCategoryFilter === 'creative'}
               className={`py-1.5 px-3 rounded-xl text-xs font-bold transition cursor-pointer ${
                 ratedCategoryFilter === 'creative'
                   ? 'bg-amber-500 text-slate-950 font-black shadow-md shadow-amber-500/20'
@@ -868,6 +873,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
             </button>
             <button
               onClick={() => setRatedCategoryFilter('innovation')}
+              aria-pressed={ratedCategoryFilter === 'innovation'}
               className={`py-1.5 px-3 rounded-xl text-xs font-bold transition cursor-pointer ${
                 ratedCategoryFilter === 'innovation'
                   ? 'bg-amber-500 text-slate-950 font-black shadow-md shadow-amber-500/20'
@@ -1013,6 +1019,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
               <button
                 key={cat.id}
                 onClick={() => setFaqCategory(cat.id)}
+                aria-pressed={faqCategory === cat.id}
                 className={`py-1.5 px-3 rounded-xl text-xs font-bold transition cursor-pointer border ${
                   faqCategory === cat.id
                     ? 'bg-purple-600 text-white border-purple-500'
