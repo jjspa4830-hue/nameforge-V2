@@ -939,7 +939,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
       ========================================================= */}
       <section className="max-w-7xl xl:max-w-[1440px] mx-auto px-4 sm:px-8">
         <div className="text-center max-w-2xl mx-auto mb-12">
-          <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight mb-3">
+          <h2 className="nf-animated-heading text-2xl sm:text-4xl font-black tracking-tight mb-3">
             {t.howItWorks.title}
           </h2>
           <p className="text-sm text-slate-400">
@@ -980,7 +980,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
             <HelpCircle className="w-3.5 h-3.5" />
             <span>{faqLabels.badge}</span>
           </div>
-          <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight mb-3">
+          <h2 className="nf-animated-heading text-2xl sm:text-4xl font-black tracking-tight mb-3">
             {faqLabels.title}
           </h2>
           <p className="text-sm text-slate-400">
