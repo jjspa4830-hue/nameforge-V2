@@ -453,7 +453,7 @@ export const MyNamesView: React.FC<MyNamesViewProps> = ({ onNavigate }) => {
           <Bookmark className="w-3.5 h-3.5" />
           <span>{controls.localBadge}</span>
         </div>
-        <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight mb-3">
+        <h1 className="nf-animated-heading text-3xl sm:text-5xl font-black tracking-tight leading-tight mb-3">
           {t.nav.myNames}
         </h1>
         <p className="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto">
@@ -708,7 +708,7 @@ export const MyNamesView: React.FC<MyNamesViewProps> = ({ onNavigate }) => {
               <div className="w-16 h-16 rounded-2xl bg-purple-500/10 text-purple-400 flex items-center justify-center mx-auto text-2xl">
                 🔖
               </div>
-              <h3 className="text-xl font-bold text-white">{copy.empty}</h3>
+              <h3 className="nf-animated-heading text-xl font-bold">{copy.empty}</h3>
               <p className="text-xs sm:text-sm text-slate-400 max-w-md mx-auto">
                 {copy.emptyDescription}
               </p>
