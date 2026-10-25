@@ -26,13 +26,23 @@ export const LanguageSelectorModal: React.FC<LanguageSelectorModalProps> = ({
   const [activeTab, setActiveTab] = useState<'all' | 'full' | 'Europe' | 'Asie' | 'Moyen-Orient' | 'Afrique' | 'Inde & Asie du Sud'>('all');
   const [currentLang, setCurrentLang] = useState<LanguageCode>(getAppSettings().language);
   const inputRef = useRef<HTMLInputElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
   const labels = getLanguageModalLabels(currentLang);
 
   useEffect(() => {
-    if (isOpen) {
-      setCurrentLang(getAppSettings().language);
-      setTimeout(() => inputRef.current?.focus(), 80);
-    }
+    if (!isOpen) return;
+
+    setCurrentLang(getAppSettings().language);
+    previousFocusRef.current = document.activeElement instanceof HTMLElement
+      ? document.activeElement
+      : null;
+    inputRef.current?.focus();
+
+    return () => {
+      previousFocusRef.current?.focus();
+      previousFocusRef.current = null;
+    };
   }, [isOpen]);
 
   useEffect(() => {
@@ -40,6 +50,28 @@ export const LanguageSelectorModal: React.FC<LanguageSelectorModalProps> = ({
       if (!isOpen) return;
       if (e.key === 'Escape') {
         onClose();
+        return;
+      }
+      if (e.key !== 'Tab' || !dialogRef.current) return;
+
+      const focusable = Array.from(
+        dialogRef.current.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        )
+      ).filter((element) => element.getAttribute('aria-hidden') !== 'true');
+      if (focusable.length === 0) {
+        e.preventDefault();
+        return;
+      }
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && (document.activeElement === first || !dialogRef.current.contains(document.activeElement))) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && (document.activeElement === last || !dialogRef.current.contains(document.activeElement))) {
+        e.preventDefault();
+        first.focus();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -91,6 +123,7 @@ export const LanguageSelectorModal: React.FC<LanguageSelectorModalProps> = ({
       onClick={onClose}
     >
       <div
+        ref={dialogRef}
         className="w-full max-w-3xl bg-[#0c1224] border border-purple-500/40 rounded-3xl shadow-2xl flex flex-col text-slate-100 overflow-hidden max-h-[90vh] my-auto"
         onClick={(e) => e.stopPropagation()}
       >
