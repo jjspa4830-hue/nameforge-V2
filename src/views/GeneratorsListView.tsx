@@ -91,8 +91,8 @@ export const GeneratorsListView: React.FC<GeneratorsListViewProps> = ({ onNaviga
       <div className="space-y-3">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-2xl bg-[#0f172a] border border-slate-800">
           <div className="relative w-full sm:w-80">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-            <input type="text" aria-label={t.search} placeholder={t.search} value={search} onChange={(e) => setSearch(e.target.value)} className="w-full h-10 pl-10 pr-3 bg-[#0a0f1d] border border-slate-700/80 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 shadow-inner" />
+            <Search className="w-4 h-4 text-slate-400 absolute start-3.5 top-1/2 -translate-y-1/2" />
+            <input type="text" aria-label={t.search} placeholder={t.search} value={search} onChange={(e) => setSearch(e.target.value)} className="w-full h-10 ps-10 pe-3 bg-[#0a0f1d] border border-slate-700/80 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 shadow-inner" />
           </div>
           <div className="flex items-center gap-2 flex-wrap w-full sm:w-auto justify-end">
             <button onClick={() => {
