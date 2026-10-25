@@ -79,6 +79,9 @@ export const CompareModal: React.FC<CompareModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md animate-fade-in overflow-y-auto">
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="compare-modal-title"
         className="w-full max-w-5xl bg-[#0d1424] border border-slate-700/80 rounded-3xl p-5 sm:p-8 shadow-2xl relative text-left my-auto"
         onClick={(e) => e.stopPropagation()}
       >
@@ -89,7 +92,7 @@ export const CompareModal: React.FC<CompareModalProps> = ({
               <Scale className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-xl sm:text-2xl font-black text-white">
+              <h2 id="compare-modal-title" className="text-xl sm:text-2xl font-black text-white">
                 {t.title}
               </h2>
               <p className="text-xs text-slate-400">
