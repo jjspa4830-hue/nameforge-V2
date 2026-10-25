@@ -1672,7 +1672,8 @@ export type GeneratorDescriptionCoverage = 'generator-specific' | 'category-fall
 /** Classifies the description actually shown, separating translated category fallbacks from source-language fallbacks. */
 export function getGeneratorDescriptionCoverage(meta: GeneratorMeta, language: LanguageCode): GeneratorDescriptionCoverage {
   if (GENERATOR_DESCRIPTION_OVERRIDES[meta.id]?.[language]) return 'generator-specific';
-  if (getLocalizedGeneratorShortTitle(meta.id, language, '') && LOCALIZED_GENERATOR_DESCRIPTION_TEMPLATES[language]) return 'generator-specific';
+  // A localized template is readable and avoids source-language fallback, but it is still generic copy rather than reviewed generator-specific prose.
+  if (getLocalizedGeneratorShortTitle(meta.id, language, '') && LOCALIZED_GENERATOR_DESCRIPTION_TEMPLATES[language]) return 'category-fallback';
   const locale = LOCALIZED_DESCRIPTIONS[language];
   if (locale && (locale[meta.category] || locale.creative)) return 'category-fallback';
   return 'source-fallback';
