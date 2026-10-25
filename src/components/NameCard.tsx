@@ -13,6 +13,8 @@ import { getAppSettings } from '../services/settings';
 import { getTranslations } from '../i18n';
 import { GENERATORS_METADATA } from '../data/generators';
 import { getLocalizedGeneratorDescription } from '../i18n/generatorContent';
+import { getNameDetailsLabels } from '../i18n/nameDetails';
+import { getShellLabels } from '../i18n/shell';
 
 interface NameCardProps {
   item: GeneratedName;
@@ -34,6 +36,8 @@ export const NameCard: React.FC<NameCardProps> = ({
 
   const settings = getAppSettings();
   const t = getTranslations(settings.language).nameCard;
+  const detailLabels = getNameDetailsLabels(settings.language);
+  const familyLabels = getShellLabels(settings.language).families;
   const extraCopy: Record<string, { styleName: string; spoken: string; attested: string; creative: string; rating: string }> = {
     en:{styleName:'Style this name (Unicode & Visual)',spoken:'Listen to pronunciation',attested:'Verified real name',creative:'Creative mode',rating:'Rating'},
     fr:{styleName:'Styliser ce nom (Unicode & Visuel)',spoken:'Écouter la prononciation',attested:'Prénom réel attesté',creative:'Mode créatif',rating:'Note'},
@@ -176,7 +180,7 @@ export const NameCard: React.FC<NameCardProps> = ({
 
           <div className="flex flex-wrap items-center justify-center gap-1.5 mt-2.5">
             <span className="px-3 py-1 rounded-full text-xs font-bold tracking-wide bg-purple-500/15 border border-purple-400/30 text-purple-300">
-              {item.tone}
+              {detailLabels.fallbackStrength}
             </span>
             {item.isAttested === true && (
               <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 flex items-center gap-1">
@@ -195,7 +199,7 @@ export const NameCard: React.FC<NameCardProps> = ({
           </p>
 
           <div className="mt-3 pt-2.5 border-t border-slate-800/90 text-xs sm:text-[13px] text-slate-400 line-clamp-2 min-h-[34px]">
-            <strong className="text-slate-200">{t.idealFor}</strong> {item.bestFor}
+            <strong className="text-slate-200">{t.idealFor}</strong> {familyLabels[GENERATORS_METADATA[item.generatorId].category as keyof typeof familyLabels] || detailLabels.idealFor}
           </div>
         </div>
 
