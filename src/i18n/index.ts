@@ -996,7 +996,7 @@ const BASE_TRANSLATIONS: Record<
     appName: 'NameForge',
     tagline: 'Fucina professionale di nomi e identità per ogni tuo universo',
     nav: {
-      home: 'Home',
+      home: 'Inizio',
       generators: 'Generatori',
       allGenerators: 'Tutti i 234 Generatori',
       myNames: 'I Miei Nomi',
