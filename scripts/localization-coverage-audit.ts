@@ -1,6 +1,7 @@
 import { GENERATORS_METADATA } from '../src/data/generators.ts';
 import { hasLocalizedGeneratorDescription } from '../src/i18n/generatorContent.ts';
 import { LOCALIZED_GENERATOR_TITLE_IDS } from '../src/i18n/generatorTitles.ts';
+import { hasLocalizedEditorialMeta } from '../src/i18n/localizedGeneratorMeta.ts';
 
 const locales = [
   'en', 'fr', 'es', 'de', 'it', 'pt', 'ar', 'tr', 'ja', 'ko',
@@ -25,6 +26,7 @@ for (const generator of generators) {
     if (!hasLocalizedGeneratorDescription(generator.id, locale)) {
       findings.push({ generator: generator.id, locale, field: 'description', reason: 'uses category-level fallback or source language' });
     }
+    if (hasLocalizedEditorialMeta(generator.id, locale)) continue;
     for (const field of editorialFields) {
       const value = generator[field];
       if (value == null || (Array.isArray(value) && value.length === 0)) continue;
