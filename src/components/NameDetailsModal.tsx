@@ -26,6 +26,7 @@ import { GENERATORS_METADATA } from '../data/generators';
 import { getAppSettings } from '../services/settings';
 import { getNameDetailsLabels } from '../i18n/nameDetails';
 import { getLocalizedGeneratorTitle } from '../i18n/generatorTitles';
+import { getLocalizedGeneratorDescription } from '../i18n/generatorContent';
 
 interface NameDetailsModalProps {
   nameItem: GeneratedName;
@@ -197,7 +198,7 @@ export const NameDetailsModal: React.FC<NameDetailsModalProps> = ({
               <span>{t.whyFits}</span>
             </div>
             <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
-              {nameItem.description}
+              {getLocalizedGeneratorDescription(meta, language)}
             </p>
             <div className="pt-2 flex flex-wrap gap-2 text-[11px]">
               <span className="px-2.5 py-1 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-300 font-semibold">
