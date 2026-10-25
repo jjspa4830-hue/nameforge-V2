@@ -89,10 +89,10 @@ export const SUPPORTED_LANGUAGES: LanguageMeta[] = [
   { code: 'az', label: 'Azerbaïdjanais', native: 'Azərbaycan', dir: 'ltr', flag: '🇦🇿', region: 'Moyen-Orient' },
   { code: 'hy', label: 'Arménien', native: 'Հայերեն', dir: 'ltr', flag: '🇦🇲', region: 'Moyen-Orient' },
   { code: 'ka', label: 'Géorgien', native: 'ქართული', dir: 'ltr', flag: '🇬🇪', region: 'Moyen-Orient' },
-  { code: 'kk', label: 'Kazakh', native: 'Қазақша', dir: 'ltr', flag: '🇰🇿', region: 'Asie Centrale' },
-  { code: 'uz', label: 'Ouzbek', native: 'Oʻzbekcha', dir: 'ltr', flag: '🇺🇿', region: 'Asie Centrale' },
-  { code: 'ky', label: 'Kirghiz', native: 'Кыргызча', dir: 'ltr', flag: '🇰🇬', region: 'Asie Centrale' },
-  { code: 'tk', label: 'Turkmène', native: 'Türkmençe', dir: 'ltr', flag: '🇹🇲', region: 'Asie Centrale' },
+  { code: 'kk', label: 'Kazakh', native: 'Қазақша', dir: 'ltr', flag: '🇰🇿', region: 'Asie' },
+  { code: 'uz', label: 'Ouzbek', native: 'Oʻzbekcha', dir: 'ltr', flag: '🇺🇿', region: 'Asie' },
+  { code: 'ky', label: 'Kirghiz', native: 'Кыргызча', dir: 'ltr', flag: '🇰🇬', region: 'Asie' },
+  { code: 'tk', label: 'Turkmène', native: 'Türkmençe', dir: 'ltr', flag: '🇹🇲', region: 'Asie' },
 
   // Afrique
   { code: 'sw', label: 'Swahili', native: 'Kiswahili', dir: 'ltr', flag: '🇰🇪', region: 'Afrique' },
