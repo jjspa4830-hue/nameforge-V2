@@ -282,7 +282,7 @@ try {
         }));
         const label = view.name + '-' + language + '-' + theme;
         const screenshotPath = outputDir + '/' + label + '.png';
-        await page.screenshot({ path: screenshotPath, fullPage: true, animations: 'disabled' });
+        await page.screenshot({ path: screenshotPath, fullPage: false, animations: 'disabled' });
         if (!response || response.status() >= 400) failures.push(label + ': HTTP response failed');
         if (state.text.length < 100) failures.push(label + ': likely blank or incomplete page');
         if (state.width > state.viewport + 2) failures.push(label + ': horizontal overflow');
