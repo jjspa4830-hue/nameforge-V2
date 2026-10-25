@@ -14,7 +14,7 @@ import { getLanguageModalLabels } from '../i18n/languageModal';
 import { getNameDetailsLabels } from '../i18n/nameDetails';
 import { getCollectionModalLabels } from '../i18n/collectionModal';
 import { getCompareModalLabels } from '../i18n/compareModal';
-import { FULL_TRANSLATION_LANGUAGES, isLanguageFullyTranslated } from '../i18n';
+import { FULL_TRANSLATION_LANGUAGES, getTranslations, isLanguageFullyTranslated } from '../i18n';
 import { normalizeAppSettings, SUPPORTED_LANGUAGES } from '../services/settings';
 import { normalizeHistoryEntry, normalizeRating, remapImportedCollectionId } from '../services/storage';
 
@@ -897,6 +897,37 @@ assert(
 
 // Test 44: Core Studio labels are translated for all 25 priority languages.
 const priorityStudioLanguages = ['fr', 'en', 'ar', 'tr', 'es', 'de', 'it', 'pt', 'ja', 'ko', 'zh', 'ru', 'hi', 'nl', 'pl', 'sv', 'vi', 'id', 'th', 'el', 'he', 'cs', 'ro', 'da', 'fi'];
+
+function flattenTranslationLeaves(value: unknown, prefix = ''): Array<{ path: string; value: unknown }> {
+  if (value && typeof value === 'object' && !Array.isArray(value)) {
+    return Object.entries(value as Record<string, unknown>).flatMap(([key, child]) =>
+      flattenTranslationLeaves(child, prefix ? `${prefix}.${key}` : key)
+    );
+  }
+  return [{ path: prefix, value }];
+}
+
+const englishTranslationLeaves = flattenTranslationLeaves(getTranslations('en'));
+const englishTranslationPaths = englishTranslationLeaves.map(({ path }) => path).sort();
+const translationCatalogFailures: string[] = [];
+for (const language of priorityStudioLanguages) {
+  const localizedLeaves = flattenTranslationLeaves(getTranslations(language));
+  const localizedPaths = localizedLeaves.map(({ path }) => path).sort();
+  if (JSON.stringify(localizedPaths) !== JSON.stringify(englishTranslationPaths)) {
+    translationCatalogFailures.push(`${language}: translation key structure differs from English`);
+  }
+  for (const leaf of localizedLeaves) {
+    if (typeof leaf.value !== 'string' || leaf.value.trim().length === 0) {
+      translationCatalogFailures.push(`${language}: missing or empty value at ${leaf.path || '<root>'}`);
+    }
+  }
+}
+assert(
+  translationCatalogFailures.length === 0,
+  'All 25 priority locales have the same complete, non-empty core translation catalog',
+  translationCatalogFailures.slice(0, 30).join('; ') || 'All translation keys and values checked'
+);
+
 const studioKeys = ['title', 'inputLabel', 'inputPlaceholder', 'copyPlain', 'quickPresets', 'unicodeTab', 'effectsTab', 'texturesTab', 'exportTab', 'fontFamily', 'fontSize', 'letterSpacing', 'visualEffect', 'textureMask', 'transparentBg', 'exportQuality', 'exportPng', 'copySvg', 'copyCss', 'copy', 'copied', 'clickToCopy', 'reset', 'typographySettings', 'chooseTexture', 'textureActive', 'clickToApply', 'openCanvas', 'backHome', 'svgCopied', 'cssCopied', 'selectedForStudio', 'heroTitle', 'heroAccent', 'heroDescription', 'unicodeHint', 'effectsHint', 'texturesHint', 'clearInput'] as const;
 const studioLabelsComplete = priorityStudioLanguages.every((language) => studioKeys.every((key) => getStudioLabel(language, key).trim().length > 0));
 assert(
