@@ -273,7 +273,7 @@ try {
           width: document.documentElement.scrollWidth,
           viewport: window.innerWidth,
           headings: [...document.querySelectorAll('h1,h2')].slice(0, 12).map((el) => (el.textContent || '').trim()),
-          cards: [...document.querySelectorAll('article h2')].slice(0, 12).map((el) => (el.textContent || '').trim()),
+          cards: [...document.querySelectorAll('article h2')].map((el) => (el.textContent || '').trim()),
           frenchMarkers: [
             'Générateur de Noms', 'Comment choisir', 'Avantages clés',
             'Points de vigilance', 'Applications & Univers Recommandés',
