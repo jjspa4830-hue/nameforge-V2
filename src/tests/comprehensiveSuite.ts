@@ -124,6 +124,15 @@ for (const locale of PRIORITY_LOCALES) {
     Object.values(labels.families).every((value) => value.trim().length > 0),
     `All generator-family labels exist for ${locale}`
   );
+  if (locale !== 'fr') {
+    const frenchFamilyLabels = getShellLabels('fr').families;
+    assert(
+      (Object.keys(frenchFamilyLabels) as Array<keyof typeof frenchFamilyLabels>).every(
+        (key) => labels.families[key] !== frenchFamilyLabels[key]
+      ),
+      `Generator-family labels are localized instead of staying French for ${locale}`
+    );
+  }
   if (locale !== 'en') {
     assert(
       labels.skipToMain !== 'Skip to main content' && labels.loading !== 'Loading NameForge…' && labels.surpriseMe !== '🎲 Surprise me!' && labels.changeLanguage !== 'Change language',
