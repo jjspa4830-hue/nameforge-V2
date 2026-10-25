@@ -29,7 +29,7 @@ import { getLocalizedGeneratorTitle } from '../i18n/generatorTitles';
 import { getLocalizedGeneratorDescription } from '../i18n/generatorContent';
 import { getShellLabels } from '../i18n/shell';
 
-const LEGAL_NOTICE: Record<LanguageCode, string> = {
+const LEGAL_NOTICE: Partial<Record<LanguageCode, string>> = {
   en: 'Creative suggestion only. Check official trademark and domain registries before using this name commercially.',
   fr: 'Suggestion créative uniquement. Vérifiez les registres officiels des marques et des domaines avant tout usage commercial.',
   es: 'Sugerencia creativa únicamente. Consulte los registros oficiales de marcas y dominios antes de usar este nombre comercialmente.',
