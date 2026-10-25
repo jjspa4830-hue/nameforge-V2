@@ -121,7 +121,7 @@ export const GeneratorsListView: React.FC<GeneratorsListViewProps> = ({ onNaviga
             <div>
               <div className="flex items-center justify-between mb-4">
                 <span className="text-3xl group-hover:scale-110 transition">{gen.icon}</span>
-                <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-300">{gen.badge}</span>
+                <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-300">{categoryLabel(gen.category, gen.category)}</span>
               </div>
               <h2 className="text-lg font-black text-white group-hover:text-cyan-300 transition mb-2">{getLocalizedGeneratorTitle(gen.id, language, gen.title)}</h2>
               <p className="text-xs text-slate-400 leading-relaxed min-h-[48px] line-clamp-3">{getLocalizedGeneratorDescription(gen, language)}</p>
