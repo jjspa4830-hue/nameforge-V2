@@ -241,6 +241,73 @@ try {
     await page.close();
     }
   }
+
+  // Exercise the catalogue and generator detail in every primary locale and both themes.
+  // The initial matrix above checks those views in English; this matrix closes the
+  // language-coverage gap for their visible UI, direction, overflow, and runtime errors.
+  const allPrimaryLanguages = ['fr','en','ar','tr','es','de','it','pt','ja','ko','zh','ru','hi','nl','pl','sv','vi','id','th','el','he','cs','ro','da','fi'];
+  const localizedViews = [
+    { name: 'catalog', hash: '#/generators' },
+    { name: 'generator-detail', hash: '#/generator/fantasy' },
+  ];
+  for (const language of allPrimaryLanguages) {
+    for (const theme of themes) {
+      for (const view of localizedViews) {
+        const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce' });
+        const pageErrors = [];
+        page.on('pageerror', (error) => pageErrors.push(error.message));
+        await page.addInitScript(({ selectedLanguage, selectedTheme }) => {
+          localStorage.setItem('nameforge_settings', JSON.stringify({
+            language: selectedLanguage,
+            theme: selectedTheme,
+            defaultGenLanguage: 'auto',
+            textSize: 'normal',
+          }));
+        }, { selectedLanguage: language, selectedTheme: theme });
+        const response = await page.goto(baseUrl + view.hash, { waitUntil: 'networkidle', timeout: 45000 });
+        await page.waitForTimeout(300);
+        const state = await page.evaluate(() => ({
+          text: (document.body?.innerText || '').trim(),
+          width: document.documentElement.scrollWidth,
+          viewport: window.innerWidth,
+          direction: document.documentElement.dir,
+          htmlLanguage: document.documentElement.lang,
+          articleCount: document.querySelectorAll('article').length,
+          selects: document.querySelectorAll('select').length,
+        }));
+        const label = 'locale-' + language + '-' + theme + '-' + view.name;
+        const screenshotPath = outputDir + '/' + label + '.png';
+        await page.screenshot({ path: screenshotPath, fullPage: true, animations: 'disabled' });
+        if (!response || response.status() >= 400) failures.push(label + ': HTTP response failed');
+        if (state.text.length < 100) failures.push(label + ': likely blank/incomplete page');
+        if (state.width > state.viewport + 2) failures.push(label + ': horizontal overflow (' + state.width + 'px vs ' + state.viewport + 'px)');
+        if (state.htmlLanguage !== language) failures.push(label + ': html lang mismatch (' + state.htmlLanguage + ')');
+        const shouldBeRtl = language === 'ar' || language === 'he';
+        if ((state.direction === 'rtl') !== shouldBeRtl) failures.push(label + ': expected ' + (shouldBeRtl ? 'rtl' : 'ltr') + ' direction, got ' + state.direction);
+        if (view.name === 'catalog' && state.articleCount !== 234) failures.push(label + ': expected 234 generator cards, found ' + state.articleCount);
+        if (view.name === 'generator-detail' && state.selects < 6) failures.push(label + ': expected 6 generator selectors, found ' + state.selects);
+        if (pageErrors.length) failures.push(label + ': JavaScript page errors: ' + pageErrors.join(' | '));
+        results.push({
+          view: view.name,
+          language,
+          theme,
+          viewport: 'desktop-localized',
+          status: response?.status() ?? null,
+          textCharacters: state.text.length,
+          documentWidth: state.width,
+          viewportWidth: state.viewport,
+          direction: state.direction,
+          htmlLanguage: state.htmlLanguage,
+          articleCount: state.articleCount,
+          selectCount: state.selects,
+          pageErrors,
+          screenshot: screenshotPath,
+        });
+        await page.close();
+      }
+    }
+  }
+
 } finally {
   if (browser) await browser.close();
   server.kill('SIGTERM');
