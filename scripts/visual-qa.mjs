@@ -105,6 +105,23 @@ try {
         // Expand every FAQ answer so each accordion's content and light/dark styling
         // is actually rendered, not only represented by its collapsed heading.
         if (view.name === 'home') {
+          // Settings is a second entry point for generation-language choices.
+          const settingsButton = page.locator('button[aria-label="Settings"]').first();
+          if (await settingsButton.count()) {
+            await settingsButton.click();
+            const settingsDialog = page.locator('[role="dialog"][aria-labelledby="settings-title"]');
+            const defaultLanguage = settingsDialog.locator('#settings-default-generation-language');
+            if (!(await defaultLanguage.isVisible())) failures.push(label + ': default generation-language selector is missing or hidden in Settings');
+            if (await defaultLanguage.count()) {
+              if (await defaultLanguage.locator('option').count() < 20) failures.push(label + ': Settings language selector has fewer than 20 language choices');
+              const indicator = await defaultLanguage.evaluate((select) => getComputedStyle(select).backgroundImage);
+              if (indicator === 'none') failures.push(label + ': Settings language selector has no visible dropdown indicator');
+            }
+            await settingsDialog.locator('button[aria-label]').first().click();
+          } else {
+            failures.push(label + ': Settings button is not discoverable by its accessible name');
+          }
+
           const faqSection = page.getByTestId('home-faq-section');
           const faqItems = faqSection.locator('div.space-y-3 > div');
           const faqButtons = faqItems.locator('button');
