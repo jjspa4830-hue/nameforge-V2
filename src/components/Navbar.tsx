@@ -93,7 +93,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         }}
       />
 
-      <header lang={settings.language} dir={["ar", "he"].includes(settings.language) ? "rtl" : "ltr"} className="sticky top-0 z-40 bg-[#070912]/95 backdrop-blur-md border-b border-white/10 transition-all">
+      <header lang={settings.language} dir={currentLangMeta.dir} className="sticky top-0 z-40 bg-[#070912]/95 backdrop-blur-md border-b border-white/10 transition-all">
         <div className="max-w-7xl xl:max-w-[1440px] mx-auto px-4 sm:px-8 h-20 flex items-center justify-between">
           {/* Brand Logo */}
           <button
@@ -101,7 +101,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               onNavigate('home');
               setMobileMenuOpen(false);
             }}
-            className="cursor-pointer text-left focus:outline-none py-1"
+            className="cursor-pointer text-start focus:outline-none py-1"
             aria-label={`NameForge ${t.home}`}
           >
             <Logo size="lg" />
@@ -142,7 +142,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     className="fixed inset-0 z-20"
                     onClick={() => setGeneratorsDropdownOpen(false)}
                   />
-                  <div className="absolute left-0 mt-2 w-[520px] rounded-2xl bg-[#0b1020] border border-slate-800 shadow-2xl p-4 z-30 animate-fade-in max-h-[80vh] overflow-y-auto">
+                  <div className="absolute start-0 mt-2 w-[520px] rounded-2xl bg-[#0b1020] border border-slate-800 shadow-2xl p-4 z-30 animate-fade-in max-h-[80vh] overflow-y-auto">
                     <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-800">
                       <span className="text-xs font-bold text-slate-300 uppercase tracking-wider">
                         {navText.all} {ALL_GENERATORS_LIST.length} {navText.generators}
@@ -175,7 +175,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                                     onNavigate('generator-detail', gen.id);
                                     setGeneratorsDropdownOpen(false);
                                   }}
-                                  className="w-full text-left px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 transition flex items-center gap-2 cursor-pointer"
+                                  className="w-full text-start px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 transition flex items-center gap-2 cursor-pointer"
                                 >
                                   <span>{gen.icon}</span>
                                   <span className="truncate">{getLocalizedGeneratorShortTitle(gen.id, settings.language, gen.shortTitle)}</span>
@@ -305,7 +305,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 onNavigate('home');
                 setMobileMenuOpen(false);
               }}
-              className="w-full text-left py-2 px-3 rounded-xl text-sm font-semibold text-slate-300 hover:text-white hover:bg-slate-800"
+              className="w-full text-start py-2 px-3 rounded-xl text-sm font-semibold text-slate-300 hover:text-white hover:bg-slate-800"
             >
               {t.home}
             </button>
@@ -315,7 +315,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 onNavigate('generators');
                 setMobileMenuOpen(false);
               }}
-              className="w-full text-left py-2 px-3 rounded-xl text-sm font-semibold text-slate-300 hover:text-white hover:bg-slate-800 flex items-center justify-between"
+              className="w-full text-start py-2 px-3 rounded-xl text-sm font-semibold text-slate-300 hover:text-white hover:bg-slate-800 flex items-center justify-between"
             >
               <span>{t.allGenerators.replace(/\b134\b/g, String(ALL_GENERATORS_LIST.length))}</span>
               <span className="text-xs bg-purple-600/30 text-purple-300 px-2 py-0.5 rounded-full font-bold">
@@ -329,7 +329,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 onNavigate('generator-detail', randomGen.id);
                 setMobileMenuOpen(false);
               }}
-              className="w-full text-left py-2 px-3 rounded-xl text-sm font-semibold text-amber-300 hover:bg-slate-800 flex items-center gap-2"
+              className="w-full text-start py-2 px-3 rounded-xl text-sm font-semibold text-amber-300 hover:bg-slate-800 flex items-center gap-2"
             >
               <Dices className="w-4 h-4 text-amber-400" />
               <span>{navText.mobileRandom}</span>
@@ -340,7 +340,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 onNavigate('style-studio');
                 setMobileMenuOpen(false);
               }}
-              className="w-full text-left py-2 px-3 rounded-xl text-sm font-semibold text-pink-300 hover:bg-slate-800 flex items-center gap-2"
+              className="w-full text-start py-2 px-3 rounded-xl text-sm font-semibold text-pink-300 hover:bg-slate-800 flex items-center gap-2"
             >
               <Wand2 className="w-4 h-4 text-pink-400" />
               <span>{navText.mobileStudio}</span>
@@ -351,7 +351,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 onNavigate('my-names');
                 setMobileMenuOpen(false);
               }}
-              className="w-full text-left py-2 px-3 rounded-xl text-sm font-semibold text-slate-300 hover:text-white hover:bg-slate-800 flex items-center justify-between"
+              className="w-full text-start py-2 px-3 rounded-xl text-sm font-semibold text-slate-300 hover:text-white hover:bg-slate-800 flex items-center justify-between"
             >
               <span className="flex items-center gap-2">
                 <Bookmark className="w-4 h-4 text-purple-400" />
@@ -369,7 +369,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 setMobileMenuOpen(false);
                 setShowLangModal(true);
               }}
-              className="w-full text-left py-2 px-3 rounded-xl text-sm font-semibold text-cyan-300 hover:bg-slate-800 flex items-center justify-between"
+              className="w-full text-start py-2 px-3 rounded-xl text-sm font-semibold text-cyan-300 hover:bg-slate-800 flex items-center justify-between"
             >
               <span className="flex items-center gap-2">
                 <Globe className="w-4 h-4 text-cyan-400" />
@@ -385,7 +385,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 setMobileMenuOpen(false);
                 setShowSettingsModal(true);
               }}
-              className="w-full text-left py-2 px-3 rounded-xl text-sm font-semibold text-slate-300 hover:text-white hover:bg-slate-800 flex items-center gap-2"
+              className="w-full text-start py-2 px-3 rounded-xl text-sm font-semibold text-slate-300 hover:text-white hover:bg-slate-800 flex items-center gap-2"
             >
               <Settings className="w-4 h-4 text-purple-400" />
               <span>{t.settings}</span>
