@@ -14,7 +14,9 @@ import { getLanguageModalLabels } from '../i18n/languageModal';
 import { getNameDetailsLabels } from '../i18n/nameDetails';
 import { getCollectionModalLabels } from '../i18n/collectionModal';
 import { getCompareModalLabels } from '../i18n/compareModal';
-import { normalizeHistoryEntry, remapImportedCollectionId } from '../services/storage';
+import { FULL_TRANSLATION_LANGUAGES, isLanguageFullyTranslated } from '../i18n';
+import { normalizeAppSettings, SUPPORTED_LANGUAGES } from '../services/settings';
+import { normalizeHistoryEntry, normalizeRating, remapImportedCollectionId } from '../services/storage';
 
 declare const process: { exit: (code: number) => void };
 
@@ -39,7 +41,47 @@ function assert(condition: boolean, description: string, details?: string) {
   }
 }
 
-// Imported history records must be normalized and malformed records ignored.
+// Persisted settings and imported ratings must be normalized before they reach the UI.
+const normalizedInvalidSettings = normalizeAppSettings({
+  language: 'not-a-language',
+  theme: 'ultraviolet',
+  textSize: 'tiny',
+  reduceMotion: 'yes',
+  defaultGenLanguage: 'unknown',
+});
+assert(
+  normalizedInvalidSettings.language === 'en' &&
+  normalizedInvalidSettings.theme === 'dark' &&
+  normalizedInvalidSettings.textSize === 'normal' &&
+  normalizedInvalidSettings.reduceMotion === false &&
+  normalizedInvalidSettings.defaultGenLanguage === 'auto',
+  'Invalid persisted settings fall back to safe defaults'
+);
+const normalizedValidSettings = normalizeAppSettings({
+  language: 'ar',
+  theme: 'system',
+  textSize: 'large',
+  reduceMotion: true,
+  defaultGenLanguage: 'tech',
+});
+assert(
+  normalizedValidSettings.language === 'ar' &&
+  normalizedValidSettings.theme === 'system' &&
+  normalizedValidSettings.textSize === 'large' &&
+  normalizedValidSettings.reduceMotion === true &&
+  normalizedValidSettings.defaultGenLanguage === 'tech',
+  'Valid persisted settings are preserved'
+);
+assert(normalizeAppSettings(null).language === 'en', 'Missing settings payload safely falls back to defaults');
+assert(normalizeRating(1) === 1, 'One-star rating is accepted');
+assert(normalizeRating(5) === 5, 'Five-star rating is accepted');
+assert(normalizeRating('4') === 4, 'Numeric rating strings are normalized');
+assert(normalizeRating(0) === 0, 'Zero rating is treated as no rating');
+assert(normalizeRating(6) === 0, 'Out-of-range ratings are rejected');
+assert(normalizeRating(Number.NaN) === 0, 'NaN ratings are rejected');
+assert(normalizeRating('not-a-rating') === 0, 'Non-numeric ratings are rejected');
+
+// Imported history records must be normalized and malformed records ignored;
 assert(normalizeHistoryEntry({ name: '  Aria  ', generator: 'fantasy' })?.name === 'Aria', 'Imported history trims names and accepts valid records');
 assert(normalizeHistoryEntry({ name: '', generator: 'fantasy' }) === null, 'Imported history rejects empty names');
 assert(normalizeHistoryEntry(null) === null, 'Imported history rejects null records');
@@ -60,6 +102,13 @@ const PRIORITY_LOCALES = [
   'zh', 'ru', 'hi', 'nl', 'pl', 'sv', 'vi', 'id', 'th', 'el',
   'he', 'cs', 'ro', 'da', 'fi',
 ] as const;
+assert(
+  FULL_TRANSLATION_LANGUAGES.length === PRIORITY_LOCALES.length &&
+    PRIORITY_LOCALES.every((locale) => FULL_TRANSLATION_LANGUAGES.includes(locale)) &&
+    PRIORITY_LOCALES.every((locale) => isLanguageFullyTranslated(locale)),
+  'The 25 priority locales are all registered as fully translated',
+  `Expected ${PRIORITY_LOCALES.length} fully translated locales; found ${FULL_TRANSLATION_LANGUAGES.length}`
+);
 for (const locale of PRIORITY_LOCALES) {
   const labels = getShellLabels(locale);
   assert(
@@ -96,6 +145,15 @@ for (const locale of PRIORITY_LOCALES) {
       labels.notRated !== 'Not rated',
       `My Names labels avoid English-only fallback for ${locale}`
     );
+    assert(
+      labels.restore !== 'Restore' &&
+      labels.compare !== 'Compare' &&
+      labels.all !== 'All' &&
+      labels.saved !== '🔖 Saved' &&
+      labels.favorites !== '❤️ Favorites' &&
+      labels.withNotes !== '📝 With notes',
+      `My Names toolbar labels avoid English-only fallback for ${locale}`
+    );
   }
 }
 
@@ -110,24 +168,33 @@ for (const locale of PRIORITY_LOCALES) {
   assert(
     missingTitles.length === 0,
     `Core generator titles and short labels are localized for ${locale}`,
-    missingTitles.join(', ') || '16 core generators checked'
+    missingTitles.join(', ') || `${LOCALIZED_GENERATOR_TITLE_IDS.length} generators checked`
   );
 }
 
-// Language selector modal must expose translated core controls for every priority locale.
+// Language selector modal must expose every translated label for all 25 priority locales.
 for (const locale of PRIORITY_LOCALES) {
   const labels = getLanguageModalLabels(locale);
   assert(
-    Boolean(labels.title.trim() && labels.close.trim() && labels.searchPlaceholder.trim() &&
-      labels.all.trim() && labels.fullyTranslated.trim() && labels.complete.trim() &&
-      labels.fallback.trim() && labels.noResults.trim() && labels.reset.trim() &&
-      labels.active.trim() && labels.completeStatus.trim() && labels.standardStatus.trim()),
-    `Language selector labels exist for ${locale}`
+    Object.values(labels).every((value) => typeof value === 'string' && value.trim().length > 0),
+    `All language selector labels are non-empty for ${locale}`
   );
   assert(
     locale === 'fr' || labels.title !== 'Choisir la langue',
     `Language selector title is not left in French for ${locale}`
   );
+  if (locale !== 'en') {
+    assert(
+      labels.close !== 'Close' &&
+      labels.searchPlaceholder !== 'Search by language name (e.g. Français, English, 日本語, Arabic)…' &&
+      labels.reset !== 'Reset search' &&
+      labels.fullyTranslated !== '✨ Fully translated' &&
+      labels.noResults !== 'No languages match' &&
+      labels.completeStatus !== '✨ Full translation' &&
+      labels.standardStatus !== 'Standard support • English fallback',
+      `Language selector controls and status labels avoid English fallback for ${locale}`
+    );
+  }
 }
 
 // Name analysis modal labels must be available in all 25 priority locales.
@@ -1131,6 +1198,29 @@ for (const generatorId of ['character', 'ai_bot'] as const) {
     failures.join(', ') || '25 languages checked'
   );
 }
+
+// Language registry integrity and right-to-left direction regression checks.
+assert(
+  new Set(SUPPORTED_LANGUAGES.map((language) => language.code)).size === SUPPORTED_LANGUAGES.length,
+  'Supported language codes are unique'
+);
+assert(
+  SUPPORTED_LANGUAGES.every((language) => language.label.trim() && language.native.trim()),
+  'Every supported language has a display and native label'
+);
+const expectedRtlLanguages = ['ar', 'he', 'fa', 'ur', 'ps'] as const;
+for (const code of expectedRtlLanguages) {
+  const language = SUPPORTED_LANGUAGES.find((item) => item.code === code);
+  assert(
+    language?.dir === 'rtl',
+    `Language registry marks ${code} as right-to-left`,
+    language ? `Expected rtl, received ${language.dir}` : 'Language code is missing'
+  );
+}
+assert(
+  SUPPORTED_LANGUAGES.filter((language) => language.dir === 'rtl').length === expectedRtlLanguages.length,
+  'Only explicitly supported right-to-left languages use RTL direction'
+);
 
 // -----------------------------------------------------------------------------
 // SUMMARY
