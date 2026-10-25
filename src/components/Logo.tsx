@@ -35,8 +35,8 @@ export const Logo: React.FC<LogoProps> = ({
         decoding="async"
       />
       {showText && (
-        <span className={`${textSizes[size]} tracking-tight leading-none text-slate-900 dark:text-slate-100`}>
-          Name<span className="bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-400 bg-clip-text text-transparent">Forge</span>
+        <span className={`${textSizes[size]} nf-brand-title tracking-tight leading-none`}>
+          NameForge
         </span>
       )}
     </div>
