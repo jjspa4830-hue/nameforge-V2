@@ -232,6 +232,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             </div>
             <p className="text-slate-400">{t.genLangDesc}</p>
             <select
+              id="settings-default-generation-language"
+              aria-label={t.genLangTitle}
               value={settings.defaultGenLanguage}
               onChange={(e) =>
                 handleUpdate({ defaultGenLanguage: e.target.value as GenLanguageCode })

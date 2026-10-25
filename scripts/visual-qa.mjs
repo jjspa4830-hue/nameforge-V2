@@ -2,7 +2,7 @@ import { chromium } from 'playwright';
 import { spawn } from 'node:child_process';
 import { mkdir } from 'node:fs/promises';
 
-const baseUrl = process.env.VISUAL_QA_BASE_URL || 'http://127.0.0.1:4173/test-name-forge/';
+const baseUrl = process.env.VISUAL_QA_BASE_URL || 'http://127.0.0.1:4173/';
 const outputDir = 'artifacts/visual-qa';
 await mkdir(outputDir, { recursive: true });
 
@@ -71,6 +71,26 @@ try {
           documentWidth: document.documentElement.scrollWidth,
           mainCount: document.querySelectorAll('main').length,
           articleCount: document.querySelectorAll('article').length,
+          selects: [...document.querySelectorAll('select')].map((select) => {
+            const rect = select.getBoundingClientRect();
+            const style = getComputedStyle(select);
+            return {
+              id: select.id,
+              label: select.labels?.[0]?.innerText?.trim() || select.getAttribute('aria-label') || '',
+              optionCount: select.options.length,
+              visible: rect.width > 0 && rect.height > 0 && style.visibility !== 'hidden' && style.display !== 'none',
+              width: Math.round(rect.width),
+              height: Math.round(rect.height),
+              backgroundImage: style.backgroundImage,
+              value: select.value,
+            };
+          }),
+          pressedChoiceCount: document.querySelectorAll('button[aria-pressed], button[aria-selected]').length,
+          visiblePressedChoiceCount: [...document.querySelectorAll('button[aria-pressed], button[aria-selected]')].filter((button) => {
+            const rect = button.getBoundingClientRect();
+            const style = getComputedStyle(button);
+            return rect.width > 0 && rect.height > 0 && style.visibility !== 'hidden' && style.display !== 'none';
+          }).length,
           images: [...document.images].map((img) => ({
             src: img.currentSrc || img.src,
             loaded: img.complete && img.naturalWidth > 0,
@@ -85,6 +105,23 @@ try {
         // Expand every FAQ answer so each accordion's content and light/dark styling
         // is actually rendered, not only represented by its collapsed heading.
         if (view.name === 'home') {
+          // Settings is a second entry point for generation-language choices.
+          const settingsButton = page.locator('button[aria-label="Settings"]:visible').first();
+          if (await settingsButton.count()) {
+            await settingsButton.click();
+            const settingsDialog = page.locator('[role="dialog"][aria-labelledby="settings-title"]');
+            const defaultLanguage = settingsDialog.locator('#settings-default-generation-language');
+            if (!(await defaultLanguage.isVisible())) failures.push(label + ': default generation-language selector is missing or hidden in Settings');
+            if (await defaultLanguage.count()) {
+              if (await defaultLanguage.locator('option').count() < 20) failures.push(label + ': Settings language selector has fewer than 20 language choices');
+              const indicator = await defaultLanguage.evaluate((select) => getComputedStyle(select).backgroundImage);
+              if (indicator === 'none') failures.push(label + ': Settings language selector has no visible dropdown indicator');
+            }
+            await settingsDialog.locator('button[aria-label]').first().click();
+          } else {
+            failures.push(label + ': Settings button is not discoverable by its accessible name');
+          }
+
           const faqSection = page.getByTestId('home-faq-section');
           const faqItems = faqSection.locator('div.space-y-3 > div');
           const faqButtons = faqItems.locator('button');
@@ -107,13 +144,54 @@ try {
               await item.screenshot({ path: faqShot, animations: 'disabled' });
             }
           }
+          const familyChoices = page.locator('button[aria-pressed]');
+          if (await familyChoices.count() > 1) {
+            await familyChoices.nth(1).click();
+            if (await familyChoices.nth(1).getAttribute('aria-pressed') !== 'true') {
+              failures.push(label + ': home category choice did not expose its selected state after interaction');
+            }
+          } else {
+            failures.push(label + ': home category choice buttons are missing');
+          }
         }
 
         if (!response || response.status() >= 400) failures.push(label + ': HTTP response failed (' + (response?.status() ?? 'none') + ')');
         if (state.bodyTextLength < 100) failures.push(label + ': likely blank/incomplete page (' + state.bodyTextLength + ' text characters)');
         if (!state.htmlClass.includes(theme === 'light' ? 'light' : 'dark')) failures.push(label + ': requested theme class missing; html class=' + state.htmlClass);
         if (state.documentWidth > state.viewportWidth + 2) failures.push(label + ': horizontal overflow (' + state.documentWidth + 'px content vs ' + state.viewportWidth + 'px viewport)');
+        for (const select of state.selects) {
+          if (!select.visible) failures.push(label + ': selector ' + (select.id || select.label || '(unlabelled)') + ' is not visible');
+          if (select.optionCount < 2) failures.push(label + ': selector ' + (select.id || select.label || '(unlabelled)') + ' has fewer than 2 options');
+          if (select.backgroundImage === 'none') failures.push(label + ': selector ' + (select.id || select.label || '(unlabelled)') + ' has no visible dropdown indicator');
+          if (!select.label) failures.push(label + ': selector ' + (select.id || '(unlabelled)') + ' has no accessible label');
+        }
+        if (view.name === 'home' && state.visiblePressedChoiceCount < 5) failures.push(label + ': home-page multi-choice filters are missing selected-state semantics or are not visible');
         if (view.name === 'catalog' && state.articleCount !== 234) failures.push(label + ': expected 234 generator cards, found ' + state.articleCount);
+        if (view.name === 'catalog' && state.visiblePressedChoiceCount < 2) failures.push(label + ': category choice buttons are missing or not visible');
+        if (view.name === 'style-studio' && state.visiblePressedChoiceCount < 4) failures.push(label + ': expected the four visible Style Studio tab choices');
+        if (view.name === 'generator-detail') {
+          if (state.selects.length < 6) failures.push(label + ': expected 6 generator selectors, found ' + state.selects.length);
+          // Exercise each control to verify the choice is functional, not just decorative.
+          for (const id of ['generator-style', 'generator-language', 'generator-length', 'generator-format', 'generator-gender', 'generator-quantity']) {
+            const control = page.locator('#' + id);
+            if (await control.count()) {
+              const optionCount = await control.locator('option').count();
+              const oldValue = await control.inputValue();
+              if (optionCount > 1) {
+                const secondValue = await control.locator('option').nth(1).getAttribute('value');
+                const nextIndex = oldValue === secondValue ? 0 : 1;
+                const nextValue = await control.locator('option').nth(nextIndex).getAttribute('value');
+                if (nextValue !== oldValue) {
+                  await control.selectOption({ index: nextIndex });
+                  const selectedValue = await control.inputValue();
+                  if (selectedValue !== nextValue) failures.push(label + ': ' + id + ' did not accept a new selection');
+                } else {
+                  failures.push(label + ': ' + id + ' has no distinct selectable value');
+                }
+              }
+            }
+          }
+        }
         if (pageErrors.length) failures.push(label + ': JavaScript page errors: ' + pageErrors.join(' | '));
         const brokenImages = state.images.filter((img) => !img.loaded && !img.src.startsWith('data:'));
         if (brokenImages.length) failures.push(label + ': broken images: ' + brokenImages.map((img) => img.src).join(', '));

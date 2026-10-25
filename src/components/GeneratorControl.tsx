@@ -96,10 +96,12 @@ export const GeneratorControl: React.FC<GeneratorControlProps> = ({
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
         {/* 1. Style selector */}
         <div className="lg:col-span-1">
-          <label className="block text-[11px] font-bold uppercase tracking-wider text-purple-300 mb-1.5">
+          <label htmlFor="generator-style" className="block text-[11px] font-bold uppercase tracking-wider text-purple-300 mb-1.5">
             {t.styleLabel}
           </label>
           <select
+            id="generator-style"
+            aria-label={t.styleLabel}
             value={style}
             onChange={(e) => onStyleChange(e.target.value)}
             className="w-full h-11 px-3 py-2 bg-[#0a0f1d] border border-slate-700/80 rounded-xl text-xs font-semibold text-white focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 cursor-pointer shadow-inner"
@@ -114,11 +116,13 @@ export const GeneratorControl: React.FC<GeneratorControlProps> = ({
 
         {/* 2. Generation Language */}
         <div>
-          <label className="block text-[11px] font-bold uppercase tracking-wider text-purple-300 mb-1.5 flex items-center gap-1">
+          <label htmlFor="generator-language" className="block text-[11px] font-bold uppercase tracking-wider text-purple-300 mb-1.5 flex items-center gap-1">
             <Globe className="w-3 h-3 text-cyan-400" />
             <span>{t.genLangLabel}</span>
           </label>
           <select
+            id="generator-language"
+            aria-label={t.genLangLabel}
             value={genLanguage}
             onChange={(e) => onGenLanguageChange && onGenLanguageChange(e.target.value as GenLanguageCode)}
             className="w-full h-11 px-3 py-2 bg-[#0a0f1d] border border-slate-700/80 rounded-xl text-xs font-semibold text-white focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 cursor-pointer shadow-inner"
@@ -133,10 +137,12 @@ export const GeneratorControl: React.FC<GeneratorControlProps> = ({
 
         {/* 3. Length selector */}
         <div>
-          <label className="block text-[11px] font-bold uppercase tracking-wider text-purple-300 mb-1.5">
+          <label htmlFor="generator-length" className="block text-[11px] font-bold uppercase tracking-wider text-purple-300 mb-1.5">
             {t.lengthLabel}
           </label>
           <select
+            id="generator-length"
+            aria-label={t.lengthLabel}
             value={length}
             onChange={(e) => onLengthChange(e.target.value as LengthOption)}
             className="w-full h-11 px-3 py-2 bg-[#0a0f1d] border border-slate-700/80 rounded-xl text-xs font-semibold text-white focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 cursor-pointer shadow-inner"
@@ -149,10 +155,12 @@ export const GeneratorControl: React.FC<GeneratorControlProps> = ({
 
         {/* 4. Format selector */}
         <div>
-          <label className="block text-[11px] font-bold uppercase tracking-wider text-purple-300 mb-1.5">
+          <label htmlFor="generator-format" className="block text-[11px] font-bold uppercase tracking-wider text-purple-300 mb-1.5">
             {t.formatLabel}
           </label>
           <select
+            id="generator-format"
+            aria-label={t.formatLabel}
             value={format}
             onChange={(e) => onFormatChange(e.target.value as FormatOption)}
             className="w-full h-11 px-3 py-2 bg-[#0a0f1d] border border-slate-700/80 rounded-xl text-xs font-semibold text-white focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 cursor-pointer shadow-inner"
@@ -165,10 +173,12 @@ export const GeneratorControl: React.FC<GeneratorControlProps> = ({
 
         {/* 5. Gender / Nuance */}
         <div>
-          <label className="block text-[11px] font-bold uppercase tracking-wider text-purple-300 mb-1.5">
+          <label htmlFor="generator-gender" className="block text-[11px] font-bold uppercase tracking-wider text-purple-300 mb-1.5">
             {t.genderLabel}
           </label>
           <select
+            id="generator-gender"
+            aria-label={t.genderLabel}
             value={gender}
             onChange={(e) => onGenderChange(e.target.value as GenderOption)}
             className="w-full h-11 px-3 py-2 bg-[#0a0f1d] border border-slate-700/80 rounded-xl text-xs font-semibold text-white focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 cursor-pointer shadow-inner"
@@ -181,10 +191,12 @@ export const GeneratorControl: React.FC<GeneratorControlProps> = ({
 
         {/* 6. Quantity */}
         <div>
-          <label className="block text-[11px] font-bold uppercase tracking-wider text-purple-300 mb-1.5">
+          <label htmlFor="generator-quantity" className="block text-[11px] font-bold uppercase tracking-wider text-purple-300 mb-1.5">
             {t.quantityLabel}
           </label>
           <select
+            id="generator-quantity"
+            aria-label={t.quantityLabel}
             value={quantity}
             onChange={(e) => onQuantityChange && onQuantityChange(Number(e.target.value))}
             className="w-full h-11 px-3 py-2 bg-[#0a0f1d] border border-slate-700/80 rounded-xl text-xs font-semibold text-white focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 cursor-pointer shadow-inner"
