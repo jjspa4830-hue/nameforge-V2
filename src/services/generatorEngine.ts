@@ -141,14 +141,14 @@ const LANGUAGE_PHONETICS: Record<
   ja: {
     prefixes: ['Kae', 'Shin', 'Ryu', 'Sora', 'Ren', 'Haru', 'Aki', 'Taka', 'Yuki', 'Kaze', 'Kira', 'Hana', 'Mio'],
     suffixes: ['maru', 'to', 'ya', 'shi', 'zen', 'jin', 'nari', 'ro', 'sora', 'ka', 'ki', 'ko', 'suke'],
-    titleWords: ['le Gardien', 'l’Éveillé', 'le Maître', 'le Lame-Noire', 'l’Ombre'],
+    titleWords: ['Mamoru', 'Kage no Senshi', 'Tsuki no Kishi', 'Yoru no Kage', 'Hoshi no Tabibito'],
     vowels: ['a', 'i', 'u', 'e', 'o'],
     consonants: ['k', 's', 't', 'n', 'h', 'm', 'y', 'r', 'w'],
   },
   ar: {
     prefixes: ['Al-', 'Nour', 'Tariq', 'Zayd', 'Malik', 'Rayan', 'Qas', 'Badr', 'Farid', 'Karim', 'Sami', 'Amir'],
     suffixes: ['an', 'ir', 'din', 'i', 'our', 'am', 'al', 'eh', 'im', 'as', 'id', 'oun'],
-    titleWords: ['le Noble', 'le Magnanime', 'le Conquérant', 'le Juste', 'le Bienveillant'],
+    titleWords: ['النَبيل', 'الفارس', 'حارس النور', 'سيف الظل', 'المسافر'],
     vowels: ['a', 'i', 'u', 'ou', 'ai'],
     consonants: ['b', 't', 'j', 'd', 'r', 'z', 's', 'q', 'k', 'l', 'm', 'n', 'h'],
   },
@@ -337,12 +337,14 @@ function generatePhoneticHarmony(
   genLang: GenLanguageCode
 ): string {
   const langRules = LANGUAGE_PHONETICS[genLang] || LANGUAGE_PHONETICS.auto;
+  // An explicit language must control the linguistic roots, not just influence them randomly.
+  // "auto" keeps the generator's category-specific vocabulary.
   const prefixes =
-    langRules.prefixes.length > 0 && Math.random() < 0.4
+    genLang !== 'auto' && langRules.prefixes.length > 0
       ? langRules.prefixes
       : d.prefixes;
   const suffixes =
-    langRules.suffixes.length > 0 && Math.random() < 0.4
+    genLang !== 'auto' && langRules.suffixes.length > 0
       ? langRules.suffixes
       : d.suffixes;
 
@@ -377,8 +379,11 @@ function generateNeologism(
   genLang: GenLanguageCode
 ): string {
   // Only use single standalone words without spaces or apostrophes
-  const singleWords = [...d.prefixes, ...d.suffixes].filter(
-    (w) => !w.includes(' ') && !w.includes("'") && !w.includes('’') && w.length >= 4
+  const langRules = LANGUAGE_PHONETICS[genLang] || LANGUAGE_PHONETICS.auto;
+  const sourcePrefixes = genLang !== 'auto' && langRules.prefixes.length ? langRules.prefixes : d.prefixes;
+  const sourceSuffixes = genLang !== 'auto' && langRules.suffixes.length ? langRules.suffixes : d.suffixes;
+  const singleWords = [...sourcePrefixes, ...sourceSuffixes].filter(
+    (w) => !w.includes(' ') && !w.includes("'") && !w.includes('’') && w.length >= 2
   );
   if (singleWords.length >= 2) {
     const w1 = randomItem(singleWords) || 'Nova';
@@ -405,8 +410,13 @@ function generatePortmanteauBlend(
   d: SubcategoryData,
   genLang: GenLanguageCode
 ): string {
-  const rootsA = d.prefixes.length > 0 ? d.prefixes : ['Nova', 'Kaly', 'Velo', 'Aero', 'Zeta', 'Sol'];
-  const rootsB = d.suffixes.length > 0 ? d.suffixes : ['tech', 'flow', 'is', 'ora', 'craft', 'wave'];
+  const langRules = LANGUAGE_PHONETICS[genLang] || LANGUAGE_PHONETICS.auto;
+  const rootsA = genLang !== 'auto' && langRules.prefixes.length
+    ? langRules.prefixes
+    : (d.prefixes.length > 0 ? d.prefixes : ['Nova', 'Kaly', 'Velo', 'Aero', 'Zeta', 'Sol']);
+  const rootsB = genLang !== 'auto' && langRules.suffixes.length
+    ? langRules.suffixes
+    : (d.suffixes.length > 0 ? d.suffixes : ['tech', 'flow', 'is', 'ora', 'craft', 'wave']);
 
   const first = (randomItem(rootsA) as string) || 'Nova';
   const second = (randomItem(rootsB) as string) || 'craft';
