@@ -1010,22 +1010,38 @@ html.light #root option {
 }
 
 
-/* Fix: keep native multi-choice controls visible and usable across every view.
-   Tailwind preflight can remove native select affordances; restore a clear dropdown
-   indicator, readable options, and consistent interactive states in both themes. */
+/* Consistent, explicit choice controls across all routes and themes.
+   Use a drawn chevron instead of relying on browser-specific native select arrows. */
 @layer base {
-  select,
-  select:where(:not([multiple])) {
+  select:not([multiple]) {
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    min-width: 0;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23a78bfa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 0.75rem center !important;
+    background-size: 1rem 1rem !important;
+    padding-inline-end: 2.5rem !important;
+  }
+
+  html.light select:not([multiple]) {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23526176' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") !important;
+  }
+
+  [dir="rtl"] select:not([multiple]) {
+    background-position: left 0.75rem center !important;
+    padding-inline-start: 2.5rem !important;
+    padding-inline-end: 0.75rem !important;
+  }
+
+  select[multiple] {
     -webkit-appearance: auto !important;
     -moz-appearance: auto !important;
     appearance: auto !important;
-    cursor: pointer;
-    min-width: 0;
-    background-image: revert !important;
-    background-repeat: revert !important;
-    background-position: revert !important;
-    background-size: revert !important;
-    padding-inline-end: 2rem;
+    background-image: none !important;
+    min-height: 8rem;
   }
 
   select option,
@@ -1060,15 +1076,13 @@ html.light #root option {
     outline-offset: 2px;
   }
 
-  /* Make icon-only and compact choice buttons easy to locate without overriding
-     their existing colors, sizes, or component-specific design. */
   button {
     -webkit-appearance: button;
     touch-action: manipulation;
   }
 
   @media (max-width: 640px) {
-    select {
+    select:not([multiple]) {
       min-height: 2.75rem;
       font-size: max(0.875rem, 16px);
     }
