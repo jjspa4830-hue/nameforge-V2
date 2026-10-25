@@ -54,7 +54,8 @@ export const GeneratorsListView: React.FC<GeneratorsListViewProps> = ({ onNaviga
   useEffect(() => subscribeToSettings((settings) => setLanguage(settings.language)), []);
 
   const t = CATALOGUE_COPY[language] || EN_COPY;
-  const categoryLabel = (id: string, fallback: string) => t.categories[id] || getShellLabels(language).families[id as keyof ReturnType<typeof getShellLabels>['families']] || fallback;
+  // Keep family names sourced from the shared 25-locale shell dictionary so the catalogue cannot fall back to hard-coded French labels.
+  const categoryLabel = (id: string, fallback: string) => getShellLabels(language).families[id as keyof ReturnType<typeof getShellLabels>['families']] || t.categories[id] || fallback;
   const filtered = ALL_GENERATORS_LIST.filter((gen) => {
     const query = normalizeSearchText(search);
     const searchableFields = [
