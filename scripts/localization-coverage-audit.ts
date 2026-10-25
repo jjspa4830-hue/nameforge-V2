@@ -42,6 +42,11 @@ const summary = {
   missingOrUnverifiedItems: findings.length,
   fields: [...new Set(findings.map((item) => item.field))],
 };
+if (process.argv.includes('--json')) {
+  console.log(JSON.stringify({ summary, findings }, null, 2));
+  process.exit(0);
+}
+
 console.log('NameForge 25-locale visible-content audit');
 console.log(JSON.stringify(summary, null, 2));
 console.log('\nFirst 100 findings (full list can be saved by redirecting stdout):');
