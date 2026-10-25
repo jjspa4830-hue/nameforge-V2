@@ -60,10 +60,16 @@ export function subscribeToStorage(callback: () => void): () => void {
    RATING HELPERS
 ===================================================================== */
 
+export function normalizeRating(value: unknown): number {
+  const rating = typeof value === 'number' ? value : Number(value);
+  if (!Number.isFinite(rating) || rating < 1 || rating > 5) return 0;
+  return Math.round(rating);
+}
+
 export function getStoredRating(name: string): number {
   try {
     const val = localStorage.getItem('nameforge_rating_' + name);
-    return val ? Number(val) : 0;
+    return val === null ? 0 : normalizeRating(val);
   } catch {
     return 0;
   }
@@ -71,15 +77,16 @@ export function getStoredRating(name: string): number {
 
 export function setStoredRating(name: string, rating: number): void {
   try {
-    if (rating <= 0) {
+    const normalizedRating = normalizeRating(rating);
+    if (normalizedRating === 0) {
       localStorage.removeItem('nameforge_rating_' + name);
     } else {
-      localStorage.setItem('nameforge_rating_' + name, String(rating));
+      localStorage.setItem('nameforge_rating_' + name, String(normalizedRating));
     }
     const names = getSavedNames();
     const entry = names.find((x) => x.name.toLowerCase() === name.toLowerCase());
     if (entry) {
-      entry.rating = rating;
+      entry.rating = normalizedRating;
       saveAllNames(names);
     } else {
       notifyStorageChange();
@@ -129,7 +136,7 @@ function normalizeEntry(raw: any): SavedNameEntry | null {
     liked: raw.liked === true,
     note: safeTrim(raw.note),
     collectionId: safeTrim(raw.collectionId) || undefined,
-    rating: typeof raw.rating === 'number' ? raw.rating : getStoredRating(name),
+    rating: normalizeRating(raw.rating) || getStoredRating(name),
     createdAt: safeTrim(raw.createdAt) || new Date().toISOString(),
   };
 }

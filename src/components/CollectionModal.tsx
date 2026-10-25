@@ -55,12 +55,12 @@ export const CollectionModal: React.FC<CollectionModalProps> = ({
         role="dialog"
         aria-modal="true"
         aria-labelledby="collection-modal-title"
-        className="w-full max-w-md bg-[#0f172a] border border-slate-700 rounded-2xl p-6 shadow-2xl relative text-left"
+        className="w-full max-w-md bg-[#0f172a] border border-slate-700 rounded-2xl p-6 shadow-2xl relative text-start"
         onClick={(e) => e.stopPropagation()}
       >
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-slate-400 hover:text-white p-1 rounded-lg transition"
+          className="absolute top-4 end-4 text-slate-400 hover:text-white p-1 rounded-lg transition"
           aria-label={t.close}
         >
           <X className="w-5 h-5" />
