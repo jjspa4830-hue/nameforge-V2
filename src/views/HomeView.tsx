@@ -706,7 +706,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
                     {gen.icon}
                   </div>
                   <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-300">
-                    {familyLabels[gen.category as keyof typeof familyLabels] || gen.category}
+                    {familyLabels[gen.category as keyof typeof familyLabels] || familyLabels.all}
                   </span>
                 </div>
 
@@ -787,7 +787,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
                     {getLocalizedGeneratorShortTitle(gen.id, settings.language, gen.shortTitle)}
                   </h4>
                   <span className="text-[10px] font-bold text-purple-400 uppercase tracking-wider">
-                    {familyLabels[gen.category as keyof typeof familyLabels] || gen.category}
+                    {familyLabels[gen.category as keyof typeof familyLabels] || familyLabels.all}
                   </span>
                 </div>
                 <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">
