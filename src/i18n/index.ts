@@ -1412,7 +1412,7 @@ const BASE_TRANSLATIONS: Record<
       creativeTitle: '創作・メディア',
       toolsTitle: 'ツール・整理',
       legalNote: '免責事項：生成された名前は創作のインスピレーション用です。商標登録やドメイン取得の可否は関係公的機関で必ずご確認ください。',
-      rights: 'All rights reserved.',
+      rights: '無断転載・複製を禁じます。',
     },
   },
   ko: {
@@ -1553,7 +1553,7 @@ const BASE_TRANSLATIONS: Record<
       creativeTitle: '창작 & 미디어',
       toolsTitle: '도구 & 보관함',
       legalNote: '법적 고지: 생성된 이름은 창작적 영감을 위해 제공됩니다. 상표권 및 도메인 사용 가능 여부는 관련 공식 기관에서 직접 확인하셔야 합니다.',
-      rights: 'All rights reserved.',
+      rights: '모든 권리 보유.',
     },
   },
 };
