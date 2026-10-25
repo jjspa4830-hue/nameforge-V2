@@ -455,9 +455,14 @@ function generateSymbolicEvocative(
     cyberpunk: ['Chrome', 'Neon', 'Glitch', 'Spike', 'Wire', 'Cyber', 'Data'],
   };
 
-  const pool = symbolicMap[generatorId] || d.prefixes;
+  const langRules = LANGUAGE_PHONETICS[genLang] || LANGUAGE_PHONETICS.auto;
+  const pool = genLang !== 'auto' && langRules.prefixes.length
+    ? langRules.prefixes
+    : (symbolicMap[generatorId] || d.prefixes);
   const root = randomItem(pool) || 'Nova';
-  const suffixPool = d.suffixes.length > 0 ? d.suffixes : ['is', 'or', 'ex', 'ix', 'um', 'ia'];
+  const suffixPool = genLang !== 'auto' && langRules.suffixes.length
+    ? langRules.suffixes
+    : (d.suffixes.length > 0 ? d.suffixes : ['is', 'or', 'ex', 'ix', 'um', 'ia']);
   const suffix = randomItem(suffixPool) || 'is';
 
   return combineParts(root, suffix);
@@ -466,9 +471,12 @@ function generateSymbolicEvocative(
 /**
  * Strategy 5: Punchy Minimal (Compact, 1-2 sharp syllables)
  */
-function generatePunchyMinimal(d: SubcategoryData): string {
-  const p = (randomItem(d.prefixes) as string) || 'Vex';
-  const s = (randomItem(d.suffixes) as string) || 'o';
+function generatePunchyMinimal(d: SubcategoryData, genLang: GenLanguageCode = 'auto'): string {
+  const langRules = LANGUAGE_PHONETICS[genLang] || LANGUAGE_PHONETICS.auto;
+  const prefixes = genLang !== 'auto' && langRules.prefixes.length ? langRules.prefixes : d.prefixes;
+  const suffixes = genLang !== 'auto' && langRules.suffixes.length ? langRules.suffixes : d.suffixes;
+  const p = (randomItem(prefixes) as string) || 'Vex';
+  const s = (randomItem(suffixes) as string) || 'o';
 
   // If p is a full multi-word phrase, combine cleanly without chopping
   if (p.includes(' ') || s.includes(' ') || p.includes("'") || s.includes("'") || p.length > 8) {
@@ -891,7 +899,7 @@ export function generateNames(options: GenerateOptions): GeneratedName[] {
             baseName = generateSymbolicEvocative(targetGenerator, resolved, genLanguage);
             break;
           case 'punchy_minimal':
-            baseName = generatePunchyMinimal(resolved);
+            baseName = generatePunchyMinimal(resolved, genLanguage);
             break;
           case 'epic_compound': {
             const part1 = generatePhoneticHarmony(resolved, 'short', genLanguage);
