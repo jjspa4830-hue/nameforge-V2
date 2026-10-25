@@ -1,4 +1,5 @@
 import { GeneratorMeta, LanguageCode } from '../types';
+import { getLocalizedGeneratorShortTitle } from './generatorTitles';
 
 const LOCALIZED_DESCRIPTIONS: Record<string, Record<string, string>> = {
   "en": {
@@ -1623,9 +1624,43 @@ export const LOCALIZED_GENERATOR_DESCRIPTION_LANGUAGES = Object.keys(LOCALIZED_D
 export const LOCALIZED_GENERATOR_DESCRIPTION_IDS = Object.keys(GENERATOR_DESCRIPTION_OVERRIDES);
 
 /** Localized, honest category-level summary. Detailed editorial guides remain in their authored source language. */
+const LOCALIZED_GENERATOR_DESCRIPTION_TEMPLATES: Record<string, string> = {
+  en: 'Generate name ideas for {subject}, tailored to your style and audience.',
+  fr: 'Générez des idées de noms pour {subject}, adaptées à votre style et à votre public.',
+  es: 'Genera ideas de nombres para {subject}, adaptadas a tu estilo y público.',
+  de: 'Erstelle Namensideen für {subject}, passend zu deinem Stil und deiner Zielgruppe.',
+  it: 'Genera idee di nomi per {subject}, adatte al tuo stile e al tuo pubblico.',
+  pt: 'Gere ideias de nomes para {subject}, adaptadas ao seu estilo e público.',
+  ar: 'أنشئ أفكار أسماء لـ{subject} بما يناسب أسلوبك وجمهورك.',
+  tr: '{subject} için tarzına ve hedef kitlene uygun isim fikirleri oluştur.',
+  ja: 'スタイルや対象に合わせて、{subject}の名前のアイデアを作成します。',
+  ko: '스타일과 대상에 맞는 {subject} 이름 아이디어를 만들어 보세요.',
+  zh: '为{subject}生成符合你风格和受众的名称创意。',
+  ru: 'Создавайте идеи названий для категории «{subject}» с учётом стиля и аудитории.',
+  hi: 'अपनी शैली और दर्शकों के अनुसार {subject} के लिए नामों के विचार बनाएँ।',
+  nl: 'Genereer naamideeën voor {subject}, afgestemd op je stijl en doelgroep.',
+  pl: 'Twórz pomysły na nazwy dla kategorii „{subject}”, dopasowane do stylu i odbiorców.',
+  sv: 'Skapa namnidéer för {subject} som passar din stil och målgrupp.',
+  vi: 'Tạo ý tưởng tên cho {subject}, phù hợp với phong cách và đối tượng của bạn.',
+  id: 'Buat ide nama untuk {subject} yang sesuai dengan gaya dan audiens Anda.',
+  th: 'สร้างไอเดียชื่อสำหรับ{subject}ให้เหมาะกับสไตล์และกลุ่มเป้าหมายของคุณ',
+  el: 'Δημιούργησε ιδέες ονομάτων για {subject}, προσαρμοσμένες στο στιλ και το κοινό σου.',
+  he: 'צרו רעיונות לשמות עבור {subject}, בהתאם לסגנון ולקהל היעד שלכם.',
+  cs: 'Vytvářejte nápady na názvy pro kategorii „{subject}“ podle svého stylu a publika.',
+  ro: 'Generează idei de nume pentru {subject}, potrivite stilului și publicului tău.',
+  da: 'Skab navneidéer til {subject}, der passer til din stil og målgruppe.',
+  fi: 'Luo nimiehdotuksia aiheelle {subject} omaan tyyliisi ja kohdeyleisöösi sopiviksi.',
+};
+
 export function getLocalizedGeneratorDescription(meta: GeneratorMeta, language: LanguageCode): string {
   const generatorSpecific = GENERATOR_DESCRIPTION_OVERRIDES[meta.id]?.[language];
   if (generatorSpecific) return generatorSpecific;
+
+  const localizedSubject = getLocalizedGeneratorShortTitle(meta.id, language, '');
+  const localizedTemplate = LOCALIZED_GENERATOR_DESCRIPTION_TEMPLATES[language];
+  if (localizedSubject && localizedTemplate) {
+    return localizedTemplate.replace('{subject}', localizedSubject);
+  }
 
   const locale = LOCALIZED_DESCRIPTIONS[language];
   if (!locale) return meta.description;
@@ -1637,6 +1672,7 @@ export type GeneratorDescriptionCoverage = 'generator-specific' | 'category-fall
 /** Classifies the description actually shown, separating translated category fallbacks from source-language fallbacks. */
 export function getGeneratorDescriptionCoverage(meta: GeneratorMeta, language: LanguageCode): GeneratorDescriptionCoverage {
   if (GENERATOR_DESCRIPTION_OVERRIDES[meta.id]?.[language]) return 'generator-specific';
+  if (getLocalizedGeneratorShortTitle(meta.id, language, '') && LOCALIZED_GENERATOR_DESCRIPTION_TEMPLATES[language]) return 'generator-specific';
   const locale = LOCALIZED_DESCRIPTIONS[language];
   if (locale && (locale[meta.category] || locale.creative)) return 'category-fallback';
   return 'source-fallback';
