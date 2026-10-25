@@ -106,7 +106,7 @@ try {
         // is actually rendered, not only represented by its collapsed heading.
         if (view.name === 'home') {
           // Settings is a second entry point for generation-language choices.
-          const settingsButton = page.locator('button[aria-label="Settings"]').first();
+          const settingsButton = page.locator('button[aria-label="Settings"]:visible').first();
           if (await settingsButton.count()) {
             await settingsButton.click();
             const settingsDialog = page.locator('[role="dialog"][aria-labelledby="settings-title"]');
