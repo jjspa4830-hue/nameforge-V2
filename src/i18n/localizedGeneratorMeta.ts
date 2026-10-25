@@ -37,6 +37,34 @@ const COPY: Record<string, EditorialCopy> = {
   fi: { badge:'NAMEFORGE-VALINTA', title:'Luo nimiä aiheelle {subject}', subtitle:'Tutki ideoita, säädä tyyliä ja valitse projektiisi sopiva nimi.', guideTitle:'Näin valitset sopivan nimen', steps:[{h:'1. Määritä tavoite',p:'Päätä, kenelle nimi on tarkoitettu ja millaisen vaikutelman sen tulee antaa.'},{h:'2. Valitse selkeä tyyli',p:'Kokeile eri sävyjä ja muotoja ja säilytä yleisöllesi sopivat vaihtoehdot.'},{h:'3. Tarkista ennen käyttöä',p:'Tarkista olemassa olevat tavaramerkit, oikeudet, käyttäjänimet ja verkkotunnukset ennen julkaisua.'}], cardsTitle:'Ideoiden käyttötapoja',cards:[{h:'Henkilökohtaiset projektit',p:'Luo mieleenpainuva identiteetti projektille, hahmolle tai kokoelmalle.'},{h:'Luova työ',p:'Tutki vaihtoehtoja tarinoihin, peleihin, videoihin ja muihin luoviin ideoihin.'},{h:'Ammattikäyttö',p:'Valitse nimi brändille, tuotteelle, palvelulle tai verkkonäkyvyydelle.'}], faqTitle:'Usein kysytyt kysymykset',faqQ:'Voinko käyttää luotua nimeä kaupallisesti?',faqA:'Käytä ehdotuksia lähtökohtana ja tarkista tavaramerkit, oikeudet ja saatavuus ennen kaupallista käyttöä.',advantages:['Tutki nopeasti monia suuntia','Vertaa tyylejä yhdessä paikassa','Tallenna lupaavat ideat'],limits:['Ehdotettu nimi voi olla jo käytössä','Saatavuutta ja oikeuksia ei taata'],footer:'Jatka tutkimista, kunnes löydät sopivan nimen.'},
 };
 
+const LEGAL_DISCLAIMER: Record<string, string> = {
+  en: 'Generated suggestions are for inspiration. Check trademark rights and domain availability with the relevant official sources before use.',
+  fr: 'Les noms générés sont des suggestions créatives. Vérifiez les marques et la disponibilité des domaines auprès des sources officielles avant utilisation.',
+  es: 'Los nombres generados son sugerencias creativas. Comprueba las marcas registradas y la disponibilidad del dominio en fuentes oficiales antes de usarlos.',
+  de: 'Generierte Namen sind kreative Vorschläge. Prüfe vor der Verwendung Markenrechte und Domainverfügbarkeit bei offiziellen Stellen.',
+  it: 'I nomi generati sono suggerimenti creativi. Prima dell’uso, verifica marchi e disponibilità dei domini presso le fonti ufficiali.',
+  pt: 'Os nomes gerados são sugestões criativas. Antes de usar, verifique marcas registadas e disponibilidade de domínios em fontes oficiais.',
+  ar: 'الأسماء المُنشأة اقتراحات إبداعية. تحقّق من العلامات التجارية وتوفّر النطاقات عبر المصادر الرسمية قبل الاستخدام.',
+  tr: 'Oluşturulan adlar yaratıcı önerilerdir. Kullanmadan önce resmî kaynaklardan marka haklarını ve alan adı uygunluğunu kontrol edin.',
+  ja: '生成された名前は創作上の提案です。使用前に、公式情報源で商標権とドメインの利用可否を確認してください。',
+  ko: '생성된 이름은 창작을 위한 제안입니다. 사용 전에 공식 자료를 통해 상표권과 도메인 사용 가능 여부를 확인하세요.',
+  zh: '生成的名称仅供创意参考。使用前请通过官方渠道核查商标权和域名可用性。',
+  ru: 'Созданные названия — это творческие предложения. Перед использованием проверьте товарные знаки и доступность домена по официальным источникам.',
+  hi: 'बनाए गए नाम रचनात्मक सुझाव हैं। उपयोग से पहले आधिकारिक स्रोतों से ट्रेडमार्क अधिकार और डोमेन उपलब्धता जाँचें।',
+  nl: 'Gegenereerde namen zijn creatieve suggesties. Controleer vóór gebruik via officiële bronnen de merkrechten en domeinbeschikbaarheid.',
+  pl: 'Wygenerowane nazwy to propozycje kreatywne. Przed użyciem sprawdź znaki towarowe i dostępność domen w oficjalnych źródłach.',
+  sv: 'Genererade namn är kreativa förslag. Kontrollera varumärkesrättigheter och domäntillgänglighet via officiella källor före användning.',
+  vi: 'Tên được tạo ra là gợi ý sáng tạo. Trước khi sử dụng, hãy kiểm tra quyền nhãn hiệu và khả năng đăng ký tên miền qua nguồn chính thức.',
+  id: 'Nama yang dihasilkan adalah saran kreatif. Sebelum digunakan, periksa hak merek dagang dan ketersediaan domain melalui sumber resmi.',
+  th: 'ชื่อที่สร้างขึ้นเป็นเพียงคำแนะนำเชิงสร้างสรรค์ โปรดตรวจสอบสิทธิ์เครื่องหมายการค้าและความพร้อมของโดเมนจากแหล่งข้อมูลทางการก่อนใช้',
+  el: 'Τα ονόματα που δημιουργούνται είναι δημιουργικές προτάσεις. Πριν από τη χρήση, ελέγξτε εμπορικά σήματα και διαθεσιμότητα τομέα από επίσημες πηγές.',
+  he: 'השמות שנוצרו הם הצעות יצירתיות. לפני השימוש, בדקו סימני מסחר וזמינות דומיין במקורות רשמיים.',
+  cs: 'Vygenerované názvy jsou kreativní návrhy. Před použitím ověřte ochranné známky a dostupnost domény v oficiálních zdrojích.',
+  ro: 'Numele generate sunt sugestii creative. Înainte de utilizare, verifică mărcile și disponibilitatea domeniului din surse oficiale.',
+  da: 'Genererede navne er kreative forslag. Kontrollér varemærkerettigheder og domænetilgængelighed via officielle kilder før brug.',
+  fi: 'Luodut nimet ovat luovia ehdotuksia. Tarkista tavaramerkkioikeudet ja verkkotunnuksen saatavuus virallisista lähteistä ennen käyttöä.',
+};
+
 const CORE_IDS = new Set(['brand', 'business', 'baby_name', 'gaming', 'startup', 'fantasy', 'anime', 'domain', 'videogame']);
 
 export function hasLocalizedEditorialMeta(generatorId: string, language: LanguageCode): boolean {
@@ -60,5 +88,6 @@ export function getLocalizedEditorialMeta(meta: GeneratorMeta, language: Languag
     advantages: copy.advantages,
     limits: copy.limits,
     footer: copy.footer,
+    ...(meta.legalDisclaimer ? { legalDisclaimer: LEGAL_DISCLAIMER[language] || LEGAL_DISCLAIMER.en } : {}),
   };
 }
