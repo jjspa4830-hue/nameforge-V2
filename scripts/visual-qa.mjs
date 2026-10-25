@@ -241,12 +241,78 @@ try {
     await page.close();
     }
   }
+
+  // Expand locale coverage beyond the home page: verify the catalogue and a
+  // generator detail page in every supported priority locale and both themes.
+  // Keep this matrix desktop-only; the full responsive matrix above covers both viewports.
+  const localizationPages = [
+    { name: 'catalog-localization', hash: '#/generators' },
+    { name: 'detail-localization', hash: '#/generator/fantasy' },
+  ];
+  const expectedRtlLanguages = new Set(['ar', 'he']);
+  const localizationFindings = [];
+  for (const language of primaryLanguages) {
+    for (const theme of themes) {
+      for (const view of localizationPages) {
+        const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce' });
+        const pageErrors = [];
+        page.on('pageerror', (error) => pageErrors.push(error.message));
+        await page.addInitScript(({ selectedLanguage, selectedTheme }) => {
+          localStorage.setItem('nameforge_settings', JSON.stringify({
+            language: selectedLanguage, theme: selectedTheme,
+            defaultGenLanguage: 'auto', textSize: 'normal',
+          }));
+        }, { selectedLanguage: language, selectedTheme: theme });
+        const response = await page.goto(baseUrl + view.hash, { waitUntil: 'networkidle', timeout: 45000 });
+        await page.waitForTimeout(300);
+        const state = await page.evaluate(() => ({
+          text: (document.body?.innerText || '').trim(),
+          title: document.title,
+          htmlLang: document.documentElement.lang,
+          htmlDir: document.documentElement.dir,
+          width: document.documentElement.scrollWidth,
+          viewport: window.innerWidth,
+          headings: [...document.querySelectorAll('h1,h2')].slice(0, 12).map((el) => (el.textContent || '').trim()),
+          cards: [...document.querySelectorAll('article h2')].slice(0, 12).map((el) => (el.textContent || '').trim()),
+        }));
+        const label = view.name + '-' + language + '-' + theme;
+        const screenshotPath = outputDir + '/' + label + '.png';
+        await page.screenshot({ path: screenshotPath, fullPage: true, animations: 'disabled' });
+        if (!response || response.status() >= 400) failures.push(label + ': HTTP response failed');
+        if (state.text.length < 100) failures.push(label + ': likely blank or incomplete page');
+        if (state.width > state.viewport + 2) failures.push(label + ': horizontal overflow');
+        if (state.htmlLang !== language) failures.push(label + ': html lang mismatch (' + state.htmlLang + ')');
+        const expectedDir = expectedRtlLanguages.has(language) ? 'rtl' : 'ltr';
+        if (state.htmlDir !== expectedDir) failures.push(label + ': expected dir=' + expectedDir + ', got ' + state.htmlDir);
+        if (pageErrors.length) failures.push(label + ': JavaScript page errors: ' + pageErrors.join(' | '));
+        if (view.name === 'catalog-localization' && await page.locator('article').count() !== 234) {
+          failures.push(label + ': expected 234 generator cards, found ' + await page.locator('article').count());
+        }
+        // Preserve visible text samples in the report for language-by-language review.
+        // These are diagnostic findings, not automatic failures: proper nouns and
+        // intentionally source-language name examples must not be translated blindly.
+        localizationFindings.push({
+          language, theme, view: view.name, title: state.title,
+          headings: state.headings, generatorCardTitles: state.cards,
+          htmlLang: state.htmlLang, htmlDir: state.htmlDir,
+        });
+        results.push({
+          view: view.name, language, theme, viewport: 'desktop',
+          status: response?.status() ?? null, textCharacters: state.text.length,
+          documentWidth: state.width, viewportWidth: state.viewport,
+          pageErrors, screenshot: screenshotPath,
+        });
+        await page.close();
+      }
+    }
+  }
+
 } finally {
   if (browser) await browser.close();
   server.kill('SIGTERM');
 }
 
-const report = { baseUrl, testedCombinations: results.length, failures, results };
+const report = { baseUrl, testedCombinations: results.length, failures, localizationFindings: typeof localizationFindings === 'undefined' ? [] : localizationFindings, results };
 await (await import('node:fs/promises')).writeFile(outputDir + '/report.json', JSON.stringify(report, null, 2));
 console.log(JSON.stringify(report, null, 2));
 if (failures.length) process.exitCode = 1;
