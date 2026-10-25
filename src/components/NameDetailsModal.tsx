@@ -409,7 +409,7 @@ export const NameDetailsModal: React.FC<NameDetailsModalProps> = ({
               onClick={onClose}
               className="py-2 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs transition cursor-pointer"
             >
-              Fermer
+              {t.close}
             </button>
           </div>
         </div>
