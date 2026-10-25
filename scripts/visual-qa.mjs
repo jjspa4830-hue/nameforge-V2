@@ -274,6 +274,11 @@ try {
           viewport: window.innerWidth,
           headings: [...document.querySelectorAll('h1,h2')].slice(0, 12).map((el) => (el.textContent || '').trim()),
           cards: [...document.querySelectorAll('article h2')].slice(0, 12).map((el) => (el.textContent || '').trim()),
+          frenchMarkers: [
+            'Générateur de Noms', 'Comment choisir', 'Avantages clés',
+            'Points de vigilance', 'Applications & Univers Recommandés',
+            'Explorer d’autres catégories', 'Générateur de noms',
+          ].filter((marker) => (document.body?.innerText || '').includes(marker)),
         }));
         const label = view.name + '-' + language + '-' + theme;
         const screenshotPath = outputDir + '/' + label + '.png';
@@ -294,6 +299,7 @@ try {
         localizationFindings.push({
           language, theme, view: view.name, title: state.title,
           headings: state.headings, generatorCardTitles: state.cards,
+          potentialFrenchFallbackMarkers: language === 'fr' ? [] : state.frenchMarkers,
           htmlLang: state.htmlLang, htmlDir: state.htmlDir,
         });
         results.push({
