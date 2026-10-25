@@ -438,7 +438,7 @@ export const EXTRA_TRANSLATIONS: Record<
     appName: 'NameForge',
     tagline: 'De professionele naamgevingssmederij voor merken, personages en werelden.',
     nav: {
-      home: 'Home',
+      home: 'Startpagina',
       generators: 'Generatoren',
       allGenerators: 'Alle 234 Generatoren',
       myNames: 'Mijn Namen',
