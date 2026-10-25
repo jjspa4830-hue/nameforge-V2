@@ -1296,6 +1296,7 @@ for (const locale of studioPriorityLocales) {
 const styleLocaleSamples = [
   { key: 'assassin', source: 'Shadow Assassin' },
   { key: 'warrior', source: 'Heroic Warrior' },
+  { key: 'brandable', source: 'Brandable Domain' },
   { key: 'cocktail', source: 'Signature Cocktail' },
 ] as const;
 for (const locale of PRIORITY_LOCALES) {
