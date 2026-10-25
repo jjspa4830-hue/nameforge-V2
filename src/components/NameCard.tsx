@@ -11,6 +11,8 @@ import {
 import { NameDetailsModal } from './NameDetailsModal';
 import { getAppSettings } from '../services/settings';
 import { getTranslations } from '../i18n';
+import { GENERATORS_METADATA } from '../data/generators';
+import { getLocalizedGeneratorDescription } from '../i18n/generatorContent';
 
 interface NameCardProps {
   item: GeneratedName;
@@ -189,7 +191,7 @@ export const NameCard: React.FC<NameCardProps> = ({
           </div>
 
           <p className="mt-3.5 text-sm sm:text-[14px] text-slate-300 leading-relaxed min-h-[50px] line-clamp-3 font-normal">
-            {item.description}
+            {getLocalizedGeneratorDescription(GENERATORS_METADATA[item.generatorId], settings.language)}
           </p>
 
           <div className="mt-3 pt-2.5 border-t border-slate-800/90 text-xs sm:text-[13px] text-slate-400 line-clamp-2 min-h-[34px]">
