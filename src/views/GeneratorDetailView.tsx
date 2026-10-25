@@ -19,6 +19,7 @@ import { getAppSettings, subscribeToSettings } from '../services/settings';
 import { getLocalizedGeneratorDescription } from '../i18n/generatorContent';
 import { getLocalizedStyleLabel } from '../i18n/styleLabels';
 import { getLocalizedGeneratorTitle, getLocalizedGeneratorShortTitle } from '../i18n/generatorTitles';
+import { getLocalizedEditorialMeta } from '../i18n/localizedGeneratorMeta';
 
 interface GeneratorDetailViewProps {
   generatorId: GeneratorId;
@@ -29,12 +30,13 @@ export const GeneratorDetailView: React.FC<GeneratorDetailViewProps> = ({
   generatorId,
   onNavigate,
 }) => {
-  const meta = GENERATORS_METADATA[generatorId] || GENERATORS_METADATA.fantasy;
+  const sourceMeta = GENERATORS_METADATA[generatorId] || GENERATORS_METADATA.fantasy;
   const settings = getAppSettings();
   const [language, setLanguage] = useState(settings.language);
-  const localizedTitle = getLocalizedGeneratorTitle(generatorId, language, meta.title);
-  const localizedShortTitle = getLocalizedGeneratorShortTitle(generatorId, language, meta.shortTitle);
-  const localizedDescription = getLocalizedGeneratorDescription(meta, language);
+  const localizedTitle = getLocalizedGeneratorTitle(generatorId, language, sourceMeta.title);
+  const localizedShortTitle = getLocalizedGeneratorShortTitle(generatorId, language, sourceMeta.shortTitle);
+  const meta = getLocalizedEditorialMeta(sourceMeta, language, localizedShortTitle);
+  const localizedDescription = getLocalizedGeneratorDescription(sourceMeta, language);
 
   useEffect(() => subscribeToSettings((next) => setLanguage(next.language)), []);
 
