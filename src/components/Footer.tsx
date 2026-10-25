@@ -90,7 +90,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
 
           {/* Fantasy Column */}
           <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200 mb-4">
+            <h4 className="nf-footer-heading text-xs font-bold uppercase tracking-wider mb-4">
               {t.exploreTitle}
             </h4>
             <ul className="space-y-2 text-xs">
@@ -110,7 +110,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
 
           {/* Business Column */}
           <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200 mb-4">
+            <h4 className="nf-footer-heading text-xs font-bold uppercase tracking-wider mb-4">
               {t.businessTitle}
             </h4>
             <ul className="space-y-2 text-xs">
@@ -130,7 +130,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
 
           {/* Creative & Tools Column */}
           <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200 mb-4">
+            <h4 className="nf-footer-heading text-xs font-bold uppercase tracking-wider mb-4">
               {t.creativeTitle}
             </h4>
             <ul className="space-y-2 text-xs mb-6">
@@ -147,7 +147,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               ))}
             </ul>
 
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200 mb-2">
+            <h4 className="nf-footer-heading text-xs font-bold uppercase tracking-wider mb-2">
               {t.toolsTitle}
             </h4>
             <ul className="space-y-2 text-xs">
