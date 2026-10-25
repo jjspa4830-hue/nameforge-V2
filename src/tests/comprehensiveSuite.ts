@@ -157,6 +157,32 @@ for (const locale of PRIORITY_LOCALES) {
   }
 }
 
+// Primary interface actions must not silently fall back to English in priority locales.
+const englishCoreUi = getTranslations('en');
+const coreUiTranslationChecks = [
+  { key: 'nav.home', get: (locale: typeof PRIORITY_LOCALES[number]) => getTranslations(locale).nav.home, english: englishCoreUi.nav.home },
+  { key: 'nav.generators', get: (locale: typeof PRIORITY_LOCALES[number]) => getTranslations(locale).nav.generators, english: englishCoreUi.nav.generators },
+  { key: 'settingsModal.closeBtn', get: (locale: typeof PRIORITY_LOCALES[number]) => getTranslations(locale).settingsModal.closeBtn, english: englishCoreUi.settingsModal.closeBtn },
+  { key: 'generatorControl.generateBtn', get: (locale: typeof PRIORITY_LOCALES[number]) => getTranslations(locale).generatorControl.generateBtn, english: englishCoreUi.generatorControl.generateBtn },
+  { key: 'footer.rights', get: (locale: typeof PRIORITY_LOCALES[number]) => getTranslations(locale).footer.rights, english: englishCoreUi.footer.rights },
+] as const;
+for (const locale of PRIORITY_LOCALES) {
+  for (const check of coreUiTranslationChecks) {
+    const value = check.get(locale);
+    assert(
+      typeof value === 'string' && value.trim().length > 0,
+      `Core UI translation ${check.key} exists for ${locale}`
+    );
+    if (locale !== 'en') {
+      assert(
+        value !== check.english,
+        `Core UI translation ${check.key} does not silently fall back to English for ${locale}`,
+        value
+      );
+    }
+  }
+}
+
 // Core generator titles and short labels must be localized in all 25 priority locales.
 for (const locale of PRIORITY_LOCALES) {
   const missingTitles = LOCALIZED_GENERATOR_TITLE_IDS.filter((id) => {
