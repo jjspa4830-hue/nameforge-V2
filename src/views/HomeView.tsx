@@ -455,7 +455,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
                 <Zap className="w-3.5 h-3.5 text-cyan-400" />
                 <span>{quickCopy.badge}</span>
               </div>
-              <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+              <h2 className="nf-animated-heading text-xl sm:text-2xl font-black tracking-tight">
                 {quickCopy.title}
               </h2>
               <p className="text-xs text-slate-400 mt-0.5">
@@ -562,7 +562,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
       ========================================================= */}
       <section className="max-w-7xl xl:max-w-[1440px] mx-auto px-4 sm:px-8">
         <div className="text-center max-w-2xl mx-auto mb-12">
-          <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight mb-3">
+          <h2 className="nf-animated-heading text-2xl sm:text-4xl font-black tracking-tight mb-3">
             {t.advantages.title}
           </h2>
           <p className="text-sm text-slate-400 leading-relaxed">
@@ -615,7 +615,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
       <section className="max-w-4xl mx-auto px-4">
         <div className="p-8 rounded-3xl bg-gradient-to-br from-[#121a30] via-[#0d1426] to-[#080d1a] border border-purple-500/30 shadow-2xl space-y-5">
           <div className="text-center max-w-lg mx-auto">
-            <h3 className="text-xl sm:text-2xl font-black text-white">
+            <h3 className="nf-animated-heading text-xl sm:text-2xl font-black">
               {homeSearchLabels.title}
             </h3>
             <p className="text-xs text-slate-400 mt-1">
@@ -680,7 +680,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
               <TrendingUp className="w-3.5 h-3.5" />
               <span>{homeSearchLabels.featuredBadge}</span>
             </div>
-            <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
+            <h2 className="nf-animated-heading text-2xl sm:text-4xl font-black tracking-tight">
               {homeSearchLabels.featuredTitle}
             </h2>
           </div>
@@ -791,7 +791,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
                 <Award className="w-3.5 h-3.5" />
                 <span>{topRatedLabels.badge}</span>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+              <h2 className="nf-animated-heading text-2xl sm:text-3xl font-black tracking-tight">
                 {t.topRated.title}
               </h2>
               <p className="text-xs text-slate-400 mt-1">
@@ -1051,7 +1051,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
       ========================================================= */}
       <section className="max-w-7xl xl:max-w-[1440px] mx-auto px-4 sm:px-8">
         <div className="p-8 sm:p-12 rounded-3xl bg-gradient-to-r from-purple-900/50 via-indigo-900/40 to-cyan-900/40 border border-purple-500/40 shadow-2xl text-center space-y-6">
-          <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
+          <h2 className="nf-animated-heading text-3xl sm:text-4xl font-black tracking-tight">
             {homeCta.title}
           </h2>
           <p className="text-sm text-slate-300 max-w-xl mx-auto leading-relaxed">
