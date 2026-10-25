@@ -14,6 +14,7 @@ const server = spawn('npm', ['run', 'preview', '--', '--host', '127.0.0.1', '--p
 let browser;
 const failures = [];
 const results = [];
+const localizationFindings = [];
 async function waitForServer() {
   for (let attempt = 0; attempt < 60; attempt++) {
     try {
@@ -250,8 +251,7 @@ try {
     { name: 'detail-localization', hash: '#/generator/fantasy' },
   ];
   const expectedRtlLanguages = new Set(['ar', 'he']);
-  const localizationFindings = [];
-  for (const language of primaryLanguages) {
+    for (const language of primaryLanguages) {
     for (const theme of themes) {
       for (const view of localizationPages) {
         const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce' });
@@ -312,7 +312,7 @@ try {
   server.kill('SIGTERM');
 }
 
-const report = { baseUrl, testedCombinations: results.length, failures, localizationFindings: typeof localizationFindings === 'undefined' ? [] : localizationFindings, results };
+const report = { baseUrl, testedCombinations: results.length, failures, localizationFindings, results };
 await (await import('node:fs/promises')).writeFile(outputDir + '/report.json', JSON.stringify(report, null, 2));
 console.log(JSON.stringify(report, null, 2));
 if (failures.length) process.exitCode = 1;
