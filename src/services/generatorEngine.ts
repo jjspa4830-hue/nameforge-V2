@@ -945,16 +945,19 @@ export function generateNames(options: GenerateOptions): GeneratedName[] {
       } else if (isFantasyOrLore && Math.random() < 0.22) {
         const langRules = LANGUAGE_PHONETICS[genLanguage] || LANGUAGE_PHONETICS.auto;
         const titlesPool =
-          langRules.titleWords.length > 0 && Math.random() < 0.6
+          genLanguage !== 'auto' && langRules.titleWords.length > 0
             ? langRules.titleWords
-            : ['le Brave', 'l’Ancien', 'le Silencieux', 'le Juste', 'le Gardien'];
+            : ['the Brave', 'the Ancient', 'the Silent', 'the Just', 'the Guardian'];
         const title = (randomItem(titlesPool) as string) || 'le Brave';
         formattedName = combineParts(baseName, title);
       }
     }
 
+    // Latin-script gender suffix rules must not append Latin letters to CJK, Arabic,
+    // Cyrillic, Devanagari, Thai, Greek, or Hebrew names.
+    const usesNonLatinGenderRules = ['ja', 'ar', 'ko', 'zh', 'ru', 'hi', 'th', 'el', 'he'].includes(genLanguage);
     // Gender adaptations
-    if (gender === 'female' && !formattedName.includes(' ')) {
+    if (!usesNonLatinGenderRules && gender === 'female' && !formattedName.includes(' ')) {
       if (resolved.femaleStarts && resolved.femaleStarts.length > 0 && Math.random() < 0.4) {
         const fPrefix = randomItem(resolved.femaleStarts);
         if (fPrefix) {
@@ -965,7 +968,7 @@ export function generateNames(options: GenerateOptions): GeneratedName[] {
       } else if (!/[aeiouy]$/i.test(formattedName)) {
         formattedName = formattedName + 'a';
       }
-    } else if (gender === 'male' && !formattedName.includes(' ')) {
+    } else if (!usesNonLatinGenderRules && gender === 'male' && !formattedName.includes(' ')) {
       if (resolved.maleStarts && resolved.maleStarts.length > 0 && Math.random() < 0.4) {
         const mPrefix = randomItem(resolved.maleStarts);
         if (mPrefix) {
