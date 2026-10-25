@@ -1,0 +1,43 @@
+/* NameForge heading motion: vivid in dark mode, restrained and readable in light mode. */
+.nf-animated-heading {
+  color: transparent;
+  background-image: linear-gradient(
+    105deg,
+    #a78bfa 0%,
+    #f0abfc 22%,
+    #67e8f9 44%,
+    #c4b5fd 66%,
+    #a78bfa 88%
+  );
+  background-size: 240% 100%;
+  background-position: 0% 50%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  animation: nf-heading-spectrum 8s ease-in-out infinite;
+  text-wrap: balance;
+}
+
+html.light .nf-animated-heading {
+  background-image: linear-gradient(
+    105deg,
+    #6d28d9 0%,
+    #a21caf 24%,
+    #0369a1 48%,
+    #4338ca 72%,
+    #6d28d9 100%
+  );
+  background-size: 220% 100%;
+  text-shadow: 0 1px 0 rgb(255 255 255 / 35%);
+}
+
+@keyframes nf-heading-spectrum {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nf-animated-heading {
+    animation: none;
+    background-position: 50% 50%;
+  }
+}

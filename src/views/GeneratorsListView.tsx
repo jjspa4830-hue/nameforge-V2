@@ -86,7 +86,7 @@ export const GeneratorsListView: React.FC<GeneratorsListViewProps> = ({ onNaviga
           <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
           <span>{t.eyebrow} {ALL_GENERATORS_LIST.length} {t.generatorWord}</span>
         </div>
-        <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight mb-4">{t.title}</h1>
+        <h1 className="nf-animated-heading text-3xl sm:text-5xl font-black tracking-tight leading-tight mb-4">{t.title}</h1>
         <p className="text-sm sm:text-base text-slate-300">{t.description}</p>
       </div>
 

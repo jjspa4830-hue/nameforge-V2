@@ -241,7 +241,7 @@ export const StyleStudioView: React.FC<StyleStudioViewProps> = ({
 
       {/* Hero Title */}
       <div className="text-center max-w-3xl mx-auto mb-10">
-        <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
+        <h1 className="nf-animated-heading text-3xl sm:text-5xl font-black tracking-tight leading-tight">
           {getStudioLabel(settings.language, 'heroTitle')}{' '}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400">
             {getStudioLabel(settings.language, 'heroAccent')}

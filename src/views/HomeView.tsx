@@ -385,7 +385,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
           <span>{t.hero.badge.replace(/\b134\b/g, String(ALL_GENERATORS_LIST.length))}</span>
         </div>
 
-        <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black text-white tracking-tight leading-[1.08] mb-6">
+        <h1 className="nf-animated-heading text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1.08] mb-6">
           {t.hero.titleA}{' '}
           <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-300 bg-[length:200%_auto] animate-gradient-x bg-clip-text text-transparent">
             {t.hero.titleB}
@@ -737,28 +737,32 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
       </section>
 
       {/* ========================================================
-          5. LES 4 GRANDES FAMILLES DE GÉNÉRATEURS
+          5. EXPLORER LES FAMILLES — LE CATALOGUE RESTE SUR SA PAGE
       ========================================================= */}
-      <section className="max-w-7xl xl:max-w-[1440px] mx-auto px-4 sm:px-8">
-        <div className="text-center max-w-3xl mx-auto mb-10">
-          <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight mb-3">
-            {t.categories.title}
+      <section className="max-w-7xl xl:max-w-[1440px] mx-auto px-4 sm:px-8 py-8">
+        <div className="relative overflow-hidden rounded-3xl border border-purple-500/20 bg-gradient-to-br from-purple-500/10 via-[#0f172a] to-cyan-500/10 p-6 sm:p-10 text-center">
+          <div className="inline-flex items-center gap-2 rounded-full border border-purple-400/30 bg-purple-500/10 px-3 py-1 text-xs font-bold uppercase tracking-widest text-purple-300 mb-4">
+            <Compass className="h-4 w-4" />
+            <span>{t.categories.subtitle}</span>
+          </div>
+          <h2 className="nf-animated-heading text-2xl sm:text-4xl font-black tracking-tight mb-3">
+            {selectedFamily === 'all' ? t.categories.title : familyLabels[selectedFamily as keyof typeof familyLabels]}
           </h2>
-          <p className="text-sm text-slate-400">
-            {t.categories.subtitle}
+          <p className="mx-auto max-w-2xl text-sm sm:text-base text-slate-400 leading-relaxed">
+            {selectedFamily === 'all'
+              ? t.categories.subtitle
+              : `${familyLabels[selectedFamily as keyof typeof familyLabels]} · ${t.categories.subtitle}`}
           </p>
-
-          {/* Family Filter Tabs */}
-          <div className="flex flex-wrap items-center justify-center gap-2 mt-6">
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
             {GENERATOR_FAMILIES_CONFIG.map((fam) => (
               <button
                 key={fam.id}
                 onClick={() => setSelectedFamily(fam.id)}
                 aria-pressed={selectedFamily === fam.id}
-                className={`py-2 px-4 rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer border ${
+                className={`py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 cursor-pointer border ${
                   selectedFamily === fam.id
-                    ? 'bg-purple-600 text-white border-purple-500 shadow-md shadow-purple-600/30'
-                    : 'bg-[#10182c] text-slate-300 border-slate-800 hover:border-slate-700'
+                    ? 'bg-purple-600 text-white border-purple-400 shadow-lg shadow-purple-600/30'
+                    : 'bg-slate-900/70 text-slate-300 border-slate-700 hover:border-purple-400/60 hover:text-white'
                 }`}
               >
                 <span>{fam.icon}</span>
@@ -766,37 +770,13 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
               </button>
             ))}
           </div>
-        </div>
-
-        {/* Display selected family generators */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {(selectedFamily === 'all'
-            ? ALL_GENERATORS_LIST
-            : ALL_GENERATORS_LIST.filter((g) => g.category === selectedFamily)
-          ).map((gen) => (
-            <div
-              key={gen.id}
-              onClick={() => onNavigate('generator-detail', gen.id)}
-              className="p-5 rounded-2xl bg-[#0f172a] border border-slate-800 hover:border-purple-500/50 transition cursor-pointer flex items-start gap-4 group"
-            >
-              <div className="w-11 h-11 rounded-xl bg-[#0a0f1e] border border-slate-700 flex items-center justify-center text-xl flex-shrink-0 group-hover:scale-105 transition">
-                {gen.icon}
-              </div>
-              <div className="flex-1 truncate">
-                <div className="flex items-center justify-between gap-1 mb-1">
-                  <h4 className="text-sm font-black text-white group-hover:text-cyan-300 transition truncate">
-                    {getLocalizedGeneratorShortTitle(gen.id, settings.language, gen.shortTitle)}
-                  </h4>
-                  <span className="text-[10px] font-bold text-purple-400 uppercase tracking-wider">
-                    {familyLabels[gen.category as keyof typeof familyLabels] || familyLabels.all}
-                  </span>
-                </div>
-                <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">
-                  {getLocalizedGeneratorDescription(gen, settings.language)}
-                </p>
-              </div>
-            </div>
-          ))}
+          <button
+            onClick={() => onNavigate('generators')}
+            className="mt-7 inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-purple-600 to-cyan-500 px-6 py-3 text-sm font-extrabold text-white shadow-lg shadow-purple-600/20 transition hover:-translate-y-0.5 hover:shadow-cyan-500/20"
+          >
+            <span>{homeSearchLabels.catalog}</span>
+            <ArrowRight className="h-4 w-4" />
+          </button>
         </div>
       </section>
 
