@@ -27,6 +27,7 @@ import { getAppSettings } from '../services/settings';
 import { getNameDetailsLabels } from '../i18n/nameDetails';
 import { getLocalizedGeneratorTitle } from '../i18n/generatorTitles';
 import { getLocalizedGeneratorDescription } from '../i18n/generatorContent';
+import { getShellLabels } from '../i18n/shell';
 
 interface NameDetailsModalProps {
   nameItem: GeneratedName;
@@ -202,10 +203,10 @@ export const NameDetailsModal: React.FC<NameDetailsModalProps> = ({
             </p>
             <div className="pt-2 flex flex-wrap gap-2 text-[11px]">
               <span className="px-2.5 py-1 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-300 font-semibold">
-                {t.tone} {nameItem.tone}
+                {t.tone} {t.fallbackStrength}
               </span>
               <span className="px-2.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 font-semibold">
-                {t.usage} {nameItem.bestFor}
+                {t.usage} {getShellLabels(language).families[meta.category as keyof ReturnType<typeof getShellLabels>['families']] || t.idealFor}
               </span>
             </div>
           </div>
