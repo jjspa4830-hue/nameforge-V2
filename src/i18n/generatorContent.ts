@@ -1632,6 +1632,16 @@ export function getLocalizedGeneratorDescription(meta: GeneratorMeta, language: 
   return locale[meta.category] || locale.creative || meta.description;
 }
 
+export type GeneratorDescriptionCoverage = 'generator-specific' | 'category-fallback' | 'source-fallback';
+
+/** Classifies the description actually shown, separating translated category fallbacks from source-language fallbacks. */
+export function getGeneratorDescriptionCoverage(meta: GeneratorMeta, language: LanguageCode): GeneratorDescriptionCoverage {
+  if (GENERATOR_DESCRIPTION_OVERRIDES[meta.id]?.[language]) return 'generator-specific';
+  const locale = LOCALIZED_DESCRIPTIONS[language];
+  if (locale && (locale[meta.category] || locale.creative)) return 'category-fallback';
+  return 'source-fallback';
+}
+
 /** True when this generator has a reviewed, generator-specific description in this locale. */
 export function hasLocalizedGeneratorDescription(generatorId: string, language: LanguageCode): boolean {
   return Boolean(GENERATOR_DESCRIPTION_OVERRIDES[generatorId]?.[language]);
