@@ -1,0 +1,49 @@
+import { GENERATORS_METADATA } from '../src/data/generators.ts';
+import { hasLocalizedGeneratorDescription } from '../src/i18n/generatorContent.ts';
+import { hasLocalizedGeneratorTitle } from '../src/i18n/generatorTitles.ts';
+
+const locales = [
+  'en', 'fr', 'es', 'de', 'it', 'pt', 'ar', 'tr', 'ja', 'ko',
+  'zh', 'ru', 'hi', 'nl', 'pl', 'sv', 'vi', 'id', 'th', 'el',
+  'he', 'cs', 'ro', 'da', 'fi',
+];
+
+const editorialFields = [
+  'badge', 'generatorTitle', 'generatorSubtitle', 'guideTitle', 'guide',
+  'cardsTitle', 'cards', 'advantages', 'limits', 'faqTitle', 'faq', 'footer',
+];
+
+const generators = Object.values(GENERATORS_METADATA);
+const findings = [];
+
+for (const generator of generators) {
+  for (const locale of locales) {
+    if (locale === 'fr') continue;
+    if (!hasLocalizedGeneratorTitle(generator.id, locale)) {
+      findings.push({ generator: generator.id, locale, field: 'title', reason: 'no explicit localized title' });
+    }
+    if (!hasLocalizedGeneratorDescription(generator.id, locale)) {
+      findings.push({ generator: generator.id, locale, field: 'description', reason: 'uses category-level fallback or source language' });
+    }
+    for (const field of editorialFields) {
+      const value = generator[field];
+      if (value == null || (Array.isArray(value) && value.length === 0)) continue;
+      findings.push({ generator: generator.id, locale, field, reason: 'no locale-specific editorial content resolver exists' });
+    }
+  }
+}
+
+const summary = {
+  localeCount: locales.length,
+  generatorCount: generators.length,
+  checkedNonFrenchLocales: locales.length - 1,
+  missingOrUnverifiedItems: findings.length,
+  fields: [...new Set(findings.map((item) => item.field))],
+};
+console.log('NameForge 25-locale visible-content audit');
+console.log(JSON.stringify(summary, null, 2));
+console.log('\nFirst 100 findings (full list can be saved by redirecting stdout):');
+for (const item of findings.slice(0, 100)) {
+  console.log(`- [${item.locale}] ${item.generator} / ${item.field}: ${item.reason}`);
+}
+if (findings.length > 100) console.log(`... ${findings.length - 100} additional findings omitted from this console preview.`);
