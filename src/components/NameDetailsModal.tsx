@@ -135,7 +135,7 @@ export const NameDetailsModal: React.FC<NameDetailsModalProps> = ({
       aria-labelledby="name-details-title"
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in"
     >
-      <div className="relative w-full max-w-2xl bg-[#0c1224] border border-purple-500/30 rounded-3xl shadow-2xl overflow-hidden max-h-[92vh] flex flex-col text-slate-200">
+      <div dir={language === 'ar' || language === 'he' ? 'rtl' : 'ltr'} className="relative w-full max-w-2xl bg-[#0c1224] border border-purple-500/30 rounded-3xl shadow-2xl overflow-hidden max-h-[92vh] flex flex-col text-slate-200">
         {/* Header */}
         <div className="p-6 border-b border-slate-800 bg-gradient-to-r from-purple-900/40 via-indigo-950 to-slate-900 flex items-center justify-between">
           <div className="flex items-center gap-3">
