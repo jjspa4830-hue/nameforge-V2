@@ -1008,3 +1008,69 @@ html.light #root option {
   color: #173653;
   background-color: #ffffff;
 }
+
+
+/* Fix: keep native multi-choice controls visible and usable across every view.
+   Tailwind preflight can remove native select affordances; restore a clear dropdown
+   indicator, readable options, and consistent interactive states in both themes. */
+@layer base {
+  select,
+  select:where(:not([multiple])) {
+    -webkit-appearance: auto !important;
+    -moz-appearance: auto !important;
+    appearance: auto !important;
+    cursor: pointer;
+    min-width: 0;
+    background-image: revert !important;
+    background-repeat: revert !important;
+    background-position: revert !important;
+    background-size: revert !important;
+    padding-inline-end: 2rem;
+  }
+
+  select option,
+  select optgroup {
+    background-color: #0f1629;
+    color: #f5f7ff;
+  }
+
+  html.light select option,
+  html.light select optgroup {
+    background-color: #ffffff;
+    color: #172033;
+  }
+
+  input,
+  select,
+  textarea {
+    max-width: 100%;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  a[class*="cursor-pointer"] {
+    cursor: pointer;
+  }
+
+  button:focus-visible,
+  select:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible {
+    outline: 3px solid #a78bfa;
+    outline-offset: 2px;
+  }
+
+  /* Make icon-only and compact choice buttons easy to locate without overriding
+     their existing colors, sizes, or component-specific design. */
+  button {
+    -webkit-appearance: button;
+    touch-action: manipulation;
+  }
+
+  @media (max-width: 640px) {
+    select {
+      min-height: 2.75rem;
+      font-size: max(0.875rem, 16px);
+    }
+  }
+}
