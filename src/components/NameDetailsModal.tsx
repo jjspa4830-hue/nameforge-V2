@@ -262,7 +262,7 @@ export const NameDetailsModal: React.FC<NameDetailsModalProps> = ({
                 </span>
                 {nameItem.origin && (
                   <span className="text-[11px] font-semibold text-slate-300 px-2.5 py-0.5 rounded-full bg-slate-800/80 border border-slate-700/60">
-                    {nameItem.origin}
+                    {nameItem.isAttested ? nameItem.origin : getLocalizedGeneratorTitle(nameItem.generatorId, language, GENERATORS_METADATA[nameItem.generatorId]?.title || nameItem.generatorId)}
                   </span>
                 )}
               </div>
