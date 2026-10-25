@@ -129,12 +129,11 @@ for (const locale of PRIORITY_LOCALES) {
       labels.close !== 'Close' &&
       labels.searchPlaceholder !== 'Search by language name (e.g. Français, English, 日本語, Arabic)…' &&
       labels.reset !== 'Reset search' &&
-      labels.europe !== 'Europe' &&
-      labels.asia !== 'Asia' &&
-      labels.middleEast !== 'Middle East & RTL' &&
-      labels.southAsia !== 'South Asia' &&
-      labels.africa !== 'Africa',
-      `Language selector controls and region filters avoid English fallback for ${locale}`
+      labels.fullyTranslated !== '✨ Fully translated' &&
+      labels.noResults !== 'No languages match' &&
+      labels.completeStatus !== '✨ Full translation' &&
+      labels.standardStatus !== 'Standard support • English fallback',
+      `Language selector controls and status labels avoid English fallback for ${locale}`
     );
   }
 }
