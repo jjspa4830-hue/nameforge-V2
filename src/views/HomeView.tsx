@@ -784,7 +784,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
               <div className="flex-1 truncate">
                 <div className="flex items-center justify-between gap-1 mb-1">
                   <h4 className="text-sm font-black text-white group-hover:text-cyan-300 transition truncate">
-                    {gen.title}
+                    {getLocalizedGeneratorShortTitle(gen.id, settings.language, gen.shortTitle)}
                   </h4>
                   <span className="text-[10px] font-bold text-purple-400 uppercase tracking-wider">
                     {familyLabels[gen.category as keyof typeof familyLabels] || gen.category}
