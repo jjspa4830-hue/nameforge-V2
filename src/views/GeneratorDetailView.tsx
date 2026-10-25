@@ -17,6 +17,7 @@ import {
 } from '../types';
 import { getAppSettings, subscribeToSettings } from '../services/settings';
 import { getLocalizedGeneratorDescription } from '../i18n/generatorContent';
+import { getLocalizedStyleLabel } from '../i18n/styleLabels';
 import { getLocalizedGeneratorTitle, getLocalizedGeneratorShortTitle } from '../i18n/generatorTitles';
 
 interface GeneratorDetailViewProps {
@@ -495,7 +496,7 @@ export const GeneratorDetailView: React.FC<GeneratorDetailViewProps> = ({
                         <span>{item.rating || 5}/5 {text.stars}</span>
                       </span>
                       <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-800 text-slate-300">
-                        {item.style}
+                        {getLocalizedStyleLabel(item.style, language, generatorId)}
                       </span>
                     </div>
                     <h3 className="text-base font-black text-white tracking-tight">{item.name}</h3>
