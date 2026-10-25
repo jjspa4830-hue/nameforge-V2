@@ -1,5 +1,5 @@
 import { GENERATORS_METADATA } from '../src/data/generators.ts';
-import { hasLocalizedGeneratorDescription } from '../src/i18n/generatorContent.ts';
+import { getGeneratorDescriptionCoverage } from '../src/i18n/generatorContent.ts';
 import { LOCALIZED_GENERATOR_TITLE_IDS } from '../src/i18n/generatorTitles.ts';
 import { hasLocalizedEditorialMeta } from '../src/i18n/localizedGeneratorMeta.ts';
 
@@ -16,6 +16,7 @@ const editorialFields = [
 
 const generators = Object.values(GENERATORS_METADATA);
 const findings = [];
+const categoryFallbackDescriptions = [];
 
 for (const generator of generators) {
   for (const locale of locales) {
@@ -23,8 +24,11 @@ for (const generator of generators) {
     if (!LOCALIZED_GENERATOR_TITLE_IDS.includes(generator.id as never)) {
       findings.push({ generator: generator.id, locale, field: 'title', reason: 'no explicit localized title' });
     }
-    if (!hasLocalizedGeneratorDescription(generator.id, locale)) {
-      findings.push({ generator: generator.id, locale, field: 'description', reason: 'uses category-level fallback or source language' });
+    const descriptionCoverage = getGeneratorDescriptionCoverage(generator, locale);
+    if (descriptionCoverage === 'source-fallback') {
+      findings.push({ generator: generator.id, locale, field: 'description', reason: 'falls back to the source description' });
+    } else if (descriptionCoverage === 'category-fallback') {
+      categoryFallbackDescriptions.push({ generator: generator.id, locale, field: 'description', reason: 'translated category-level description; generator-specific copy is not yet available' });
     }
     if (hasLocalizedEditorialMeta(generator.id, locale)) continue;
     for (const field of editorialFields) {
@@ -40,15 +44,17 @@ const summary = {
   generatorCount: generators.length,
   checkedNonFrenchLocales: locales.length - 1,
   missingOrUnverifiedItems: findings.length,
+  categoryFallbackDescriptionCount: categoryFallbackDescriptions.length,
   fields: [...new Set(findings.map((item) => item.field))],
 };
 if (process.argv.includes('--json')) {
-  console.log(JSON.stringify({ summary, findings }, null, 2));
+  console.log(JSON.stringify({ summary, findings, categoryFallbackDescriptions }, null, 2));
   process.exit(0);
 }
 
 console.log('NameForge 25-locale visible-content audit');
 console.log(JSON.stringify(summary, null, 2));
+console.log(`Translated category-level description fallbacks: ${categoryFallbackDescriptions.length}`);
 console.log('\nFirst 100 findings (full list can be saved by redirecting stdout):');
 for (const item of findings.slice(0, 100)) {
   console.log(`- [${item.locale}] ${item.generator} / ${item.field}: ${item.reason}`);
