@@ -14,7 +14,7 @@ import {
   Lightbulb,
   Wand2,
 } from 'lucide-react';
-import { GeneratedName, GeneratorId } from '../types';
+import { GeneratedName, GeneratorId, LanguageCode } from '../types';
 import {
   findSavedEntry,
   getStoredRating,
@@ -28,6 +28,34 @@ import { getNameDetailsLabels } from '../i18n/nameDetails';
 import { getLocalizedGeneratorTitle } from '../i18n/generatorTitles';
 import { getLocalizedGeneratorDescription } from '../i18n/generatorContent';
 import { getShellLabels } from '../i18n/shell';
+
+const LEGAL_NOTICE: Record<LanguageCode, string> = {
+  en: 'Creative suggestion only. Check official trademark and domain registries before using this name commercially.',
+  fr: 'Suggestion créative uniquement. Vérifiez les registres officiels des marques et des domaines avant tout usage commercial.',
+  es: 'Sugerencia creativa únicamente. Consulte los registros oficiales de marcas y dominios antes de usar este nombre comercialmente.',
+  de: 'Nur ein kreativer Vorschlag. Prüfen Sie vor der kommerziellen Nutzung die offiziellen Marken- und Domainregister.',
+  it: 'Solo un suggerimento creativo. Prima dell’uso commerciale, verifica i registri ufficiali di marchi e domini.',
+  pt: 'Apenas uma sugestão criativa. Verifique os registos oficiais de marcas e domínios antes de usar este nome comercialmente.',
+  ar: 'اقتراح إبداعي فقط. تحقّق من السجلات الرسمية للعلامات التجارية والنطاقات قبل استخدام هذا الاسم تجاريًا.',
+  tr: 'Yalnızca yaratıcı bir öneridir. Bu adı ticari amaçla kullanmadan önce resmî marka ve alan adı kayıtlarını kontrol edin.',
+  ja: '創作上の提案です。商用利用の前に、公式の商標登録とドメイン登録状況を確認してください。',
+  ko: '창작용 제안입니다. 상업적으로 사용하기 전에 공식 상표 및 도메인 등록 정보를 확인하세요.',
+  zh: '此内容仅为创意建议。用于商业用途前，请查询官方商标和域名注册信息。',
+  ru: 'Это только творческое предложение. Перед коммерческим использованием проверьте официальные реестры товарных знаков и доменов.',
+  hi: 'यह केवल एक रचनात्मक सुझाव है। व्यावसायिक उपयोग से पहले आधिकारिक ट्रेडमार्क और डोमेन रजिस्ट्रियों की जाँच करें।',
+  nl: 'Dit is alleen een creatieve suggestie. Controleer officiële merken- en domeinregisters voordat je de naam commercieel gebruikt.',
+  pl: 'To wyłącznie propozycja kreatywna. Przed użyciem komercyjnym sprawdź oficjalne rejestry znaków towarowych i domen.',
+  sv: 'Detta är endast ett kreativt förslag. Kontrollera officiella varumärkes- och domänregister före kommersiell användning.',
+  vi: 'Đây chỉ là gợi ý sáng tạo. Hãy kiểm tra cơ sở dữ liệu nhãn hiệu và tên miền chính thức trước khi sử dụng cho mục đích thương mại.',
+  id: 'Ini hanya saran kreatif. Periksa daftar resmi merek dagang dan domain sebelum menggunakan nama ini secara komersial.',
+  th: 'นี่เป็นเพียงข้อเสนอเชิงสร้างสรรค์ โปรดตรวจสอบทะเบียนเครื่องหมายการค้าและโดเมนอย่างเป็นทางการก่อนนำชื่อไปใช้ในเชิงพาณิชย์',
+  el: 'Πρόκειται μόνο για δημιουργική πρόταση. Ελέγξτε τα επίσημα μητρώα εμπορικών σημάτων και domain πριν από εμπορική χρήση.',
+  he: 'זוהי הצעה יצירתית בלבד. לפני שימוש מסחרי, בדקו במאגרים הרשמיים של סימני מסחר ודומיינים.',
+  cs: 'Jde pouze o kreativní návrh. Před komerčním použitím ověřte oficiální rejstříky ochranných známek a domén.',
+  ro: 'Aceasta este doar o sugestie creativă. Verifică registrele oficiale de mărci și domenii înainte de utilizarea comercială.',
+  da: 'Dette er kun et kreativt forslag. Kontrollér officielle varemærke- og domæneregistre før kommerciel brug.',
+  fi: 'Tämä on vain luova ehdotus. Tarkista viralliset tavaramerkki- ja verkkotunnusrekisterit ennen kaupallista käyttöä.',
+};
 
 interface NameDetailsModalProps {
   nameItem: GeneratedName;
@@ -47,8 +75,11 @@ export const NameDetailsModal: React.FC<NameDetailsModalProps> = ({
   const [rating, setRating] = useState<number>(getStoredRating(nameItem.name));
   const language = getAppSettings().language;
   const t = getNameDetailsLabels(language);
+  const familyLabels = getShellLabels(language).families;
 
   const meta = GENERATORS_METADATA[nameItem.generatorId] || GENERATORS_METADATA.fantasy;
+  const localizedStrengths = [t.fallbackStrength];
+  const localizedWatchouts = t.fallbackWatchout.split(';').map((item) => item.trim()).filter(Boolean);
 
   const handleCopy = async () => {
     try {
@@ -145,7 +176,7 @@ export const NameDetailsModal: React.FC<NameDetailsModalProps> = ({
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
             <div className="p-3 rounded-2xl bg-[#10182e] border border-slate-800">
               <span className="text-[10px] uppercase font-bold text-slate-400">{t.archetype}</span>
-              <div className="font-bold text-white text-sm mt-0.5">{nameItem.style}</div>
+              <div className="font-bold text-white text-sm mt-0.5">{familyLabels[meta.category as keyof typeof familyLabels] || getLocalizedGeneratorTitle(nameItem.generatorId, language, meta.title)}</div>
             </div>
 
             <button
@@ -262,10 +293,7 @@ export const NameDetailsModal: React.FC<NameDetailsModalProps> = ({
                 <span>{t.strengths}</span>
               </div>
               <ul className="space-y-1.5 text-slate-300 text-[11px]">
-                {(nameItem.strengths && nameItem.strengths.length > 0
-                  ? nameItem.strengths
-                  : [t.fallbackStrength, t.fallbackStrength, t.fallbackStrength]
-                ).map((s, idx) => (
+                {localizedStrengths.map((s, idx) => (
                   <li key={idx} className="flex items-start gap-1.5">
                     <span className="text-emerald-400 mt-0.5">✓</span>
                     <span>{s}</span>
@@ -281,10 +309,7 @@ export const NameDetailsModal: React.FC<NameDetailsModalProps> = ({
                 <span>{t.watchouts}</span>
               </div>
               <ul className="space-y-1.5 text-slate-300 text-[11px]">
-                {(nameItem.watchouts && nameItem.watchouts.length > 0
-                  ? nameItem.watchouts
-                  : t.fallbackWatchout.split('; ')
-                ).map((w, idx) => (
+                {localizedWatchouts.map((w, idx) => (
                   <li key={idx} className="flex items-start gap-1.5">
                     <span className="text-amber-400 mt-0.5">•</span>
                     <span>{w}</span>
@@ -309,7 +334,7 @@ export const NameDetailsModal: React.FC<NameDetailsModalProps> = ({
           {nameItem.disclaimer && (
             <div className="p-3.5 rounded-2xl bg-slate-900 border border-slate-700/80 flex items-start gap-2.5 text-[11px] text-slate-400">
               <ShieldAlert className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5" />
-              <span>{nameItem.disclaimer}</span>
+              <span>{LEGAL_NOTICE[language] || t.transparency}</span>
             </div>
           )}
         </div>
