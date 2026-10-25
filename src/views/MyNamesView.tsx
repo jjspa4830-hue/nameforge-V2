@@ -924,7 +924,7 @@ export const MyNamesView: React.FC<MyNamesViewProps> = ({ onNavigate }) => {
         <div className="space-y-6">
           <div className="flex items-center justify-between gap-4">
             <div>
-              <h2 className="text-xl font-bold text-white">{copy.collections}</h2>
+              <h2 className="nf-animated-heading text-xl font-bold">{copy.collections}</h2>
               <p className="text-xs text-slate-400 mt-0.5">
                 {copy.collectionsDescription}
               </p>
@@ -1026,7 +1026,7 @@ export const MyNamesView: React.FC<MyNamesViewProps> = ({ onNavigate }) => {
         <div className="space-y-6">
           <div className="flex items-center justify-between gap-4">
             <div>
-              <h2 className="text-xl font-bold text-white">{controls.recentHistory}</h2>
+              <h2 className="nf-animated-heading text-xl font-bold">{controls.recentHistory}</h2>
               <p className="text-xs text-slate-400 mt-0.5">
                 {controls.recentHistory}
               </p>
