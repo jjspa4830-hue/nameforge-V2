@@ -40,3 +40,12 @@ jobs:
 
       - name: Audit visible and functional choice controls
         run: npm run test:visual
+
+      - name: Save localization screenshots and audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: localization-qa-matrix
+          path: artifacts/visual-qa/
+          if-no-files-found: warn
+          retention-days: 14
