@@ -1,5 +1,4 @@
 import type { GeneratorMeta, LanguageCode } from '../types';
-import { LOCALIZED_GENERATOR_TITLE_IDS } from './generatorTitles';
 
 type EditorialCopy = {
   badge: string; title: string; subtitle: string; guideTitle: string;
@@ -66,14 +65,11 @@ const LEGAL_DISCLAIMER: Record<string, string> = {
   fi: 'Luodut nimet ovat luovia ehdotuksia. Tarkista tavaramerkkioikeudet ja verkkotunnuksen saatavuus virallisista lähteistä ennen käyttöä.',
 };
 
-const CORE_IDS = new Set<string>(LOCALIZED_GENERATOR_TITLE_IDS);
-
 export function hasLocalizedEditorialMeta(generatorId: string, language: LanguageCode): boolean {
-  return CORE_IDS.has(generatorId) && Boolean(COPY[language]);
+  return Boolean(COPY[language]);
 }
 
 export function getLocalizedEditorialMeta(meta: GeneratorMeta, language: LanguageCode, subject: string): GeneratorMeta {
-  if (!CORE_IDS.has(meta.id)) return meta;
   const copy = COPY[language] || COPY.en;
   return {
     ...meta,
