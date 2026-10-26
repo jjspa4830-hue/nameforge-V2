@@ -9,7 +9,7 @@ assert.ok(sitemap.includes('</urlset>'), 'sitemap must close its urlset root');
 assert.deepEqual(
   locations,
   ['https://jjspa4830-hue.github.io/nameforge-V2/'],
-  'published sitemap should list only the current crawlable homepage'
+  'source fallback sitemap should include the homepage before build-time expansion'
 );
 assert.ok(
   locations.every((url) => !url.includes('#')),
@@ -35,5 +35,7 @@ assert.ok(appSource.includes("setMetaContent('meta[name=\"description\"]', descr
 assert.ok(appSource.includes("setMetaContent('meta[property=\"og:title\"]', title)"), 'active page should update Open Graph title');
 assert.ok(appSource.includes("setMetaContent('meta[name=\"twitter:description\"]', description)"), 'active page should update Twitter description');
 assert.ok(seoMetadata.includes("const FALLBACK = COPY.en"), 'unknown languages should safely fall back to English');
+const packageJson = readFileSync(new URL('../package.json', import.meta.url), 'utf8');
+assert.ok(packageJson.includes('npx tsx scripts/generate-seo-pages.ts'), 'both production build scripts should generate static SEO pages');
 
 console.log('Dynamic SEO metadata checks passed: 25 locales and social metadata updates are covered.');

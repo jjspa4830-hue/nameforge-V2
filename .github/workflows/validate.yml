@@ -38,6 +38,9 @@ jobs:
       - name: Build production site
         run: npm run build
 
+      - name: Verify generated SEO landing pages and sitemap
+        run: node scripts/generatedSeoPages.test.mjs
+
       - name: Audit 25-locale visible-content coverage
         run: npm run audit:i18n -- --json > localization-coverage-audit.json
 
