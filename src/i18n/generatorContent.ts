@@ -1617,8 +1617,7 @@ const GENERATOR_DESCRIPTION_OVERRIDES: Record<string, Record<string, string>> = 
     ro: "Creează nume memorabile pentru orașe cyberpunk, personaje, bande și tehnologie, potrivite pentru povești, jocuri și construirea creativă a lumilor.",
     da: "Skab mindeværdige navne til cyberpunkbyer, figurer, bander og teknologi, der passer til historier, spil og kreativ verdensopbygning.",
     fi: "Luo mieleenpainuvia nimiä aiheelle kyberpunk-kaupungit, hahmot, jengit ja teknologia tarinoihin, peleihin ja luovaan maailmanrakennukseen."
-  }
-
+  },
   coffee_shop: {
     en: "Create inviting names for coffee shops, cafés, espresso bars, and specialty coffee brands.",
     fr: "Créez des noms accueillants pour des cafés, coffee shops, bars à espresso et marques de café de spécialité.",
