@@ -11,6 +11,7 @@ import { GENERATORS_METADATA, ALL_GENERATORS_LIST } from './data/generators';
 import { applySettingsToDOM, getAppSettings, subscribeToSettings, SUPPORTED_LANGUAGES } from './services/settings';
 import { getShellLabels } from './i18n/shell';
 import { getLocalizedGeneratorTitle } from './i18n/generatorTitles';
+import { getOpenGraphLocale, getSeoDescription, setMetaContent } from './i18n/seoMetadata';
 import './styles/animated-headings.css';
 
 export const App: React.FC = () => {
@@ -144,7 +145,9 @@ export const App: React.FC = () => {
     document.documentElement.dir = languageMeta?.dir || 'ltr';
   }, [settings.language]);
 
-  // Keep page titles useful and consistent with the selected interface language.
+  // Keep browser and social metadata synchronized with the active view and language.
+  // GitHub Pages serves a client-rendered app; crawlers that do not execute JavaScript
+  // will still see the safe default metadata from index.html.
   useEffect(() => {
     const labels = getShellLabels(settings.language);
     const titles: Record<string, string> = {
@@ -153,12 +156,26 @@ export const App: React.FC = () => {
       'my-names': `${labels.pageTitles.myNames} — NameForge`,
       'style-studio': `${labels.pageTitles.styleStudio} — NameForge`,
     };
-    if (currentView === 'generator-detail') {
-      const meta = GENERATORS_METADATA[currentGenerator];
-      document.title = `${meta ? getLocalizedGeneratorTitle(currentGenerator, settings.language, meta.title) : labels.pageTitles.generator} | NameForge`;
-    } else {
-      document.title = titles[currentView] || 'NameForge';
-    }
+    const generatorMeta = currentView === 'generator-detail' ? GENERATORS_METADATA[currentGenerator] : undefined;
+    const generatorTitle = generatorMeta
+      ? getLocalizedGeneratorTitle(currentGenerator, settings.language, generatorMeta.title)
+      : labels.pageTitles.generator;
+    const title = currentView === 'generator-detail'
+      ? `${generatorTitle} | NameForge`
+      : titles[currentView] || 'NameForge';
+    const description = getSeoDescription(
+      currentView as 'home' | 'generators' | 'my-names' | 'style-studio' | 'generator-detail',
+      settings.language,
+      generatorTitle
+    );
+
+    document.title = title;
+    setMetaContent('meta[name="description"]', description);
+    setMetaContent('meta[property="og:title"]', title);
+    setMetaContent('meta[property="og:description"]', description);
+    setMetaContent('meta[property="og:locale"]', getOpenGraphLocale(settings.language));
+    setMetaContent('meta[name="twitter:title"]', title);
+    setMetaContent('meta[name="twitter:description"]', description);
   }, [currentView, currentGenerator, settings.language]);
 
   return (
