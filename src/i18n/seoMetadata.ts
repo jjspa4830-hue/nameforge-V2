@@ -1,5 +1,3 @@
-import { GeneratorId } from '../types';
-
 type SeoPage = 'home' | 'generators' | 'my-names' | 'style-studio' | 'generator-detail';
 
 const COPY: Record<string, {
