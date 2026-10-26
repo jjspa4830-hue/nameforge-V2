@@ -190,7 +190,7 @@ export const NameDetailsModal: React.FC<NameDetailsModalProps> = ({
               </span>
               <div className="font-bold text-cyan-300 text-sm mt-0.5 flex items-center gap-1">
                 <Volume2 className="w-3.5 h-3.5 text-cyan-400 group-hover:scale-110 transition" />
-                <span>{nameItem.pronunciation || '[nom]'}</span>
+                <span>{nameItem.pronunciation || '—'}</span>
               </div>
             </button>
 
