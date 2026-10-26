@@ -5,6 +5,7 @@ import { getStyleOptions } from '../data/styles';
 import { GEN_LANGUAGES } from '../services/settings';
 import { getTranslations } from '../i18n';
 import { getAppSettings } from '../services/settings';
+import { getLocalizedStyleLabel } from '../i18n/styleLabels';
 
 interface GeneratorControlProps {
   generatorId?: GeneratorId;
@@ -108,7 +109,7 @@ export const GeneratorControl: React.FC<GeneratorControlProps> = ({
           >
             {styles.map((s) => (
               <option key={s.key} value={s.key} className="bg-[#0e1627] text-white py-1">
-                {s.label}
+                {getLocalizedStyleLabel(s.label, settings.language, generatorId)}
               </option>
             ))}
           </select>

@@ -19,6 +19,7 @@ import { getAppSettings, subscribeToSettings } from '../services/settings';
 import { getLocalizedGeneratorDescription } from '../i18n/generatorContent';
 import { getLocalizedStyleLabel } from '../i18n/styleLabels';
 import { getLocalizedGeneratorTitle, getLocalizedGeneratorShortTitle } from '../i18n/generatorTitles';
+import { getLocalizedEditorialMeta } from '../i18n/localizedGeneratorMeta';
 
 interface GeneratorDetailViewProps {
   generatorId: GeneratorId;
@@ -29,12 +30,13 @@ export const GeneratorDetailView: React.FC<GeneratorDetailViewProps> = ({
   generatorId,
   onNavigate,
 }) => {
-  const meta = GENERATORS_METADATA[generatorId] || GENERATORS_METADATA.fantasy;
+  const sourceMeta = GENERATORS_METADATA[generatorId] || GENERATORS_METADATA.fantasy;
   const settings = getAppSettings();
   const [language, setLanguage] = useState(settings.language);
-  const localizedTitle = getLocalizedGeneratorTitle(generatorId, language, meta.title);
-  const localizedShortTitle = getLocalizedGeneratorShortTitle(generatorId, language, meta.shortTitle);
-  const localizedDescription = getLocalizedGeneratorDescription(meta, language);
+  const localizedTitle = getLocalizedGeneratorTitle(generatorId, language, sourceMeta.title);
+  const localizedShortTitle = getLocalizedGeneratorShortTitle(generatorId, language, sourceMeta.shortTitle);
+  const meta = getLocalizedEditorialMeta(sourceMeta, language, localizedShortTitle);
+  const localizedDescription = getLocalizedGeneratorDescription(sourceMeta, language);
 
   useEffect(() => subscribeToSettings((next) => setLanguage(next.language)), []);
 
@@ -182,7 +184,7 @@ export const GeneratorDetailView: React.FC<GeneratorDetailViewProps> = ({
 
   const handleCopyBatch = async () => {
     if (!results.length) return;
-    const text = results.map((r) => `${r.name} — ${r.style} (${r.tone}) : ${r.description}`).join('\n');
+    const text = results.map((r) => `${r.name} — ${getLocalizedStyleLabel(r.style, language, generatorId)} (${r.tone}) : ${r.description}`).join('\n');
     try {
       if (navigator.clipboard && navigator.clipboard.writeText) {
         await navigator.clipboard.writeText(text);
@@ -205,9 +207,9 @@ export const GeneratorDetailView: React.FC<GeneratorDetailViewProps> = ({
       `========================================================`,
       `NameForge — ${exportText[9]} (${localizedTitle})`,
       `${exportText[0]}: ${new Date().toLocaleString(language)}`,
-      `${exportText[1]}: ${generatorId} | ${exportText[2]}: ${selectedStyle}`,
+      `${exportText[1]}: ${generatorId} | ${exportText[2]}: ${getLocalizedStyleLabel(selectedStyle, language, generatorId)}`,
       `========================================================\n`,
-      ...results.map((r, i) => `${i + 1}. ${r.name}\n   ${exportText[3]}: ${r.style} | ${exportText[4]}: ${r.tone}\n   ${exportText[5]}: ${r.description}\n   ${exportText[6]}: ${r.bestFor}\n`),
+      ...results.map((r, i) => `${i + 1}. ${r.name}\n   ${exportText[3]}: ${getLocalizedStyleLabel(r.style, language, generatorId)} | ${exportText[4]}: ${r.tone}\n   ${exportText[5]}: ${r.description}\n   ${exportText[6]}: ${r.bestFor}\n`),
     ].join('\n');
     const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
     const url = URL.createObjectURL(blob);
@@ -223,7 +225,7 @@ export const GeneratorDetailView: React.FC<GeneratorDetailViewProps> = ({
     const header = [exportText[7], exportText[3], exportText[4], exportText[5], exportText[6], exportText[8]];
     const rows = results.map((r) => [
       `"${r.name.replace(/"/g, '""')}"`,
-      `"${r.style.replace(/"/g, '""')}"`,
+      `"${getLocalizedStyleLabel(r.style, language, generatorId).replace(/"/g, '""')}"`,
       `"${r.tone.replace(/"/g, '""')}"`,
       `"${r.description.replace(/"/g, '""')}"`,
       `"${r.bestFor.replace(/"/g, '""')}"`,

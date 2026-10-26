@@ -1,4 +1,5 @@
 import { LanguageCode } from '../types';
+import { getLocalizedGeneratorShortTitle } from './generatorTitles';
 import { NAMEFORGE_STYLES, CATEGORY_SPECIFIC_STYLES } from '../data/styles';
 
 type StyleLabels = Record<string, string>;
@@ -41,7 +42,7 @@ export function getLocalizedStyleLabel(style: string | undefined, language: Lang
     .find(([key, label]) => key === trimmed || label === trimmed || label.replace(/^\S+\s/, '') === trimmed)?.[0]
     || trimmed.toLowerCase().replace(/\s+/g, '-');
   const labels = LABELS[language] || COMMON_EN;
-  const localizedLabel = labels[styleKey] || COMMON_EN[styleKey];
+  const localizedLabel = labels[styleKey] || getLocalizedGeneratorShortTitle(styleKey, language, '') || COMMON_EN[styleKey];
   if (localizedLabel) {
     const icon = [...NAMEFORGE_STYLES, ...(CATEGORY_SPECIFIC_STYLES[generatorId || ''] || [])].find(([key]) => key === styleKey)?.[1].split(' ')[0];
     return icon ? `${icon} ${localizedLabel}` : localizedLabel;

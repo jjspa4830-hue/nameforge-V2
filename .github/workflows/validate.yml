@@ -38,6 +38,17 @@ jobs:
       - name: Build production site
         run: npm run build
 
+      - name: Audit 25-locale visible-content coverage
+        run: npm run audit:i18n -- --json > localization-coverage-audit.json
+
+      - name: Upload localization coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: localization-coverage-audit
+          path: localization-coverage-audit.json
+          if-no-files-found: error
+          retention-days: 30
+
       - name: Audit visible and functional choice controls
         run: npm run test:visual
 
