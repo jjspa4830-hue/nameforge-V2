@@ -21,3 +21,19 @@ assert.ok(
 );
 
 console.log('Site metadata checks passed: sitemap URL and crawlable entries are valid.');
+
+const seoMetadata = readFileSync(new URL('../src/i18n/seoMetadata.ts', import.meta.url), 'utf8');
+const appSource = readFileSync(new URL('../src/App.tsx', import.meta.url), 'utf8');
+const localizedSeoLanguages = [...seoMetadata.matchAll(/^  ([a-z]{2}): \{ home:/gm)].map((match) => match[1]);
+assert.equal(localizedSeoLanguages.length, 25, 'SEO descriptions should cover all 25 supported languages');
+assert.deepEqual(
+  localizedSeoLanguages,
+  ['en', 'fr', 'es', 'de', 'it', 'pt', 'ar', 'tr', 'ja', 'ko', 'zh', 'ru', 'hi', 'nl', 'pl', 'sv', 'vi', 'id', 'th', 'el', 'he', 'cs', 'ro', 'da', 'fi'],
+  'SEO language coverage should match the supported 25-language list'
+);
+assert.ok(appSource.includes("setMetaContent('meta[name=\"description\"]', description)"), 'active page should update its description');
+assert.ok(appSource.includes("setMetaContent('meta[property=\"og:title\"]', title)"), 'active page should update Open Graph title');
+assert.ok(appSource.includes("setMetaContent('meta[name=\"twitter:description\"]', description)"), 'active page should update Twitter description');
+assert.ok(seoMetadata.includes("const FALLBACK = COPY.en"), 'unknown languages should safely fall back to English');
+
+console.log('Dynamic SEO metadata checks passed: 25 locales and social metadata updates are covered.');
